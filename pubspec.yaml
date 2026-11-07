@@ -1,0 +1,42 @@
+# Project metadata
+name: template # App package name
+description: "A new Flutter project." # Short project description
+publish_to: 'none' # Prevents accidental publishing to pub.dev
+version: 1.0.0+1 # App version (1.0.0 = version name, +1 = build number)
+
+# Dart SDK version constraint
+environment:
+  sdk: ^3.13.7
+
+# Production packages required by the app
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.8 # iOS-style icons
+  flutter_screenutil: ^5.9.3
+  get: ^4.7.3
+  get_storage: ^2.1.1
+  flutter_secure_storage: ^11.2.0
+  flutter_localizations:
+    sdk: flutter
+  logger: ^2.8.0
+  google_fonts: ^9.0.0
+  http: ^1.6.0
+  connectivity_plus: ^7.3.2
+  flutter_svg: ^2.3.2
+
+# Packages used only for development, testing, and linting
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0 # Recommended lint rules for good coding practices
+  rename: ^3.1.0 # Tool for renaming the project
+
+# Flutter-specific configuration
+flutter:
+  uses-material-design: true # Enables Material Design icons and features
+
+  # Project assets (images, icons, etc.)
+  assets:
+    - assets/images/
+    - assets/icons/
