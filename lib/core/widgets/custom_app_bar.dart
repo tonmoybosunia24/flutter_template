@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart' hide ContextExtensionss;
 import 'package:template/core/core.dart';
 
-/// A reusable app bar: start-aligned title on the app background with a soft bottom line and round action buttons. [title] is the already translated title, [actions] are the widgets on the end side (usually [CustomAppBarAction]), [onBack] replaces the default back behavior, and [showBackButton] can hide the back arrow. The back arrow only appears when there is a route to go back to, so root screens and main tabs don't show it.
+/// A reusable app bar with a start-aligned title, a soft bottom line and round action buttons. The back arrow only appears when there is a route to go back to, so root screens and main tabs don't show it. Params: [title]: the already translated title. [actions]: widgets on the end side, usually [CustomAppBarAction]. [onBack]: replaces the default back behavior. [showBackButton]: set to false to hide the back arrow. Defaults to true.
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String? title;
   final List<Widget>? actions;

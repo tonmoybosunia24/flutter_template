@@ -5,7 +5,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:template/app.dart';
 import 'package:template/core/core.dart';
 
-// The main function is the entry point of the Flutter application. It initializes necessary services and runs the app.
+/// The entry point of the app: prepares local storage, allows every device orientation, registers [StorageService] and starts [MyApp].
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await GetStorage.init(); // Initialize GetStorage for local storage

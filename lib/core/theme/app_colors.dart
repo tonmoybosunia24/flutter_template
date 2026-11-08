@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-/// This class defines the central color palette for the application. Raw color constants are defined in [AppColors], while the active theme's semantic palette is exposed via [AppColorScheme.light] and [AppColorScheme.dark]. Prefer reading semantic colors from the current [BuildContext] using `context.appColors` (e.g., `context.appColors.surface`) or via `Theme.of(context).extension<AppColorScheme>()!`.
+/// Raw color constants of the application. Widgets should use the semantic colors of the active theme instead, through `context.appColors` (see [AppColorScheme]).
 class AppColors {
 
   // Common utility colors.
@@ -127,7 +127,7 @@ class AppColors {
   );
 }
 
-// Custom ThemeExtension that makes semantic colors accessible via Theme.of(context).
+/// The semantic colors of a theme, available through `context.appColors` or `Theme.of(context).extension<AppColorScheme>()`. Use [AppColorScheme.light] or [AppColorScheme.dark]. Each field is one named color role of the theme.
 @immutable
 class AppColorScheme extends ThemeExtension<AppColorScheme> {
   final Color primary;

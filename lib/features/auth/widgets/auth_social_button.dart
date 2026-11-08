@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:template/core/core.dart';
 
-/// A circular social sign-in button (Facebook, Google, ...) used across the auth flow. [icon] is a brand SVG from [IconPath] shown in its original colors, [iconSize] is its size and [onTap] is the tap callback.
+/// A circular social sign-in button (Facebook, Google, ...) used across the auth flow. Params: [icon]: brand SVG from [IconPath], shown in its original colors. [iconSize]: size of the icon inside the button. [onTap]: called when the button is tapped.
 class AuthSocialButton extends StatelessWidget {
   final String icon;
   final double iconSize;

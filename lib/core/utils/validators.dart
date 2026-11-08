@@ -1,4 +1,4 @@
-/// This file contains validation functions for form fields. Each function takes a string input and returns an error message if the input is invalid, or null if the input is valid.
+/// Validation functions for form fields. Each returns an error message when the value is invalid, or null when it is valid.
 class AppValidators {
   // Private constructor to prevent instantiation
   AppValidators._();
@@ -25,7 +25,7 @@ class AppValidators {
     return null;
   }
 
-  // Validates a username. Returns an error message if the username is invalid, or null if it is valid.
+  // Checks that a required field is not blank. [fieldName] is the field's name in the error message.
   static String? defaultValidator(String? value, {String? fieldName}) {
     if (value == null || value.trim().isEmpty) {
       return '\${fieldName ?? "Field"} is required';

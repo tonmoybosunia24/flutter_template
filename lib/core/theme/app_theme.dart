@@ -4,7 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:template/core/theme/app_colors.dart';
 import 'package:template/core/utils/app_dimensions.dart';
 
-/// This class defines the light and dark themes for the application using a shared theme builder. Both [AppTheme.light] and [AppTheme.dark] are generated from [_buildTheme] using [AppColorScheme.light] and [AppColorScheme.dark].
+/// Builds the app's light and dark [ThemeData] from one shared builder, using [AppColorScheme.light] and [AppColorScheme.dark].
 class AppTheme {
   // Private constructor to prevent instantiation
   AppTheme._();

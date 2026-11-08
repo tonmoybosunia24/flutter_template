@@ -2,7 +2,7 @@ import 'package:get/get.dart';
 import 'package:template/core/core.dart';
 import 'package:template/routes/app_routes.dart';
 
-/// A controller for the splash screen that handles the app's initialization logic and determines the next route to navigate to after the splash screen.
+/// Runs the app's startup work behind the splash screen, then opens onboarding, login or the main screen.
 class SplashController extends GetxController {
   final StorageService _storage = Get.find<StorageService>();
 

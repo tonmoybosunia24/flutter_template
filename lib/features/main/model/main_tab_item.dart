@@ -1,4 +1,4 @@
-/// Data for a single bottom navigation tab. [icon] is an icon asset path from [IconPath] and [label] is a translation key from [AppStrings].
+/// Data for a single bottom navigation tab. Params: [icon]: icon asset path from [IconPath]. [label]: translation key from [AppStrings].
 class MainTabItem {
   final String icon;
   final String label;

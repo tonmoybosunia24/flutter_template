@@ -1,4 +1,4 @@
-/// This class defines centralized design tokens for application dimensions, including padding, border radii, font sizes, icon sizes, and spacing. It stores raw `double` values that can be scaled in the UI using responsive helpers (`getWidth`, `getHeight`, `getSp`, `getRadius`) or `ScreenUtil` extensions (`.w`, `.h`, `.sp`, `.r`).
+/// Centralized design tokens for padding, radii, font sizes, icon sizes, component sizes, stroke widths and spacing. Values are raw doubles. Scale them in the UI with `getWidth`, `getHeight`, `getSp` or `getRadius`.
 class AppDimensions {
   // Private constructor to prevent instantiation
   AppDimensions._();

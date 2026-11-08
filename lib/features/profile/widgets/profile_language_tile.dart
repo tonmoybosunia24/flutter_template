@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:template/core/core.dart';
 
-/// One language row on the language screen: [name] in its own language, [subtitle] as its translated name, and a radio on the end side. When [isSelected] the row is tinted and the radio shows a tick.
+/// One language row on the language screen, with a radio on the end side. Params: [name]: the language's name in its own language. [subtitle]: the language's translated name. [isSelected]: tints the row and shows a tick in the radio. [onTap]: called when the row is tapped.
 class ProfileLanguageTile extends StatelessWidget {
   final String name;
   final String subtitle;

@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import '../controller/search_controller.dart';
 
+/// Registers [AppSearchController] for the search tab.
 class SearchBinding extends Bindings {
   @override
   void dependencies() {

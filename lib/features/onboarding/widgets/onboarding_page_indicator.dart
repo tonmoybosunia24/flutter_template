@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:template/core/core.dart';
 
-/// Dot indicator for the onboarding pages. [count] is the number of pages and [currentIndex] is the active page. The active dot stretches into a pill.
+/// Dot indicator for the onboarding pages. The active dot stretches into a pill. Params: [count]: number of pages. [currentIndex]: index of the active page.
 class OnboardingPageIndicator extends StatelessWidget {
   final int count;
   final int currentIndex;

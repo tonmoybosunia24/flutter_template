@@ -2,7 +2,7 @@ import 'package:get/get.dart';
 import '../controller/login_controller.dart';
 
 
-/// LoginBinding class is responsible for managing the dependencies for the login feature.
+/// Registers [LoginController] for the login screen.
 class LoginBinding extends Bindings {
   @override
   void dependencies() {

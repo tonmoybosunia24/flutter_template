@@ -1,4 +1,4 @@
-/// This class contains all the translation keys used for localization across the application.Use these keys with `.tr` (e.g., `AppStrings.appName.tr`) to display localized text.
+/// The translation keys of every UI text. Use them with `.tr`, e.g. `AppStrings.appName.tr`.
 class AppStrings {
   // Private constructor to prevent instantiation
   AppStrings._();

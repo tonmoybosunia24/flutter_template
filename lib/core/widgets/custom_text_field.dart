@@ -3,7 +3,7 @@ import 'package:template/core/utils/app_dimensions.dart';
 import 'package:template/core/utils/extensions.dart';
 import 'package:template/core/utils/app_size_class.dart';
 
-/// A reusable text field widget that supports password input, validation, and custom styling. [controller] manages the text input, [hintText] is the placeholder text, [isPassword] indicates if the field should obscure text, [keyboardType] specifies the type of keyboard to display, [validator] allows for custom validation logic, and [prefixIcon] and [suffixIcon] allow for optional icons inside the text field. Icons sit 20px from the field edge with an 8px gap to the text.
+/// A form text field with optional validation, password obscuring and icons. Icons sit 20px from the field edge with an 8px gap to the text. Params: [controller]: holds the entered text. [hintText]: the already translated placeholder. [isPassword]: obscures the entered text. Defaults to false. [keyboardType]: keyboard to show. Defaults to [TextInputType.text]. [validator]: returns an error message for invalid input, or null when valid. [prefixIcon]: widget on the start side of the field. [suffixIcon]: widget on the end side of the field.
 class CustomTextField extends StatelessWidget {
   final TextEditingController controller;
   final String hintText;

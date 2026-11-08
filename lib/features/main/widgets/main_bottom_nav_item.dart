@@ -3,7 +3,7 @@ import 'package:get/get.dart' hide ContextExtensionss;
 import 'package:template/core/core.dart';
 import 'package:template/features/main/model/main_tab_item.dart';
 
-/// A single tab in the main bottom navigation bar: icon above label, in the primary color when [isSelected]. The whole slot is tappable, and long translated labels shrink to fit it.
+/// A single tab in the main bottom navigation bar: icon above label. The whole slot is tappable, and long translated labels shrink to fit it. Params: [tab]: the icon and label of this tab. [isSelected]: shows the tab in the primary color. [onTap]: called when the tab is tapped.
 class MainBottomNavItem extends StatelessWidget {
   final MainTabItem tab;
   final bool isSelected;

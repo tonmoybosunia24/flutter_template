@@ -1,4 +1,4 @@
-/// This class contains all the SVG icon asset paths used across the application.Use [IconPath] constants instead of hardcoded strings to load icons safely and consistently.
+/// Asset paths of the SVG icons. Use these constants instead of hardcoded strings.
 class IconPath {
   // Private constructor to prevent instantiation
   IconPath._(); 

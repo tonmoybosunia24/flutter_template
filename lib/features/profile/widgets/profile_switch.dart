@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:template/core/core.dart';
 
-/// The small pill-shaped toggle used in the profile rows. [value] is the current state and [onChanged] is called when it is tapped.
+/// The small pill-shaped toggle used in the profile rows. Params: [value]: the current state. [onChanged]: called when the switch is tapped.
 class ProfileSwitch extends StatelessWidget {
   final bool value;
   final VoidCallback onChanged;

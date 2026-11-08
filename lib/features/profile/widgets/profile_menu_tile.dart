@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:template/core/core.dart';
 
-/// A single row in a profile section. [icon] and [title] sit on the start side; the end side shows [trailing] when given, otherwise an arrow with an optional [value] text before it. [onTap] makes the whole row tappable.
+/// A single row in a profile section. Params: [icon]: SVG path from [IconPath], shown on the start side. [title]: the already translated label next to the icon. [value]: optional text before the arrow. Ignored when [trailing] is given. [trailing]: replaces the arrow on the end side. [onTap]: makes the whole row tappable.
 class ProfileMenuTile extends StatelessWidget {
   final String icon;
   final String title;

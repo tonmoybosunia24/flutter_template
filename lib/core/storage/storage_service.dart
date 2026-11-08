@@ -3,7 +3,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:template/core/storage/storage_keys.dart';
 
-/// This service handles all storage-related operations, including saving and retrieving data from local and secure storage.
+/// Saves and reads app data: preferences in [GetStorage] and auth tokens in [FlutterSecureStorage].
 class StorageService extends GetxService {
 
   // Storage instances for local and secure storage
@@ -29,7 +29,7 @@ class StorageService extends GetxService {
   Future<void> setOnboarded() async =>
       _localStorage.write(StorageKeys.hasOnboarded, true);
 
-  // Methods for saving and retrieving tokens
+  // Saves both tokens securely and records when the access token expires. [expiresIn] is in seconds.
   Future<void> saveTokens({
     required String accessToken,
     required String refreshToken,

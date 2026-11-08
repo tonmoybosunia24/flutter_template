@@ -1,4 +1,4 @@
-/// Data for a single onboarding page. [image] is an illustration asset path from [IllustrationPath] (SVG or raster like PNG), while [title] and [description] are translation keys from [AppStrings].
+/// Data for a single onboarding page. Params: [image]: illustration asset path from [IllustrationPath], SVG or raster. [title]: translation key from [AppStrings]. [description]: translation key from [AppStrings].
 class OnboardingItem {
   final String image;
   final String title;

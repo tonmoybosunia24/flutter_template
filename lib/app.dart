@@ -7,11 +7,10 @@ import 'package:template/bindings/app_binding.dart';
 import 'package:template/core/core.dart';
 import 'package:template/routes/app_pages.dart';
 
-/// The main entry point of the application. It initializes the app and sets up the necessary configurations. The [MyApp] class is the root widget of the application. It sets up the theme, localization, and routing for the app.
+/// The root widget of the application. Reads the saved theme and language from [StorageService], then sets up responsive sizing, theming, localization and routing for the whole app.
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of the application.
   @override
   Widget build(BuildContext context) {
     // Get the StorageService instance
@@ -41,7 +40,7 @@ class MyApp extends StatelessWidget {
       builder: (context, child) {
         return GetMaterialApp(
           debugShowCheckedModeBanner: false,
-          title: AppStrings.appName.tr, // Application title.Change this to your app's name.
+          title: AppStrings.appName.tr, // Application title. Change this to your app's name.
           theme: AppTheme.light,
           darkTheme: AppTheme.dark,
           themeMode: initialTheme,

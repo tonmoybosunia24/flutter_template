@@ -1,6 +1,6 @@
 import 'package:template/core/utils/app_strings.dart';
 
-/// This is the English (United States) localization file.
+/// English (United States) translations, keyed by [AppStrings].
 const Map<String, String> enUS = {
   AppStrings.appName: 'Starter Template',
   AppStrings.splashTitle: 'Flutter Template',

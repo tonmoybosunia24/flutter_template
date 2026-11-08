@@ -2,7 +2,7 @@ import 'package:get/get.dart';
 import 'package:template/core/core.dart';
 import 'package:template/features/main/model/main_tab_item.dart';
 
-// Manages the main screen's bottom navigation: the list of tabs and which one is selected. The order of [tabs] must match the screens in MainScreen.
+/// Manages the main screen's bottom navigation: the list of tabs and which one is selected. The order of [tabs] must match the screens in `MainScreen`.
 class MainController extends GetxController {
   final List<MainTabItem> tabs = const [
     MainTabItem(icon: IconPath.home, label: AppStrings.navHome),

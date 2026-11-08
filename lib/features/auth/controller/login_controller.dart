@@ -1,7 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 
-/// Manages the login screen state: form fields, password visibility and the remember-me option. The action methods are placeholders to be wired to the real auth logic.
+/// Manages the login screen state: form fields, password visibility and the remember-me option.
 class LoginController extends GetxController {
   // TextEditingControllers for the email and password input fields.
   final TextEditingController emailController = TextEditingController();

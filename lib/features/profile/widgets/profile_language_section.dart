@@ -4,7 +4,7 @@ import 'package:template/core/core.dart';
 import 'package:template/features/profile/controller/language_controller.dart';
 import 'package:template/features/profile/widgets/profile_language_tile.dart';
 
-/// A titled card of languages on the language screen. [title] is shown above the card and [languages] become its rows.
+/// A titled card of selectable languages on the language screen. Params: [title]: the already translated heading above the card. [languages]: the rows, as records of (language code, name in its own language, translation key of its translated name).
 class ProfileLanguageSection extends GetView<LanguageController> {
   final String title;
   final List<(String, String, String)> languages;

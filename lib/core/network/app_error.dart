@@ -1,7 +1,6 @@
-/// A class representing an application-level error, encapsulating details such as a human-readable message, an optional HTTP status code, and an optional machine-readable error code for conditional UI logic.
+/// An application-level error that the UI can show or branch on. Params: [message]: human-readable text for the user. [statusCode]: HTTP status code, if the error came from a response. [errorCode]: machine-readable code for conditional UI logic.
 class AppError {
   
-  /// Constructs an AppError instance with a required message, and optional status code and error code.
   final String message;
   final int? statusCode;
   final String? errorCode;
@@ -31,7 +30,7 @@ class AppError {
     errorCode: 'UNAUTHORIZED',
   );
 
-  /// Factory constructor to create an AppError instance based on an HTTP status code and an optional message.
+  // Creates the matching error for an HTTP [statusCode]. [message] replaces the default text, except for 408, which always uses [timeout].
   factory AppError.fromStatusCode(int statusCode, {String? message}) {
     switch (statusCode) {
       case 400:

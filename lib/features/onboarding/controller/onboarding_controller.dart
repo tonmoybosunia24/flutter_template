@@ -4,7 +4,7 @@ import 'package:template/core/core.dart';
 import 'package:template/features/onboarding/model/onboarding_item.dart';
 import 'package:template/routes/app_routes.dart';
 
-// The OnboardingController class is responsible for managing the onboarding state and logic of the application. It extends GetxController, which provides reactive state management capabilities.
+/// Manages the onboarding flow: the list of pages, the current page and remembering when onboarding is finished.
 class OnboardingController extends GetxController {
   final StorageService _storage = Get.find<StorageService>();
 

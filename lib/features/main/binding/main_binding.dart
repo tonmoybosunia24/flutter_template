@@ -6,6 +6,7 @@ import 'package:template/features/search/binding/search_binding.dart';
 import 'package:template/features/settings/binding/settings_binding.dart';
 import '../controller/main_controller.dart';
 
+/// Registers [MainController] and the controllers of every tab shown inside the main screen.
 class MainBinding extends Bindings {
   @override
   void dependencies() {

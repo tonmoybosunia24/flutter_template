@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import '../controller/profile_controller.dart';
 
+/// Registers [ProfileController] for the profile tab.
 class ProfileBinding extends Bindings {
   @override
   void dependencies() {

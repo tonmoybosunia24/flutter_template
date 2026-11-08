@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:template/core/core.dart';
 
-/// A reusable loading indicator that continuously rotates the app's loading SVG icon. [size] sets the icon size (defaults to [AppDimensions.icon30]), [color] tints the icon (defaults to the theme's primary color), and [duration] controls the time for one full rotation.
+/// A loading indicator that continuously rotates the app's loading SVG icon. Params: [size]: icon size. Defaults to [AppDimensions.icon30]. [color]: icon tint. Defaults to the theme's primary color. [duration]: time for one full rotation. Defaults to 2 seconds.
 class CustomLoader extends StatefulWidget {
   final double? size;
   final Color? color;

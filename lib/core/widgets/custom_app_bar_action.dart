@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:template/core/core.dart';
 
-/// A round icon button for [CustomAppBar], used for the back arrow and the end-side actions. [icon] is an SVG path from [IconPath], [onTap] is the tap callback, [tooltip] is the already translated label for accessibility, and [flipInRtl] mirrors directional icons in right-to-left languages.
+/// A round icon button for [CustomAppBar], used for the back arrow and the end-side actions. Params: [icon]: SVG path from [IconPath]. [onTap]: called when the button is tapped. [tooltip]: the already translated label for accessibility. [flipInRtl]: mirrors directional icons in right-to-left languages. Defaults to false.
 class CustomAppBarAction extends StatelessWidget {
   final String icon;
   final VoidCallback onTap;

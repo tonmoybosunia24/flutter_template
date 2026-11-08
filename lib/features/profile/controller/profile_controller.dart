@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:get/get.dart';
 import 'package:template/core/core.dart';
 
-// Holds the state of the profile screen: the user's name, the notification toggle and the theme setting (applied and saved through SettingsUtil).
+/// Holds the state of the profile screen: the user's name, the notification toggle and the theme setting.
 class ProfileController extends GetxController {
   // Placeholder until the profile comes from the API.
   final String userName = 'Md Tonmoy Bosunia';

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:template/core/core.dart';
 
-/// A titled card on the profile screen. [title] is shown above the card and [children] are its rows, separated by thin lines.
+/// A titled card on the profile screen. Params: [title]: the already translated heading above the card. [children]: the rows of the card, separated by thin lines.
 class ProfileSection extends StatelessWidget {
   final String title;
   final List<Widget> children;

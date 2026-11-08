@@ -12,7 +12,7 @@ import 'package:template/core/storage/storage_service.dart';
 import 'package:template/core/utils/logger.dart';
 import 'package:template/routes/app_routes.dart';
 
-/// A class responsible for making network requests, handling token refresh, and managing error responses. It provides methods for GET, POST, PUT, PATCH, and DELETE requests.
+/// Makes the app's HTTP requests: adds auth headers, refreshes expired tokens, retries once after a 401 and turns every outcome into a [ResponseData]. Params: [storage]: token storage. Defaults to the registered [StorageService]. [client]: the HTTP client. Defaults to a new [http.Client]. [connectivityCheck]: tells whether the device is online. Defaults to a check with [Connectivity].
 class NetworkCaller {
   
   // Timeout duration for network requests in seconds.
@@ -36,7 +36,7 @@ class NetworkCaller {
     return results.any((r) => r != ConnectivityResult.none);
   }
 
-  // Method to refresh the access token
+  // The refresh currently in progress, shared by every request waiting for a new token.
   Completer<bool>? _refreshCompleter;
 
   // This method ensures that only one token refresh operation is in progress at a time. If a refresh is already in progress, it returns the existing future. Otherwise, it initiates a new refresh operation and returns its future.
@@ -128,7 +128,7 @@ class NetworkCaller {
     };
   }
 
-  // Method to handle the HTTP response and return a ResponseData object
+  // Sends a request with up to one retry after a 401, and converts connectivity, timeout and other failures into a failed ResponseData.
   Future<ResponseData<dynamic>> _sendRequest({
     required String url,
     required String method,

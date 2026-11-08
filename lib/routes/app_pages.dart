@@ -13,7 +13,7 @@ import 'package:template/routes/app_routes.dart';
 
 export 'package:template/routes/app_routes.dart';
 
-// This class defines the application's pages and their associated routes. It uses the GetX package to manage navigation and bindings for each page.
+/// The app's pages, each linked to its route and binding.
 class AppPages {
   static final routes = [
     // Define the route for the splash screen

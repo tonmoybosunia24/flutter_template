@@ -3,7 +3,7 @@ import 'package:get/get.dart' hide ContextExtensionss;
 import 'package:template/core/core.dart';
 import 'package:template/features/splash/controller/splash_controller.dart';
 
-/// A splash screen that displays the app's title and a loading indicator while the app initializes. It uses [SplashController] to manage the initialization logic.
+/// Shows the app's title and a loading indicator while [SplashController] runs the startup work.
 class SplashScreen extends GetView<SplashController> {
   const SplashScreen({super.key});
 

@@ -3,7 +3,7 @@ import 'package:get/get.dart' hide ContextExtensionss;
 import 'package:template/core/core.dart';
 import 'package:template/features/onboarding/model/onboarding_item.dart';
 
-/// The content of a single onboarding page: an illustration that fills the available space, followed by a title and a description.
+/// The content of a single onboarding page: an illustration that fills the available space, followed by a title and a description. Params: [item]: the image and texts of this page.
 class OnboardingPageContent extends StatelessWidget {
   final OnboardingItem item;
 

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:template/core/storage/storage_service.dart';
 
-/// This utility class provides methods to manage application settings such as theme and language. It uses [GetX] for state management and [StorageService] for persistent storage.
+/// Changes the app's theme and language at runtime and saves the choice through [StorageService].
 class SettingsUtil {
   // Private constructor to prevent instantiation
   SettingsUtil._();
@@ -28,7 +28,7 @@ class SettingsUtil {
     return _currentLanguage;
   }
 
-  // Method to change the theme of the application. It updates the current Theme and saves it in the StorageService.
+  // Applies the theme for [themeModeCode] ('light', 'dark' or 'system') and saves it.
   static void changeTheme(String themeModeCode) {
     currentTheme.value = themeModeCode;
     if (themeModeCode == 'dark') {
@@ -41,7 +41,7 @@ class SettingsUtil {
     Get.find<StorageService>().saveTheme(themeModeCode);
   }
 
-  // Method to change the language of the application. It updates the current Language and saves it in the StorageService.
+  // Applies the language for [langCode] ('en', 'ar' or 'bn') and saves it.
   static void changeLanguage(String langCode) {
     currentLanguage.value = langCode;
     if (langCode == 'ar') {

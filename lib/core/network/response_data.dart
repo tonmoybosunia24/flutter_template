@@ -1,7 +1,7 @@
 import 'package:template/core/network/app_error.dart';
 
 
-/// A generic class to encapsulate the response from network calls, including success status, HTTP status code, data, and error information.
+/// The result of a network call, successful or not. Params: [isSuccess]: whether the request succeeded. [statusCode]: HTTP status code, or 0 when the request failed before a response. [data]: the parsed response body on success. [error]: what went wrong on failure.
 class ResponseData<T> {
   final bool isSuccess;
   final int statusCode;
@@ -63,7 +63,7 @@ class ResponseData<T> {
     );
   }
 
-  // Method to transform the error in the response, if the request failed
+  // A readable summary of this response, for logs and debugging.
   @override
   String toString() =>
       'ResponseData(isSuccess: $isSuccess, statusCode: $statusCode, error: $error)';

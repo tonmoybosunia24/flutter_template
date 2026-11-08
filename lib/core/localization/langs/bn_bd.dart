@@ -1,6 +1,6 @@
 import 'package:template/core/utils/app_strings.dart';
 
-/// This is the Bengali (Bangladesh) localization file.
+/// Bengali (Bangladesh) translations, keyed by [AppStrings].
 const Map<String, String> bnBD = {
   AppStrings.appName: 'স্টার্টার টেমপ্লেট',
   AppStrings.splashTitle: 'ফ্লাটার টেমপ্লেট',
