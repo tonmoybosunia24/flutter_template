@@ -8,4 +8,6 @@ class ImagePath {
   static const String productHeadphones = '${asset}product_headphones.png';
   static const String productSneakers = '${asset}product_sneakers.png';
   static const String productWatch = '${asset}product_watch.png';
+  // Profile images
+  static const String profileAvatar = '${asset}profile_avatar.jpg';
 }

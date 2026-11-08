@@ -36,4 +36,29 @@ const Map<String, String> enUS = {
   AppStrings.navNotifications: 'Alerts',
   AppStrings.navSettings: 'Settings',
   AppStrings.navProfile: 'Profile',
+
+  // Profile
+  AppStrings.profileAccountSettings: 'Account Settings',
+  AppStrings.profileMyAccount: 'My Account',
+  AppStrings.profileChangePassword: 'Change Password',
+  AppStrings.profileNotification: 'Notification',
+  AppStrings.profilePreferences: 'Preferences',
+  AppStrings.profileTheme: 'Theme',
+  AppStrings.profileLanguage: 'Language',
+  AppStrings.profileCurrentLanguage: 'English (US)',
+  AppStrings.profilePayment: 'Payment',
+  AppStrings.profileUpgradePremium: 'Upgrade To Premium',
+  AppStrings.profileSupport: 'Support',
+  AppStrings.profileHelpCenter: 'Help Center',
+  AppStrings.profileTerms: 'Terms & Conditions',
+  AppStrings.profilePrivacy: 'Privacy Policy',
+  AppStrings.profileLogout: 'Logout',
+
+  // Language names
+  AppStrings.languageEnglish: 'English',
+  AppStrings.languageBengali: 'Bangla',
+  AppStrings.languageArabic: 'Arabic',
+  AppStrings.languageSuggested: 'Suggested',
+  AppStrings.languageOthers: 'Others',
+  AppStrings.languageSave: 'Save',
 };

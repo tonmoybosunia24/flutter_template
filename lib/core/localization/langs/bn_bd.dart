@@ -34,4 +34,29 @@ const Map<String, String> bnBD = {
   AppStrings.navNotifications: 'নোটিফিকেশন',
   AppStrings.navSettings: 'সেটিংস',
   AppStrings.navProfile: 'প্রোফাইল',
+
+  // Profile
+  AppStrings.profileAccountSettings: 'অ্যাকাউন্ট সেটিংস',
+  AppStrings.profileMyAccount: 'আমার অ্যাকাউন্ট',
+  AppStrings.profileChangePassword: 'পাসওয়ার্ড পরিবর্তন',
+  AppStrings.profileNotification: 'নোটিফিকেশন',
+  AppStrings.profilePreferences: 'পছন্দসমূহ',
+  AppStrings.profileTheme: 'থিম',
+  AppStrings.profileLanguage: 'ভাষা',
+  AppStrings.profileCurrentLanguage: 'বাংলা',
+  AppStrings.profilePayment: 'পেমেন্ট',
+  AppStrings.profileUpgradePremium: 'প্রিমিয়ামে আপগ্রেড করুন',
+  AppStrings.profileSupport: 'সহায়তা',
+  AppStrings.profileHelpCenter: 'সহায়তা কেন্দ্র',
+  AppStrings.profileTerms: 'শর্তাবলী',
+  AppStrings.profilePrivacy: 'প্রাইভেসি পলিসি',
+  AppStrings.profileLogout: 'লগ আউট',
+
+  // Language names
+  AppStrings.languageEnglish: 'ইংরেজি',
+  AppStrings.languageBengali: 'বাংলা',
+  AppStrings.languageArabic: 'আরবি',
+  AppStrings.languageSuggested: 'প্রস্তাবিত',
+  AppStrings.languageOthers: 'অন্যান্য',
+  AppStrings.languageSave: 'সংরক্ষণ',
 };

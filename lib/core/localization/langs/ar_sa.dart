@@ -33,4 +33,29 @@ const Map<String, String> arSA = {
   AppStrings.navNotifications: 'الإشعارات',
   AppStrings.navSettings: 'الإعدادات',
   AppStrings.navProfile: 'الملف الشخصي',
+
+  // Profile
+  AppStrings.profileAccountSettings: 'إعدادات الحساب',
+  AppStrings.profileMyAccount: 'حسابي',
+  AppStrings.profileChangePassword: 'تغيير كلمة المرور',
+  AppStrings.profileNotification: 'الإشعارات',
+  AppStrings.profilePreferences: 'التفضيلات',
+  AppStrings.profileTheme: 'المظهر',
+  AppStrings.profileLanguage: 'اللغة',
+  AppStrings.profileCurrentLanguage: 'العربية',
+  AppStrings.profilePayment: 'الدفع',
+  AppStrings.profileUpgradePremium: 'الترقية إلى بريميوم',
+  AppStrings.profileSupport: 'الدعم',
+  AppStrings.profileHelpCenter: 'مركز المساعدة',
+  AppStrings.profileTerms: 'الشروط والأحكام',
+  AppStrings.profilePrivacy: 'سياسة الخصوصية',
+  AppStrings.profileLogout: 'تسجيل الخروج',
+
+  // Language names
+  AppStrings.languageEnglish: 'الإنجليزية',
+  AppStrings.languageBengali: 'البنغالية',
+  AppStrings.languageArabic: 'العربية',
+  AppStrings.languageSuggested: 'مقترحة',
+  AppStrings.languageOthers: 'أخرى',
+  AppStrings.languageSave: 'حفظ',
 };

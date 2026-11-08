@@ -63,7 +63,10 @@ class AppDimensions {
   static const double iconContainerSize = 40.0;
   static const double appBarHeight = 64.0;
   static const double appBarActionSize = 50.0;
+  static const double switchWidth = 36.0;
+  static const double switchPadding = 1.0;
   static const double avatarSize = 70.0;
+  static const double avatarSizeLarge = 100.0;
   static const double vehicleThumbWidth = 96.0;
   static const double vehicleThumbHeight = 92.0;
   static const double logoSizeLarge = 200.0;
@@ -91,6 +94,7 @@ class AppDimensions {
   static const double space16 = 16.0;
   static const double space20 = 20.0;
   static const double space24 = 24.0;
+  static const double space30 = 30.0;
   static const double space32 = 32.0;
   static const double space40 = 40.0;
   static const double space48 = 48.0;

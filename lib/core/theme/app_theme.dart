@@ -121,6 +121,11 @@ class AppTheme {
           fontSize: AppDimensions.font30,
           fontWeight: FontWeight.w500,
         ),
+        headlineSmall: GoogleFonts.poppins(
+          color: colors.textPrimary,
+          fontSize: AppDimensions.font24,
+          fontWeight: FontWeight.w500,
+        ),
         titleLarge: GoogleFonts.poppins(
           color: colors.textPrimary,
           fontSize: AppDimensions.font20,
@@ -279,7 +284,7 @@ class AppTheme {
         backgroundColor: colors.surfaceVariant,
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(
-            top: Radius.circular(AppDimensions.radius40),
+            top: Radius.circular(AppDimensions.radius30),
           ),
         ),
       ),

@@ -5,6 +5,8 @@ import 'package:template/features/main/binding/main_binding.dart';
 import 'package:template/features/main/view/main_screen.dart';
 import 'package:template/features/onboarding/binding/onboarding_binding.dart';
 import 'package:template/features/onboarding/view/onboarding_screen.dart';
+import 'package:template/features/profile/binding/language_binding.dart';
+import 'package:template/features/profile/view/language_screen.dart';
 import 'package:template/features/splash/binding/splash_binding.dart';
 import 'package:template/features/splash/view/splash_screen.dart';
 import 'package:template/routes/app_routes.dart';
@@ -40,6 +42,13 @@ class AppPages {
       name: AppRoutes.main,
       page: () => const MainScreen(),
       binding: MainBinding(),
+    ),
+
+    // Define the route for the language screen
+    GetPage(
+      name: AppRoutes.language,
+      page: () => const LanguageScreen(),
+      binding: LanguageBinding(),
     ),
   ];
 }

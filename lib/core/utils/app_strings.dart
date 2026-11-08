@@ -37,4 +37,29 @@ class AppStrings {
   static const String navNotifications = 'nav_notifications';
   static const String navSettings = 'nav_settings';
   static const String navProfile = 'nav_profile';
+
+  // Profile
+  static const String profileAccountSettings = 'profile_account_settings';
+  static const String profileMyAccount = 'profile_my_account';
+  static const String profileChangePassword = 'profile_change_password';
+  static const String profileNotification = 'profile_notification';
+  static const String profilePreferences = 'profile_preferences';
+  static const String profileTheme = 'profile_theme';
+  static const String profileLanguage = 'profile_language';
+  static const String profileCurrentLanguage = 'profile_current_language';
+  static const String profilePayment = 'profile_payment';
+  static const String profileUpgradePremium = 'profile_upgrade_premium';
+  static const String profileSupport = 'profile_support';
+  static const String profileHelpCenter = 'profile_help_center';
+  static const String profileTerms = 'profile_terms';
+  static const String profilePrivacy = 'profile_privacy';
+  static const String profileLogout = 'profile_logout';
+
+  // Language
+  static const String languageEnglish = 'language_english';
+  static const String languageBengali = 'language_bengali';
+  static const String languageArabic = 'language_arabic';
+  static const String languageSuggested = 'language_suggested';
+  static const String languageOthers = 'language_others';
+  static const String languageSave = 'language_save';
 }
