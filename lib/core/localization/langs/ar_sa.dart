@@ -2,7 +2,7 @@ import 'package:template/core/utils/app_strings.dart';
 
 /// Arabic (Saudi Arabia) translations, keyed by [AppStrings].
 const Map<String, String> arSA = {
-  AppStrings.appName: 'قالب البداية',
+  AppStrings.appName: 'قالب فلاتر',
   AppStrings.splashTitle: 'قالب فلاتر',
 
   // Onboarding
