@@ -27,4 +27,11 @@ const Map<String, String> bnBD = {
   AppStrings.loginOrContinueWith: 'অথবা এভাবে চালিয়ে যান',
   AppStrings.loginNoAccount: 'অ্যাকাউন্ট নেই?',
   AppStrings.loginSignUp: 'সাইন আপ',
+
+  // Main screen tabs
+  AppStrings.navHome: 'হোম',
+  AppStrings.navSearch: 'খুঁজুন',
+  AppStrings.navNotifications: 'নোটিফিকেশন',
+  AppStrings.navSettings: 'সেটিংস',
+  AppStrings.navProfile: 'প্রোফাইল',
 };

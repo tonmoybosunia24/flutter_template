@@ -30,4 +30,11 @@ class AppStrings {
   static const String loginOrContinueWith = 'login_or_continue_with';
   static const String loginNoAccount = 'login_no_account';
   static const String loginSignUp = 'login_sign_up';
+
+  // Main screen tabs
+  static const String navHome = 'nav_home';
+  static const String navSearch = 'nav_search';
+  static const String navNotifications = 'nav_notifications';
+  static const String navSettings = 'nav_settings';
+  static const String navProfile = 'nav_profile';
 }

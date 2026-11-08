@@ -3,6 +3,7 @@ import 'package:get/get.dart' hide ContextExtensionss;
 import 'package:template/core/core.dart';
 import 'package:template/features/auth/controller/login_controller.dart';
 import 'package:template/features/auth/widgets/auth_social_button.dart';
+import 'package:template/routes/app_routes.dart';
 
 /// The login screen of the auth flow: email & password fields, remember me, sign in, forgot password, social sign-in and a link to sign up.
 class LoginScreen extends GetView<LoginController> {
@@ -180,7 +181,7 @@ class LoginScreen extends GetView<LoginController> {
                                 // Sign in
                                 CustomButton(
                                   text: AppStrings.loginSignIn.tr,
-                                  onPressed: controller.signIn,
+                                  onPressed: () => Get.offAllNamed(AppRoutes.main),
                                 ),
                                 SizedBox(
                                   height: getHeight(AppDimensions.space24),
@@ -189,7 +190,7 @@ class LoginScreen extends GetView<LoginController> {
                                 // Forgot password
                                 Center(
                                   child: GestureDetector(
-                                    onTap: controller.forgotPassword,
+                                    onTap: () => {},
                                     child: CustomText(
                                       text: AppStrings.loginForgotPassword.tr,
                                       style: textTheme.bodyLarge,
@@ -233,7 +234,7 @@ class LoginScreen extends GetView<LoginController> {
                                     AuthSocialButton(
                                       icon: IconPath.facebook,
                                       iconSize: AppDimensions.icon30,
-                                      onTap: controller.signInWithFacebook,
+                                      onTap: () => {},
                                     ),
                                     SizedBox(
                                       width: getWidth(AppDimensions.space10),
@@ -241,7 +242,7 @@ class LoginScreen extends GetView<LoginController> {
                                     AuthSocialButton(
                                       icon: IconPath.google,
                                       iconSize: AppDimensions.icon24,
-                                      onTap: controller.signInWithGoogle,
+                                      onTap: () => {},
                                     ),
                                   ],
                                 ),
@@ -260,7 +261,7 @@ class LoginScreen extends GetView<LoginController> {
                                       style: textTheme.bodyMedium,
                                     ),
                                     GestureDetector(
-                                      onTap: controller.signUp,
+                                      onTap: () => {},
                                       child: CustomText(
                                         text: AppStrings.loginSignUp.tr,
                                         style: textTheme.titleMedium,

@@ -22,20 +22,6 @@ class LoginController extends GetxController {
     if (Get.key.currentState?.canPop() ?? false) Get.back();
   }
 
-  // Placeholder for sign-in functionality.
-  void signIn() {}
-
-  // Placeholder for forgot password functionality.
-  void forgotPassword() {}
-
-  // Placeholder for social sign-in functionality.
-  void signInWithFacebook() {}
-
-  // Placeholder for social sign-in functionality.
-  void signInWithGoogle() {}
-
-  // Placeholder for social sign-in functionality.
-  void signUp() {}
 
   @override
   void onClose() {

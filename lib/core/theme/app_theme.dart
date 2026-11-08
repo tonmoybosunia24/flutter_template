@@ -156,6 +156,11 @@ class AppTheme {
           fontSize: AppDimensions.font16,
           fontWeight: FontWeight.w600,
         ),
+        labelMedium: GoogleFonts.poppins(
+          color: colors.textPrimary,
+          fontSize: AppDimensions.font14,
+          fontWeight: FontWeight.w500,
+        ),
         labelSmall: GoogleFonts.poppins(
           color: colors.textSecondary,
           fontSize: AppDimensions.font11,

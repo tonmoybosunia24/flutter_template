@@ -29,4 +29,11 @@ const Map<String, String> enUS = {
   AppStrings.loginOrContinueWith: 'Or Continue With',
   AppStrings.loginNoAccount: 'Don’t have an account?',
   AppStrings.loginSignUp: 'Sign Up',
+
+  // Main screen tabs
+  AppStrings.navHome: 'Home',
+  AppStrings.navSearch: 'Search',
+  AppStrings.navNotifications: 'Alerts',
+  AppStrings.navSettings: 'Settings',
+  AppStrings.navProfile: 'Profile',
 };

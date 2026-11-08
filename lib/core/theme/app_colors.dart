@@ -145,6 +145,7 @@ class AppColorScheme extends ThemeExtension<AppColorScheme> {
   final Color divider;
   final Color textPrimary;
   final Color textSecondary;
+  final Color textMuted;
   final Color textHint;
   final Color success;
   final Color warning;
@@ -171,6 +172,7 @@ class AppColorScheme extends ThemeExtension<AppColorScheme> {
     required this.divider,
     required this.textPrimary,
     required this.textSecondary,
+    required this.textMuted,
     required this.textHint,
     required this.success,
     required this.warning,
@@ -198,6 +200,7 @@ class AppColorScheme extends ThemeExtension<AppColorScheme> {
     divider: AppColors.dividerLight,
     textPrimary: AppColors.textPrimaryLight,
     textSecondary: AppColors.textSecondaryLight,
+    textMuted: AppColors.textMutedLight,
     textHint: AppColors.textHintLight,
     success: AppColors.successLight,
     warning: AppColors.warningLight,
@@ -225,6 +228,7 @@ class AppColorScheme extends ThemeExtension<AppColorScheme> {
     divider: AppColors.dividerDark,
     textPrimary: AppColors.textPrimaryDark,
     textSecondary: AppColors.textSecondaryDark,
+    textMuted: AppColors.textMutedDark,
     textHint: AppColors.textHintDark,
     success: AppColors.successDark,
     warning: AppColors.warningDark,
@@ -253,6 +257,7 @@ class AppColorScheme extends ThemeExtension<AppColorScheme> {
     Color? divider,
     Color? textPrimary,
     Color? textSecondary,
+    Color? textMuted,
     Color? textHint,
     Color? success,
     Color? warning,
@@ -278,6 +283,7 @@ class AppColorScheme extends ThemeExtension<AppColorScheme> {
       divider: divider ?? this.divider,
       textPrimary: textPrimary ?? this.textPrimary,
       textSecondary: textSecondary ?? this.textSecondary,
+      textMuted: textMuted ?? this.textMuted,
       textHint: textHint ?? this.textHint,
       success: success ?? this.success,
       warning: warning ?? this.warning,
@@ -313,6 +319,7 @@ class AppColorScheme extends ThemeExtension<AppColorScheme> {
       divider: Color.lerp(divider, other.divider, t)!,
       textPrimary: Color.lerp(textPrimary, other.textPrimary, t)!,
       textSecondary: Color.lerp(textSecondary, other.textSecondary, t)!,
+      textMuted: Color.lerp(textMuted, other.textMuted, t)!,
       textHint: Color.lerp(textHint, other.textHint, t)!,
       success: Color.lerp(success, other.success, t)!,
       warning: Color.lerp(warning, other.warning, t)!,

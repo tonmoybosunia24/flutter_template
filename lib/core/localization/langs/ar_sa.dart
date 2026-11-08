@@ -26,4 +26,11 @@ const Map<String, String> arSA = {
   AppStrings.loginOrContinueWith: 'أو المتابعة باستخدام',
   AppStrings.loginNoAccount: 'ليس لديك حساب؟',
   AppStrings.loginSignUp: 'إنشاء حساب',
+
+  // Main screen tabs
+  AppStrings.navHome: 'الرئيسية',
+  AppStrings.navSearch: 'بحث',
+  AppStrings.navNotifications: 'الإشعارات',
+  AppStrings.navSettings: 'الإعدادات',
+  AppStrings.navProfile: 'الملف الشخصي',
 };
