@@ -18,6 +18,9 @@ class ProfileController extends GetxController {
   // Reactive state of the theme switch: on means dark mode.
   late final RxBool darkModeSwitch = _isDarkMode.obs;
 
+  // Icon of the theme row: a moon in dark mode, a sun in light mode.
+  String get themeIcon => darkModeSwitch.value ? IconPath.moon : IconPath.sun;
+
   // Whether the app is showing dark mode, including when it follows a dark system theme.
   bool get _isDarkMode {
     final theme = SettingsUtil.currentTheme.value;

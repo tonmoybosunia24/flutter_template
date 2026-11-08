@@ -30,6 +30,7 @@ class IconPath {
   static const String info = '${asset}info.svg';
   static const String lockOpen = '${asset}lock_open.svg';
   static const String moneyAdd = '${asset}money_add.svg';
+  static const String moon = '${asset}moon.svg';
   static const String sun = '${asset}sun.svg';
   // Brand icons (multi-color, don't tint)
   static const String facebook = '${asset}facebook.svg';

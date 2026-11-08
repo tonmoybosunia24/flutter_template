@@ -78,12 +78,12 @@ class ProfileScreen extends GetView<ProfileController> {
                 ProfileSection(
                   title: AppStrings.profilePreferences.tr,
                   children: [
-                    ProfileMenuTile(
-                      icon: IconPath.sun,
-                      title: AppStrings.profileTheme.tr,
-                      onTap: controller.toggleTheme,
-                      trailing: Obx(
-                        () => ProfileSwitch(
+                    Obx(
+                      () => ProfileMenuTile(
+                        icon: controller.themeIcon,
+                        title: AppStrings.profileTheme.tr,
+                        onTap: controller.toggleTheme,
+                        trailing: ProfileSwitch(
                           value: controller.darkModeSwitch.value,
                           onChanged: controller.toggleTheme,
                         ),
