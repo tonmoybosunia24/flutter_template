@@ -19,6 +19,7 @@ export 'widgets/widgets.dart';
 // Utilities
 export 'utils/app_dimensions.dart';
 export 'utils/app_icons.dart';
+export 'utils/app_illustrations.dart';
 export 'utils/app_images.dart';
 export 'utils/app_size_class.dart';
 export 'utils/app_strings.dart';

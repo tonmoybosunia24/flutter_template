@@ -37,7 +37,7 @@ class OnboardingScreen extends GetView<OnboardingController> {
                           onPressed: controller.skip,
                           child: CustomText(
                             text: AppStrings.onboardingSkip.tr,
-                            style: textTheme.bodyMedium,
+                            style: textTheme.titleSmall,
                           ),
                         ),
                       ),

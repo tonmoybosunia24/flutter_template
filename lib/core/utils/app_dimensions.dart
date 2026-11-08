@@ -66,9 +66,6 @@ class AppDimensions {
   static const double logoSizeLarge = 200.0;
   static const double logoSizeMedium = 120.0;
   static const double bottomNavBarHeight = 81.0;
-  static const double onboardingIllustrationSize = 200.0;
-  static const double onboardingIconSize = 64.0;
-
   // Standard border stroke widths for outlines, dividers, and focused inputs.
   static const double borderWidth05 = 0.5;
   static const double borderWidth1 = 1.0;

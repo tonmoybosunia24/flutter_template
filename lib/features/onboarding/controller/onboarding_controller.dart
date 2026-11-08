@@ -17,17 +17,17 @@ class OnboardingController extends GetxController {
   // The onboarding pages. Replace the images and texts to fit your app.
   final List<OnboardingItem> items = const [
     OnboardingItem(
-      image: IconPath.home,
+      image: IllustrationPath.onboarding1,
       title: AppStrings.onboardingTitle1,
       description: AppStrings.onboardingDesc1,
     ),
     OnboardingItem(
-      image: IconPath.notification,
+      image: IllustrationPath.onboarding2,
       title: AppStrings.onboardingTitle2,
       description: AppStrings.onboardingDesc2,
     ),
     OnboardingItem(
-      image: IconPath.settings,
+      image: IllustrationPath.onboarding3,
       title: AppStrings.onboardingTitle3,
       description: AppStrings.onboardingDesc3,
     ),
