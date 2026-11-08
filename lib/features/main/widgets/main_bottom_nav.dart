@@ -38,6 +38,7 @@ class MainBottomNav extends GetView<MainController> {
           ),
           child: Obx(
             () => Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 for (final (index, tab) in controller.tabs.indexed)
                   Expanded(

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:template/core/core.dart';
 
-/// A reusable text widget that allows for custom styling, including font size, weight, color, alignment, and overflow handling. [text] is the string to display, [style] allows for a custom TextStyle, [fontSize], [fontWeight], and [color] provide additional customization options, while [textAlign], [maxLines], and [overflow] control the text layout and behavior.
+/// A reusable text widget that allows for custom styling, including font size, weight, color, alignment, and overflow handling. [text] is the string to display, [style] allows for a custom TextStyle, [fontSize], [fontWeight], and [color] provide additional customization options, while [textAlign], [maxLines], and [overflow] control the text layout and behavior, and [strutStyle] can force fixed line metrics.
 class CustomText extends StatelessWidget {
   final String text;
   final TextStyle? style;
@@ -11,6 +11,7 @@ class CustomText extends StatelessWidget {
   final TextAlign? textAlign;
   final int? maxLines;
   final TextOverflow? overflow;
+  final StrutStyle? strutStyle;
 
   const CustomText({
     super.key,
@@ -22,6 +23,7 @@ class CustomText extends StatelessWidget {
     this.textAlign,
     this.maxLines,
     this.overflow,
+    this.strutStyle,
   });
 
   @override
@@ -34,6 +36,7 @@ class CustomText extends StatelessWidget {
       textAlign: textAlign,
       maxLines: maxLines,
       overflow: overflow,
+      strutStyle: strutStyle,
       style: baseStyle.copyWith(
         fontSize: getSp(fontSize ?? baseStyle.fontSize ?? AppDimensions.font14),
         fontWeight: fontWeight,

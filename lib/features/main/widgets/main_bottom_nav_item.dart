@@ -45,6 +45,11 @@ class MainBottomNavItem extends StatelessWidget {
                 style: isSelected ? textTheme.labelMedium : textTheme.bodyMedium,
                 color: isSelected ? colors.primary : colors.textMuted,
                 maxLines: 1,
+                strutStyle: StrutStyle(
+                  fontFamily: textTheme.bodyMedium?.fontFamily,
+                  fontSize: getSp(AppDimensions.font14),
+                  forceStrutHeight: true,
+                ),
               ),
             ),
           ],
