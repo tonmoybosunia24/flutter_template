@@ -223,10 +223,17 @@ class NetworkCaller {
     AppLogger.logInfo('Status: ${response.statusCode}');
     AppLogger.logDebug('Body: ${response.body}');
 
+    final isSuccess = response.statusCode >= 200 && response.statusCode < 300;
+
+    // A successful response can have no body at all (e.g. 204 No Content), and an empty string can't be decoded as JSON.
+    if (isSuccess && response.body.trim().isEmpty) {
+      return ResponseData.success(statusCode: response.statusCode);
+    }
+
     try {
       final decoded = jsonDecode(response.body);
 
-      if (response.statusCode == 200 || response.statusCode == 201) {
+      if (isSuccess) {
         // Handle common API success structures
         if (decoded is Map<String, dynamic> &&
             decoded.containsKey('status') &&
@@ -253,6 +260,14 @@ class NetworkCaller {
         statusCode: response.statusCode,
       );
     } catch (e) {
+      // The server reported success but the body isn't JSON, so hand back the raw text.
+      if (isSuccess) {
+        return ResponseData.success(
+          statusCode: response.statusCode,
+          data: response.body,
+        );
+      }
+
       return ResponseData.failure(
         error: AppError.unknown,
         statusCode: response.statusCode,
