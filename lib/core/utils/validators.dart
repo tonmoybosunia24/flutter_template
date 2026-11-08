@@ -28,7 +28,7 @@ class AppValidators {
   // Checks that a required field is not blank. [fieldName] is the field's name in the error message.
   static String? defaultValidator(String? value, {String? fieldName}) {
     if (value == null || value.trim().isEmpty) {
-      return '\${fieldName ?? "Field"} is required';
+      return '${fieldName ?? "Field"} is required';
     }
     return null;
   }
