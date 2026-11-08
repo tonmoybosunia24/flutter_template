@@ -9,8 +9,18 @@ class SettingsScreen extends GetView<SettingsController> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Center(
+    return Scaffold(
+      appBar: CustomAppBar(
+        title: AppStrings.navSettings.tr,
+        actions: [
+          CustomAppBarAction(
+            icon: IconPath.notification,
+            tooltip: AppStrings.navNotifications.tr,
+            onTap: () {},
+          ),
+        ],
+      ),
+      body: Center(
         child: CustomText(
           text: AppStrings.navSettings.tr,
           style: context.textTheme.titleLarge,

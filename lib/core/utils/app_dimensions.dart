@@ -61,12 +61,15 @@ class AppDimensions {
   static const double inputHeight = 52.0;
   static const double iconButtonSize = 50.0;
   static const double iconContainerSize = 40.0;
+  static const double appBarHeight = 64.0;
+  static const double appBarActionSize = 50.0;
   static const double avatarSize = 70.0;
   static const double vehicleThumbWidth = 96.0;
   static const double vehicleThumbHeight = 92.0;
   static const double logoSizeLarge = 200.0;
   static const double logoSizeMedium = 120.0;
   static const double bottomNavBarHeight = 81.0;
+  
   // Standard border stroke widths for outlines, dividers, and focused inputs.
   static const double borderWidth05 = 0.5;
   static const double borderWidth1 = 1.0;

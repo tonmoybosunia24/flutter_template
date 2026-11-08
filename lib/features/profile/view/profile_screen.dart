@@ -9,8 +9,18 @@ class ProfileScreen extends GetView<ProfileController> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Center(
+    return Scaffold(
+      appBar: CustomAppBar(
+        title: AppStrings.navProfile.tr,
+        actions: [
+          CustomAppBarAction(
+            icon: IconPath.notification,
+            tooltip: AppStrings.navNotifications.tr,
+            onTap: () {},
+          ),
+        ],
+      ),
+      body: Center(
         child: CustomText(
           text: AppStrings.navProfile.tr,
           style: context.textTheme.titleLarge,

@@ -9,8 +9,18 @@ class NotificationScreen extends GetView<NotificationController> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Center(
+    return Scaffold(
+      appBar: CustomAppBar(
+        title: AppStrings.navNotifications.tr,
+        actions: [
+          CustomAppBarAction(
+            icon: IconPath.notification,
+            tooltip: AppStrings.navNotifications.tr,
+            onTap: () {},
+          ),
+        ],
+      ),
+      body: Center(
         child: CustomText(
           text: AppStrings.navNotifications.tr,
           style: context.textTheme.titleLarge,

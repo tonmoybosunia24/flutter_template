@@ -9,8 +9,18 @@ class SearchScreen extends GetView<AppSearchController> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Center(
+    return Scaffold(
+      appBar: CustomAppBar(
+        title: AppStrings.navSearch.tr,
+        actions: [
+          CustomAppBarAction(
+            icon: IconPath.notification,
+            tooltip: AppStrings.navNotifications.tr,
+            onTap: () {},
+          ),
+        ],
+      ),
+      body: Center(
         child: CustomText(
           text: AppStrings.navSearch.tr,
           style: context.textTheme.titleLarge,

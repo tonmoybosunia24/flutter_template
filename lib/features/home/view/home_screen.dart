@@ -9,8 +9,18 @@ class HomeScreen extends GetView<HomeController> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Center(
+    return Scaffold(
+      appBar: CustomAppBar(
+        title: AppStrings.navHome.tr,
+        actions: [
+          CustomAppBarAction(
+            icon: IconPath.notification,
+            tooltip: AppStrings.navNotifications.tr,
+            onTap: () {},
+          ),
+        ],
+      ),
+      body: Center(
         child: CustomText(
           text: AppStrings.navHome.tr,
           style: context.textTheme.titleLarge,
