@@ -17,7 +17,7 @@ class MainBottomNav extends GetView<MainController> {
         color: colors.background,
         border: Border(
           top: BorderSide(
-            color: colors.border,
+            color: colors.border.withValues(alpha: 0.5),
             width: AppDimensions.borderWidth1,
           ),
         ),
