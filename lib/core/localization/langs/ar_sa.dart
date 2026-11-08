@@ -3,4 +3,16 @@ import 'package:template/core/utils/app_strings.dart';
 /// This is the Arabic (Saudi Arabia) localization file.
 const Map<String, String> arSA = {
   AppStrings.appName: 'قالب البداية',
+  AppStrings.splashTitle: 'قالب فلاتر',
+
+  // Onboarding
+  AppStrings.onboardingSkip: 'تخطي',
+  AppStrings.onboardingNext: 'التالي',
+  AppStrings.onboardingGetStarted: 'ابدأ الآن',
+  AppStrings.onboardingTitle1: 'مرحباً بك',
+  AppStrings.onboardingDesc1: 'كل ما تحتاجه للبدء، في مكان واحد.',
+  AppStrings.onboardingTitle2: 'ابقَ على اطلاع',
+  AppStrings.onboardingDesc2: 'احصل على إشعارات فورية حتى لا يفوتك أي شيء مهم.',
+  AppStrings.onboardingTitle3: 'اجعله خاصاً بك',
+  AppStrings.onboardingDesc3: 'خصّص الإعدادات لتناسب طريقة عملك.',
 };
