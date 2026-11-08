@@ -62,4 +62,25 @@ class AppStrings {
   static const String languageSuggested = 'language_suggested';
   static const String languageOthers = 'language_others';
   static const String languageSave = 'language_save';
+
+  // Errors
+  static const String errorUnknown = 'error_unknown';
+  static const String errorNoInternet = 'error_no_internet';
+  static const String errorTimeout = 'error_timeout';
+  static const String errorSessionExpired = 'error_session_expired';
+  static const String errorBadRequest = 'error_bad_request';
+  static const String errorUnauthorized = 'error_unauthorized';
+  static const String errorForbidden = 'error_forbidden';
+  static const String errorNotFound = 'error_not_found';
+  static const String errorValidation = 'error_validation';
+  static const String errorServer = 'error_server';
+  static const String errorRequestFailed = 'error_request_failed';
+
+  // Form validation
+  static const String validationEmailRequired = 'validation_email_required';
+  static const String validationEmailInvalid = 'validation_email_invalid';
+  static const String validationPasswordRequired = 'validation_password_required';
+  static const String validationPasswordTooShort = 'validation_password_too_short';
+  static const String validationFieldRequired = 'validation_field_required';
+  static const String validationFieldDefault = 'validation_field_default';
 }

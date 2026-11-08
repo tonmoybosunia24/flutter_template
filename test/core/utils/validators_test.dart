@@ -1,8 +1,28 @@
+import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:get/get.dart';
+import 'package:template/core/localization/app_translations.dart';
 import 'package:template/core/utils/validators.dart';
 
-/// Tests the form field rules in [AppValidators].
+/// Tests the form field rules in [AppValidators] and that their messages follow the current language.
 void main() {
+  setUpAll(() {
+    Get.addTranslations(AppTranslations().keys);
+    Get.locale = const Locale('en', 'US');
+  });
+
+  test('messages follow the current language', () {
+    Get.locale = const Locale('bn', 'BD');
+    addTearDown(() => Get.locale = const Locale('en', 'US'));
+
+    expect(AppValidators.emailValidator(''), 'ইমেইল দিতে হবে');
+    expect(
+      AppValidators.defaultValidator('', fieldName: 'নাম'),
+      'নাম পূরণ করতে হবে',
+    );
+    expect(AppValidators.defaultValidator(''), 'ঘরটি পূরণ করতে হবে');
+  });
+
   group('emailValidator', () {
     test('requires a value', () {
       expect(AppValidators.emailValidator(null), 'Email is required');

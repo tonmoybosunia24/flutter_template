@@ -61,4 +61,25 @@ const Map<String, String> enUS = {
   AppStrings.languageSuggested: 'Suggested',
   AppStrings.languageOthers: 'Others',
   AppStrings.languageSave: 'Save',
+
+  // Errors
+  AppStrings.errorUnknown: 'An unexpected error occurred.',
+  AppStrings.errorNoInternet: 'No internet connection.',
+  AppStrings.errorTimeout: 'Request timed out. Please try again.',
+  AppStrings.errorSessionExpired: 'Session expired. Please log in again.',
+  AppStrings.errorBadRequest: 'Invalid request.',
+  AppStrings.errorUnauthorized: 'Unauthorized.',
+  AppStrings.errorForbidden: 'Access denied.',
+  AppStrings.errorNotFound: 'Resource not found.',
+  AppStrings.errorValidation: 'Validation failed.',
+  AppStrings.errorServer: 'Server error.',
+  AppStrings.errorRequestFailed: 'Request failed.',
+
+  // Form validation
+  AppStrings.validationEmailRequired: 'Email is required',
+  AppStrings.validationEmailInvalid: 'Enter a valid email',
+  AppStrings.validationPasswordRequired: 'Password is required',
+  AppStrings.validationPasswordTooShort: 'Password must be at least 6 characters',
+  AppStrings.validationFieldRequired: '@field is required',
+  AppStrings.validationFieldDefault: 'Field',
 };

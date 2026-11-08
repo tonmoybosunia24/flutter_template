@@ -58,4 +58,25 @@ const Map<String, String> arSA = {
   AppStrings.languageSuggested: 'مقترحة',
   AppStrings.languageOthers: 'أخرى',
   AppStrings.languageSave: 'حفظ',
+
+  // Errors
+  AppStrings.errorUnknown: 'حدث خطأ غير متوقع.',
+  AppStrings.errorNoInternet: 'لا يوجد اتصال بالإنترنت.',
+  AppStrings.errorTimeout: 'انتهت مهلة الطلب. يرجى المحاولة مرة أخرى.',
+  AppStrings.errorSessionExpired: 'انتهت الجلسة. يرجى تسجيل الدخول مرة أخرى.',
+  AppStrings.errorBadRequest: 'طلب غير صالح.',
+  AppStrings.errorUnauthorized: 'غير مصرح.',
+  AppStrings.errorForbidden: 'تم رفض الوصول.',
+  AppStrings.errorNotFound: 'المورد غير موجود.',
+  AppStrings.errorValidation: 'فشل التحقق.',
+  AppStrings.errorServer: 'خطأ في الخادم.',
+  AppStrings.errorRequestFailed: 'فشل الطلب.',
+
+  // Form validation
+  AppStrings.validationEmailRequired: 'البريد الإلكتروني مطلوب',
+  AppStrings.validationEmailInvalid: 'أدخل بريدًا إلكترونيًا صالحًا',
+  AppStrings.validationPasswordRequired: 'كلمة المرور مطلوبة',
+  AppStrings.validationPasswordTooShort: 'يجب ألا تقل كلمة المرور عن 6 أحرف',
+  AppStrings.validationFieldRequired: '@field مطلوب',
+  AppStrings.validationFieldDefault: 'الحقل',
 };

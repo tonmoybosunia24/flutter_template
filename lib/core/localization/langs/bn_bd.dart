@@ -59,4 +59,25 @@ const Map<String, String> bnBD = {
   AppStrings.languageSuggested: 'প্রস্তাবিত',
   AppStrings.languageOthers: 'অন্যান্য',
   AppStrings.languageSave: 'সংরক্ষণ',
+
+  // Errors
+  AppStrings.errorUnknown: 'একটি অপ্রত্যাশিত সমস্যা হয়েছে।',
+  AppStrings.errorNoInternet: 'ইন্টারনেট সংযোগ নেই।',
+  AppStrings.errorTimeout: 'অনুরোধের সময় শেষ হয়ে গেছে। আবার চেষ্টা করুন।',
+  AppStrings.errorSessionExpired: 'সেশনের মেয়াদ শেষ। আবার লগ ইন করুন।',
+  AppStrings.errorBadRequest: 'অনুরোধটি সঠিক নয়।',
+  AppStrings.errorUnauthorized: 'অনুমতি নেই।',
+  AppStrings.errorForbidden: 'প্রবেশাধিকার নেই।',
+  AppStrings.errorNotFound: 'কিছু খুঁজে পাওয়া যায়নি।',
+  AppStrings.errorValidation: 'যাচাই ব্যর্থ হয়েছে।',
+  AppStrings.errorServer: 'সার্ভারে সমস্যা হয়েছে।',
+  AppStrings.errorRequestFailed: 'অনুরোধ ব্যর্থ হয়েছে।',
+
+  // Form validation
+  AppStrings.validationEmailRequired: 'ইমেইল দিতে হবে',
+  AppStrings.validationEmailInvalid: 'সঠিক ইমেইল লিখুন',
+  AppStrings.validationPasswordRequired: 'পাসওয়ার্ড দিতে হবে',
+  AppStrings.validationPasswordTooShort: 'পাসওয়ার্ড কমপক্ষে ৬ অক্ষরের হতে হবে',
+  AppStrings.validationFieldRequired: '@field পূরণ করতে হবে',
+  AppStrings.validationFieldDefault: 'ঘরটি',
 };
