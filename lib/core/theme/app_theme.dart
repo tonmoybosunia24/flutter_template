@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:template/core/theme/app_colors.dart';
 import 'package:template/core/utils/app_dimensions.dart';
@@ -19,6 +20,23 @@ class AppTheme {
         brightness: Brightness.dark,
         colors: AppColorScheme.dark,
       );
+
+  // System status bar & navigation bar style for the given theme brightness: transparent status bar (no dark scrim), navigation bar matching the app background, and icons that contrast with it. Applied app-wide in MaterialApp's builder and by every AppBar.
+  static SystemUiOverlayStyle systemOverlayStyle(Brightness brightness) {
+    final isDark = brightness == Brightness.dark;
+    final iconBrightness = isDark ? Brightness.light : Brightness.dark;
+
+    return SystemUiOverlayStyle(
+      statusBarColor: Colors.transparent,
+      statusBarIconBrightness: iconBrightness, // Android
+      statusBarBrightness: brightness, // iOS
+      systemNavigationBarColor: isDark
+          ? AppColors.backgroundDark
+          : AppColors.backgroundLight,
+      systemNavigationBarIconBrightness: iconBrightness,
+      systemNavigationBarDividerColor: Colors.transparent,
+    );
+  }
 
   // Common helper method to build both light and dark themes from an AppColorScheme.
   static ThemeData _buildTheme({
@@ -64,6 +82,7 @@ class AppTheme {
           color: colors.textPrimary,
         ),
         iconTheme: IconThemeData(color: colors.textPrimary),
+        systemOverlayStyle: systemOverlayStyle(brightness),
       ),
 
       // Card theme

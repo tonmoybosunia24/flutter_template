@@ -34,10 +34,10 @@ class SplashController extends GetxController {
     try {
       if (!_storage.hasOnboarded()) return AppRoutes.onboarding;
 
-      return await _isLoggedIn() ? AppRoutes.main : AppRoutes.auth;
+      return await _isLoggedIn() ? AppRoutes.main : AppRoutes.login;
     } catch (e, stackTrace) {
       AppLogger.logError('Splash startup failed', e, stackTrace);
-      return AppRoutes.auth;
+      return AppRoutes.login;
     }
   }
 

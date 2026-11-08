@@ -50,7 +50,7 @@ class AppColors {
 
   // The light and dark theme's border colors.
   static const Color borderLight = Color(0xFFE0E0E0);
-  static const Color borderDark = Color(0xFF2E3350);
+  static const Color borderDark = Color(0xFF363946);
 
   // The light and dark theme's outline colors.
   static const Color outlineLight = Color(0xFFE2E2E2);

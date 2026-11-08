@@ -57,7 +57,7 @@ class OnboardingController extends GetxController {
   // Remembers that onboarding is done and moves to the auth flow.
   Future<void> complete() async {
     await _storage.setOnboarded();
-    Get.offAllNamed(AppRoutes.auth);
+    Get.offAllNamed(AppRoutes.login);
   }
 
   @override

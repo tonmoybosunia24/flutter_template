@@ -53,6 +53,7 @@ class AppDimensions {
   static const double icon22 = 22.0;
   static const double icon24 = 24.0;
   static const double icon30 = 30.0;
+  static const double icon32 = 32.0;
   static const double icon40 = 40.0;
 
   // Fixed dimensions for common UI components (buttons, inputs, avatars, nav bar).
@@ -88,6 +89,7 @@ class AppDimensions {
   static const double space20 = 20.0;
   static const double space24 = 24.0;
   static const double space32 = 32.0;
+  static const double space40 = 40.0;
   static const double space48 = 48.0;
   static const double space64 = 64.0;
 }

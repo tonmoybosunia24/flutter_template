@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -59,7 +60,10 @@ class MyApp extends StatelessWidget {
           ],
           builder: (context, child) {
             AppSizeClass.init(context); // Initialize AppSizeClass for responsive sizing
-            return child!;
+            return AnnotatedRegion<SystemUiOverlayStyle>( // Set the system overlay style based on the current theme
+              value: AppTheme.systemOverlayStyle(Theme.of(context).brightness),
+              child: child!,
+            );
           },
           initialBinding: AppBinding(), // Initial binding to set up dependencies
           initialRoute: AppRoutes.splash, // Set the initial route to the splash screen

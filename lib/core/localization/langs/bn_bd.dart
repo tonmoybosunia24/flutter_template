@@ -16,4 +16,15 @@ const Map<String, String> bnBD = {
       'সময়মতো নোটিফিকেশন পান, যাতে গুরুত্বপূর্ণ কিছু মিস না হয়।',
   AppStrings.onboardingTitle3: 'নিজের মতো সাজান',
   AppStrings.onboardingDesc3: 'আপনার কাজের ধরন অনুযায়ী সেটিংস সাজিয়ে নিন।',
+
+  // Login
+  AppStrings.loginTitle: 'আবার স্বাগতম!',
+  AppStrings.loginEmailHint: 'আপনার ইমেইল লিখুন',
+  AppStrings.loginPasswordHint: 'আপনার পাসওয়ার্ড লিখুন',
+  AppStrings.loginRememberMe: 'মনে রাখুন',
+  AppStrings.loginSignIn: 'সাইন ইন',
+  AppStrings.loginForgotPassword: 'পাসওয়ার্ড ভুলে গেছেন?',
+  AppStrings.loginOrContinueWith: 'অথবা এভাবে চালিয়ে যান',
+  AppStrings.loginNoAccount: 'অ্যাকাউন্ট নেই?',
+  AppStrings.loginSignUp: 'সাইন আপ',
 };

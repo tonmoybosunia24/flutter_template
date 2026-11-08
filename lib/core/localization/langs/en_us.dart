@@ -18,4 +18,15 @@ const Map<String, String> enUS = {
   AppStrings.onboardingTitle3: 'Make It Yours',
   AppStrings.onboardingDesc3:
       'Personalize the settings to fit the way you work.',
+
+  // Login
+  AppStrings.loginTitle: 'Welcome Back!',
+  AppStrings.loginEmailHint: 'Enter Your Email',
+  AppStrings.loginPasswordHint: 'Enter Your Password',
+  AppStrings.loginRememberMe: 'Remember me',
+  AppStrings.loginSignIn: 'Sign In',
+  AppStrings.loginForgotPassword: 'Forgot Password?',
+  AppStrings.loginOrContinueWith: 'Or Continue With',
+  AppStrings.loginNoAccount: 'Don’t have an account?',
+  AppStrings.loginSignUp: 'Sign Up',
 };

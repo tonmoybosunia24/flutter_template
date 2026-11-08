@@ -19,4 +19,15 @@ class AppStrings {
   static const String onboardingDesc2 = 'onboarding_desc_2';
   static const String onboardingTitle3 = 'onboarding_title_3';
   static const String onboardingDesc3 = 'onboarding_desc_3';
+
+  // Login
+  static const String loginTitle = 'login_title';
+  static const String loginEmailHint = 'login_email_hint';
+  static const String loginPasswordHint = 'login_password_hint';
+  static const String loginRememberMe = 'login_remember_me';
+  static const String loginSignIn = 'login_sign_in';
+  static const String loginForgotPassword = 'login_forgot_password';
+  static const String loginOrContinueWith = 'login_or_continue_with';
+  static const String loginNoAccount = 'login_no_account';
+  static const String loginSignUp = 'login_sign_up';
 }
