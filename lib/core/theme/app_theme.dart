@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:template/core/theme/app_colors.dart';
 import 'package:template/core/utils/app_dimensions.dart';
 
-/// This class defines the light and dark themes for the application using a shared theme builder. Both [AppTheme.light] and [AppTheme.dark] are generated from [_buildTheme] using [AppColorScheme.light] and [AppColorScheme.dark].
+/// Builds the app's light and dark [ThemeData] from one shared builder, using [AppColorScheme.light] and [AppColorScheme.dark].
 class AppTheme {
   // Private constructor to prevent instantiation
   AppTheme._();
@@ -19,6 +20,23 @@ class AppTheme {
         brightness: Brightness.dark,
         colors: AppColorScheme.dark,
       );
+
+  // System status bar & navigation bar style for the given theme brightness: transparent status bar (no dark scrim), navigation bar matching the app background, and icons that contrast with it. Applied app-wide in MaterialApp's builder and by every AppBar.
+  static SystemUiOverlayStyle systemOverlayStyle(Brightness brightness) {
+    final isDark = brightness == Brightness.dark;
+    final iconBrightness = isDark ? Brightness.light : Brightness.dark;
+
+    return SystemUiOverlayStyle(
+      statusBarColor: Colors.transparent,
+      statusBarIconBrightness: iconBrightness, // Android
+      statusBarBrightness: brightness, // iOS
+      systemNavigationBarColor: isDark
+          ? AppColors.backgroundDark
+          : AppColors.backgroundLight,
+      systemNavigationBarIconBrightness: iconBrightness,
+      systemNavigationBarDividerColor: Colors.transparent,
+    );
+  }
 
   // Common helper method to build both light and dark themes from an AppColorScheme.
   static ThemeData _buildTheme({
@@ -64,6 +82,7 @@ class AppTheme {
           color: colors.textPrimary,
         ),
         iconTheme: IconThemeData(color: colors.textPrimary),
+        systemOverlayStyle: systemOverlayStyle(brightness),
       ),
 
       // Card theme
@@ -102,6 +121,11 @@ class AppTheme {
           fontSize: AppDimensions.font30,
           fontWeight: FontWeight.w500,
         ),
+        headlineSmall: GoogleFonts.poppins(
+          color: colors.textPrimary,
+          fontSize: AppDimensions.font24,
+          fontWeight: FontWeight.w500,
+        ),
         titleLarge: GoogleFonts.poppins(
           color: colors.textPrimary,
           fontSize: AppDimensions.font20,
@@ -136,6 +160,11 @@ class AppTheme {
           color: colors.textPrimary,
           fontSize: AppDimensions.font16,
           fontWeight: FontWeight.w600,
+        ),
+        labelMedium: GoogleFonts.poppins(
+          color: colors.textPrimary,
+          fontSize: AppDimensions.font14,
+          fontWeight: FontWeight.w500,
         ),
         labelSmall: GoogleFonts.poppins(
           color: colors.textSecondary,
@@ -255,7 +284,7 @@ class AppTheme {
         backgroundColor: colors.surfaceVariant,
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(
-            top: Radius.circular(AppDimensions.radius40),
+            top: Radius.circular(AppDimensions.radius30),
           ),
         ),
       ),

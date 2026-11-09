@@ -1,8 +1,7 @@
 import 'package:get/get.dart';
 import 'package:template/core/network/network_caller.dart';
-// import '../core/network/network_caller.dart';
 
-/// This class is responsible for managing the dependencies of the application. It extends [Bindings] from the GetX package, allowing for easy dependency injection and management.
+/// Registers the app-wide dependencies that must exist before the first screen opens, such as [NetworkCaller].
 class AppBinding extends Bindings {
   @override
   void dependencies() {

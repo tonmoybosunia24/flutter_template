@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:template/core/core.dart';
 
-/// A reusable primary button widget that supports loading states, optional icons, and custom styling. [text] is the button label, [onPressed] is the callback when the button is tapped, [isLoading] indicates if a loading spinner should be shown, [color] and [textColor] allow for custom colors, [icon] allows for an optional icon, and [borderRadius] allows for custom corner rounding.
+/// A full-width primary button with a loading state and an optional icon. Params: [text]: the already translated label. [onPressed]: called when the button is tapped. [isLoading]: shows a spinner and disables the button. Defaults to false. [color]: background color. Defaults to the theme's primary color. [textColor]: color of the label, icon and spinner. Defaults to the theme's onPrimary color. [icon]: optional icon shown before the label. [borderRadius]: corner radius. Defaults to [AppDimensions.radius100].
 class CustomButton extends StatelessWidget {
   final String text;
   final VoidCallback onPressed;

@@ -12,7 +12,18 @@ import 'package:template/core/storage/storage_service.dart';
 import 'package:template/core/utils/logger.dart';
 import 'package:template/routes/app_routes.dart';
 
-/// A class responsible for making network requests, handling token refresh, and managing error responses. It provides methods for GET, POST, PUT, PATCH, and DELETE requests.
+/// The result of trying to get a new access token: it worked, the server refused the session, the request timed out, the server couldn't be reached, or the server failed.
+enum _RefreshResult { refreshed, rejected, timedOut, offline, serverError }
+
+/// Stops a request whose session couldn't be refreshed. Params: [error]: the failure to report. [statusCode]: the status code to report.
+class _SessionException implements Exception {
+  final AppError error;
+  final int statusCode;
+
+  const _SessionException(this.error, this.statusCode);
+}
+
+/// Makes the app's HTTP requests: adds auth headers, refreshes expired tokens, retries once after a 401 and turns every outcome into a [ResponseData]. Params: [storage]: token storage. Defaults to the registered [StorageService]. [client]: the HTTP client. Defaults to a new [http.Client]. [connectivityCheck]: tells whether the device is online. Defaults to a check with [Connectivity]. [onSessionExpired]: called after the session is cleared. Defaults to opening the login screen.
 class NetworkCaller {
   
   // Timeout duration for network requests in seconds.
@@ -20,15 +31,18 @@ class NetworkCaller {
   final StorageService _storage;
   final http.Client _client;
   final Future<bool> Function() _connectivityCheck;
+  final void Function() _onSessionExpired;
 
-  // Constructor with optional parameters for storage, client, and connectivity check function
+  // Constructor with optional parameters for storage, client, connectivity check and session expiry
   NetworkCaller({
     StorageService? storage,
     http.Client? client,
     Future<bool> Function()? connectivityCheck,
+    void Function()? onSessionExpired,
   }) : _storage = storage ?? Get.find<StorageService>(),
        _client = client ?? http.Client(),
-       _connectivityCheck = connectivityCheck ?? _defaultConnectivityCheck;
+       _connectivityCheck = connectivityCheck ?? _defaultConnectivityCheck,
+       _onSessionExpired = onSessionExpired ?? _goToLogin;
 
   // Default connectivity check function
   static Future<bool> _defaultConnectivityCheck() async {
@@ -36,46 +50,59 @@ class NetworkCaller {
     return results.any((r) => r != ConnectivityResult.none);
   }
 
-  // Method to refresh the access token
-  Completer<bool>? _refreshCompleter;
+  // Opens the login screen, unless it is already showing. Not awaited, because the navigation's future only completes when the login screen closes.
+  static void _goToLogin() {
+    if (Get.currentRoute != AppRoutes.login) {
+      Get.offAllNamed<void>(AppRoutes.login);
+    }
+  }
+
+  // The refresh currently in progress, shared by every request waiting for a new token.
+  Completer<_RefreshResult>? _refreshCompleter;
 
   // This method ensures that only one token refresh operation is in progress at a time. If a refresh is already in progress, it returns the existing future. Otherwise, it initiates a new refresh operation and returns its future.
-  Future<bool> _refreshToken() {
+  Future<_RefreshResult> _refreshToken() {
     final inFlight = _refreshCompleter;
     if (inFlight != null) return inFlight.future;
 
-    final completer = Completer<bool>();
+    final completer = Completer<_RefreshResult>();
     _refreshCompleter = completer;
 
     unawaited(
       _performRefresh()
-          .then((success) {
+          .then((result) {
             _refreshCompleter = null;
-            completer.complete(success);
+            completer.complete(result);
           })
           .catchError((Object e) {
             _refreshCompleter = null;
             AppLogger.logError('Token refresh failed', e);
-            completer.complete(false);
+            completer.complete(_RefreshResult.serverError);
           }),
     );
 
     return completer.future;
   }
 
-  // Method to perform the actual token refresh operation.
-  Future<bool> _performRefresh() async {
+  // Method to perform the actual token refresh operation. Only a clear refusal from the server counts as rejected; network errors, timeouts and server errors leave the session alone.
+  Future<_RefreshResult> _performRefresh() async {
     try {
       final refreshToken = await _storage.getRefreshToken();
-      if (refreshToken == null) return false;
+      if (refreshToken == null) return _RefreshResult.rejected;
 
       AppLogger.logInfo('Refreshing token...');
 
-      final response = await _client.post(
-        Uri.parse(ApiEndpoints.refreshToken),
-        headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({'refresh_token': refreshToken}),
-      );
+      final response = await _client
+          .post(
+            Uri.parse(ApiEndpoints.refreshToken),
+            headers: {'Content-Type': 'application/json'},
+            body: jsonEncode({'refresh_token': refreshToken}),
+          )
+          .timeout(Duration(seconds: _timeoutSeconds));
+
+      if (const [400, 401, 403].contains(response.statusCode)) {
+        return _RefreshResult.rejected;
+      }
 
       if (response.statusCode == 200) {
         final decoded = jsonDecode(response.body);
@@ -93,31 +120,63 @@ class NetworkCaller {
               expiresIn: expiresIn is int ? expiresIn : 0,
             );
             AppLogger.logInfo('Token refreshed successfully');
-            return true;
+            return _RefreshResult.refreshed;
           }
         }
         AppLogger.logError('Refresh response did not contain valid tokens');
       }
+    } on TimeoutException catch (e) {
+      AppLogger.logError('Token refresh timed out', e);
+      return _RefreshResult.timedOut;
+    } on http.ClientException catch (e) {
+      AppLogger.logError('Token refresh could not reach the server', e);
+      return _RefreshResult.offline;
     } catch (e) {
       AppLogger.logError('Token refresh failed', e);
     }
-    return false;
+    return _RefreshResult.serverError;
   }
 
-  // Method to log out the user by clearing authentication data and navigating to the login screen.
+  // Whether a logout is running, so parallel requests that fail together log out only once.
+  bool _isLoggingOut = false;
+
+  // Method to log out the user by clearing authentication data and reporting the expired session.
   Future<void> _logout() async {
-    await _storage.clearAuth();
-    await Get.offAllNamed<void>(AppRoutes.login);
+    if (_isLoggingOut) return;
+
+    _isLoggingOut = true;
+    try {
+      await _storage.clearAuth();
+      _onSessionExpired();
+    } finally {
+      _isLoggingOut = false;
+    }
+  }
+
+  // Gets a new access token, or throws a [_SessionException] so the request stops instead of going out without a valid token.
+  Future<void> _refreshOrThrow() async {
+    switch (await _refreshToken()) {
+      case _RefreshResult.refreshed:
+        return;
+      case _RefreshResult.rejected:
+        await _logout();
+        throw const _SessionException(AppError.unauthorized, 401);
+      case _RefreshResult.timedOut:
+        throw const _SessionException(AppError.timeout, 408);
+      case _RefreshResult.offline:
+        throw const _SessionException(AppError.noInternet, 0);
+      case _RefreshResult.serverError:
+        throw _SessionException(AppError.fromStatusCode(500), 500);
+    }
   }
 
   // Method to get headers for network requests, including authorization if needed.
   Future<Map<String, String>> _getHeaders({bool isAuthCall = false}) async {
     var token = await _storage.getAccessToken();
 
-    // Check for expiration and refresh if necessary
-    if (!isAuthCall && _storage.isAccessTokenExpired()) {
-      final refreshed = await _refreshToken();
-      if (!refreshed) await _logout();
+    // Refresh an expired token. Without a token there is no session to refresh, so the request goes out without one.
+    if (!isAuthCall && token != null && _storage.isAccessTokenExpired()) {
+      await _refreshOrThrow();
       token = await _storage.getAccessToken();
     }
 
@@ -128,7 +187,7 @@ class NetworkCaller {
     };
   }
 
-  // Method to handle the HTTP response and return a ResponseData object
+  // Sends a request with up to one retry after a 401, and converts connectivity, timeout and other failures into a failed ResponseData.
   Future<ResponseData<dynamic>> _sendRequest({
     required String url,
     required String method,
@@ -192,24 +251,18 @@ class NetworkCaller {
 
       // Handle Unauthorized (401)
       if (response.statusCode == 401 && !isAuthCall && !isRetry) {
-        final refreshed = await _refreshToken();
-        if (refreshed) {
-          return await _sendRequest(
-            url: url,
-            method: method,
-            body: body,
-            isRetry: true,
-          );
-        } else {
-          await _logout();
-          return ResponseData.failure(
-            error: AppError.unauthorized,
-            statusCode: 401,
-          );
-        }
+        await _refreshOrThrow();
+        return await _sendRequest(
+          url: url,
+          method: method,
+          body: body,
+          isRetry: true,
+        );
       }
 
       return _handleResponse(response);
+    } on _SessionException catch (e) {
+      return ResponseData.failure(error: e.error, statusCode: e.statusCode);
     } on TimeoutException {
       return ResponseData.failure(error: AppError.timeout, statusCode: 408);
     } catch (e) {
@@ -223,10 +276,17 @@ class NetworkCaller {
     AppLogger.logInfo('Status: ${response.statusCode}');
     AppLogger.logDebug('Body: ${response.body}');
 
+    final isSuccess = response.statusCode >= 200 && response.statusCode < 300;
+
+    // A successful response can have no body at all (e.g. 204 No Content), and an empty string can't be decoded as JSON.
+    if (isSuccess && response.body.trim().isEmpty) {
+      return ResponseData.success(statusCode: response.statusCode);
+    }
+
     try {
       final decoded = jsonDecode(response.body);
 
-      if (response.statusCode == 200 || response.statusCode == 201) {
+      if (isSuccess) {
         // Handle common API success structures
         if (decoded is Map<String, dynamic> &&
             decoded.containsKey('status') &&
@@ -253,6 +313,14 @@ class NetworkCaller {
         statusCode: response.statusCode,
       );
     } catch (e) {
+      // The server reported success but the body isn't JSON, so hand back the raw text.
+      if (isSuccess) {
+        return ResponseData.success(
+          statusCode: response.statusCode,
+          data: response.body,
+        );
+      }
+
       return ResponseData.failure(
         error: AppError.unknown,
         statusCode: response.statusCode,
@@ -306,6 +374,22 @@ class NetworkCaller {
     required Map<String, String> fields,
     required String fileFieldName,
     required String filePath,
+  }) {
+    return _sendMultipart(
+      url: url,
+      fields: fields,
+      fileFieldName: fileFieldName,
+      filePath: filePath,
+    );
+  }
+
+  // Sends a file upload with up to one retry after a 401. The request is rebuilt for the retry, because a sent multipart request can't be reused.
+  Future<ResponseData<dynamic>> _sendMultipart({
+    required String url,
+    required Map<String, String> fields,
+    required String fileFieldName,
+    required String filePath,
+    bool isRetry = false,
   }) async {
     if (!await _connectivityCheck()) {
       return ResponseData.failure(error: AppError.noInternet);
@@ -333,7 +417,22 @@ class NetworkCaller {
           .timeout(Duration(seconds: _timeoutSeconds));
       final response = await http.Response.fromStream(streamedResponse);
 
+      if (response.statusCode == 401 && !isRetry) {
+        await _refreshOrThrow();
+        return await _sendMultipart(
+          url: url,
+          fields: fields,
+          fileFieldName: fileFieldName,
+          filePath: filePath,
+          isRetry: true,
+        );
+      }
+
       return _handleResponse(response);
+    } on _SessionException catch (e) {
+      return ResponseData.failure(error: e.error, statusCode: e.statusCode);
+    } on TimeoutException {
+      return ResponseData.failure(error: AppError.timeout, statusCode: 408);
     } catch (e) {
       AppLogger.logError('Upload error', e);
       return ResponseData.failure(error: AppError.unknown);

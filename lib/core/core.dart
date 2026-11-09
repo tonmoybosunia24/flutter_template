@@ -1,4 +1,5 @@
-// This file exports all core modules including configuration, localization, storage, theme, and utilities, allowing them to be accessed from a single import throughout the application.
+/// Barrel file for the core layer: configuration, localization, storage, theme, widgets and utilities. The network layer is imported directly.
+library;
 
 // Configuration
 export 'config/env_config.dart';
@@ -19,6 +20,7 @@ export 'widgets/widgets.dart';
 // Utilities
 export 'utils/app_dimensions.dart';
 export 'utils/app_icons.dart';
+export 'utils/app_illustrations.dart';
 export 'utils/app_images.dart';
 export 'utils/app_size_class.dart';
 export 'utils/app_strings.dart';

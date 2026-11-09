@@ -1,34 +1,49 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-// This file defines the AppSizeClass, which provides a responsive sizing system for the application. It calculates scaling factors based on the device's screen size and type, allowing for consistent UI scaling across different devices. The class also includes global helper functions and getters for responsive sizing and screen utility.
+/// The device categories used for responsive layouts.
 enum ScreenType { mobile, tablet, desktop, tv }
 
 // Global helper functions for responsive sizing.
-// Call [AppSizeClass.init(context)] in your App's build method first.
+// Call [AppSizeClass.init] in the app's builder before using them.
+
+/// Scales [size] with the screen height.
 double getHeight(double size) => AppSizeClass.instance.getHeight(size);
+/// Scales [size] with the screen width.
 double getWidth(double size) => AppSizeClass.instance.getWidth(size);
+/// Scales the font [size] with the screen.
 double getSp(double size) => AppSizeClass.instance.getSp(size);
+/// Scales a corner radius or icon [size] with the smaller screen side.
 double getRadius(double size) => AppSizeClass.instance.getRadius(size);
 
-// Global helper function to get a value based on the current screen type. It takes different values for mobile, tablet, desktop, and TV, and returns the appropriate one based on the current screen type.
+/// Returns the value for the current screen type, falling back to the next smaller size that was given.
 T getValue<T>({required T mobile, T? tablet, T? desktop, T? tv}) => AppSizeClass
     .instance
     .getValue(mobile: mobile, tablet: tablet, desktop: desktop, tv: tv);
 
 // Global screen utility getters
+
+/// The current screen width in logical pixels.
 double get screenWidth => AppSizeClass.instance.screenWidth;
+/// The current screen height in logical pixels.
 double get screenHeight => AppSizeClass.instance.screenHeight;
+/// The horizontal page padding for the current screen type.
 double get horizontalPadding => AppSizeClass.instance.horizontalPadding;
+/// The maximum content width for the current screen type.
 double get maxContentWidth => AppSizeClass.instance.maxContentWidth;
 
 // Global screen type checks
+
+/// Whether the screen is mobile sized.
 bool get isMobile => AppSizeClass.instance.isMobile;
+/// Whether the screen is tablet sized.
 bool get isTablet => AppSizeClass.instance.isTablet;
+/// Whether the screen is desktop sized.
 bool get isDesktop => AppSizeClass.instance.isDesktop;
+/// Whether the screen is TV sized.
 bool get isTV => AppSizeClass.instance.isTV;
 
-// This class provides a responsive sizing system for the application. It calculates scaling factors based on the device's screen size and type, allowing for consistent UI scaling across different devices.
+/// The responsive sizing system: works out the screen type and scale factor from the screen width. Created with [AppSizeClass.init] and read through [AppSizeClass.instance] or the global helpers above.
 class AppSizeClass {
 
   // Singleton instance of AppSizeClass
@@ -69,7 +84,6 @@ class AppSizeClass {
     final ScreenType type;
     final double scale;
 
-    // Determine the screen type and scaling factor based on the width
     if (width < 600) {
       type = ScreenType.mobile;
       scale = (width / 412).clamp(0.8, 1.2);

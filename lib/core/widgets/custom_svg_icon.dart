@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 
-/// A reusable widget for displaying SVG icons. [assetName] is the path to the SVG asset, [width] and [height] allow for custom sizing, and [color] allows for color customization of the SVG.
+/// Displays an SVG asset, optionally tinted. Params: [assetName]: path of the SVG asset, usually from [IconPath]. [width]: icon width. [height]: icon height. [color]: tints the whole icon. Leave null to keep the SVG's own colors.
 class CustomSvgIcon extends StatelessWidget {
   final String assetName;
   final double? width;

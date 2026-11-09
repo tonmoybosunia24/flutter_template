@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:logger/logger.dart';
 
+/// Prints log messages in debug builds only. Release builds log nothing.
 class AppLogger {
   // Private constructor to prevent instantiation
   AppLogger._();

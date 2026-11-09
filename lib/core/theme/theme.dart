@@ -1,3 +1,5 @@
-// This file exports the application's color palette and theme configurations for easy access across the app.
+/// Barrel file for the application's color palette and themes.
+library;
+
 export 'app_colors.dart';
 export 'app_theme.dart';

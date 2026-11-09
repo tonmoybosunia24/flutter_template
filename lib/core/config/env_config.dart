@@ -1,18 +1,19 @@
+/// The environments the app can be built for, selected with `--dart-define=ENV=<name>`.
 enum Environment { dev, staging, prod }
 
-/// A class that provides access to environment-specific configuration values.
+/// Environment-specific configuration values, read from `--dart-define` at build time.
 class EnvConfig {
 
   // Private constructor to prevent instantiation.
   EnvConfig._();
 
-  /// The name of the environment, which can be set via the `ENV` environment variable.
+  // The environment name, set with `--dart-define=ENV=<name>`. Defaults to dev.
   static const String _envName = String.fromEnvironment('ENV', defaultValue: 'dev');
 
-  /// The base URL for the API, which can be overridden via the `API_BASE_URL` environment variable.
+  // Overrides the base URL of every environment when `--dart-define=API_BASE_URL=<url>` is set.
   static const String _baseUrlOverride = String.fromEnvironment('API_BASE_URL');
 
-  /// Returns the current environment based on the `_envName` value.
+  // The current environment. Any unknown name falls back to dev.
   static Environment get environment => switch (_envName) {
     'prod' => Environment.prod,
     'staging' => Environment.staging,
@@ -25,7 +26,7 @@ class EnvConfig {
 
     return switch (environment) {
       // TODO: Replace these with your own API hosts.
-      Environment.dev => 'https://dev.api.example.com',
+      Environment.dev => 'https://mock-server-iota-ebon.vercel.app',
       Environment.staging => 'https://staging.api.example.com',
       Environment.prod => 'https://api.example.com',
     };

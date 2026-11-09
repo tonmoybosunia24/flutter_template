@@ -1,4 +1,4 @@
-/// This class defines centralized design tokens for application dimensions, including padding, border radii, font sizes, icon sizes, and spacing. It stores raw `double` values that can be scaled in the UI using responsive helpers (`getWidth`, `getHeight`, `getSp`, `getRadius`) or `ScreenUtil` extensions (`.w`, `.h`, `.sp`, `.r`).
+/// Centralized design tokens for padding, radii, font sizes, icon sizes, component sizes, stroke widths and spacing. Values are raw doubles. Scale them in the UI with `getWidth`, `getHeight`, `getSp` or `getRadius`.
 class AppDimensions {
   // Private constructor to prevent instantiation
   AppDimensions._();
@@ -53,6 +53,7 @@ class AppDimensions {
   static const double icon22 = 22.0;
   static const double icon24 = 24.0;
   static const double icon30 = 30.0;
+  static const double icon32 = 32.0;
   static const double icon40 = 40.0;
 
   // Fixed dimensions for common UI components (buttons, inputs, avatars, nav bar).
@@ -60,13 +61,19 @@ class AppDimensions {
   static const double inputHeight = 52.0;
   static const double iconButtonSize = 50.0;
   static const double iconContainerSize = 40.0;
+  static const double appBarHeight = 64.0;
+  static const double appBarActionSize = 50.0;
+  static const double switchWidth = 36.0;
+  static const double switchPadding = 1.0;
   static const double avatarSize = 70.0;
+  static const double avatarSizeLarge = 100.0;
   static const double vehicleThumbWidth = 96.0;
   static const double vehicleThumbHeight = 92.0;
+  static const double feedMaxWidth = 500.0;
   static const double logoSizeLarge = 200.0;
   static const double logoSizeMedium = 120.0;
   static const double bottomNavBarHeight = 81.0;
-
+  
   // Standard border stroke widths for outlines, dividers, and focused inputs.
   static const double borderWidth05 = 0.5;
   static const double borderWidth1 = 1.0;
@@ -88,7 +95,9 @@ class AppDimensions {
   static const double space16 = 16.0;
   static const double space20 = 20.0;
   static const double space24 = 24.0;
+  static const double space30 = 30.0;
   static const double space32 = 32.0;
+  static const double space40 = 40.0;
   static const double space48 = 48.0;
   static const double space64 = 64.0;
 }

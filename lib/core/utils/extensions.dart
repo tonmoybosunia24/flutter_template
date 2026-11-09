@@ -2,15 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:template/core/theme/app_colors.dart';
 import 'package:template/core/utils/app_size_class.dart';
 
-/// This file contains extension methods for the String class and the BuildContext class. These extensions provide additional functionality to these classes, making it easier to work with strings and context in Flutter applications.
+/// Helper methods on [String].
 extension StringExtension on String {
+  // Uppercases the first letter and lowercases the rest.
   String capitalize() {
     if (isEmpty) return this;
     return '${this[0].toUpperCase()}${substring(1).toLowerCase()}';
   }
 }
 
-/// Extension for BuildContext to provide quick access to common properties.
+/// Quick access to common screen and theme values from a [BuildContext].
 extension ContextExtension on BuildContext {
   // Quick access to screen height.
   double get screenHeight => MediaQuery.sizeOf(this).height;

@@ -1,4 +1,4 @@
-/// This class contains all the keys used for storing data in local storage. All [GetStorage] read/write operations must use these keys.
+/// All keys used for local and secure storage, plus the saved language codes. Every read and write must use these constants.
 class StorageKeys {
 
   // Private constructor to prevent instantiation

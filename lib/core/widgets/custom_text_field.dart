@@ -3,7 +3,7 @@ import 'package:template/core/utils/app_dimensions.dart';
 import 'package:template/core/utils/extensions.dart';
 import 'package:template/core/utils/app_size_class.dart';
 
-/// A reusable text field widget that supports password input, validation, and custom styling. [controller] manages the text input, [hintText] is the placeholder text, [isPassword] indicates if the field should obscure text, [keyboardType] specifies the type of keyboard to display, [validator] allows for custom validation logic, and [prefixIcon] and [suffixIcon] allow for optional icons inside the text field.
+/// A form text field with optional validation, password obscuring and icons. Icons sit 20px from the field edge with an 8px gap to the text. Params: [controller]: holds the entered text. [hintText]: the already translated placeholder. [isPassword]: obscures the entered text. Defaults to false. [keyboardType]: keyboard to show. Defaults to [TextInputType.text]. [validator]: returns an error message for invalid input, or null when valid. [prefixIcon]: widget on the start side of the field. [suffixIcon]: widget on the end side of the field. [isBorderless]: removes the border and background, for fields placed inside their own container. Defaults to false.
 class CustomTextField extends StatelessWidget {
   final TextEditingController controller;
   final String hintText;
@@ -12,6 +12,7 @@ class CustomTextField extends StatelessWidget {
   final String? Function(String?)? validator;
   final Widget? prefixIcon;
   final Widget? suffixIcon;
+  final bool isBorderless;
 
   const CustomTextField({
     super.key,
@@ -22,11 +23,13 @@ class CustomTextField extends StatelessWidget {
     this.validator,
     this.prefixIcon,
     this.suffixIcon,
+    this.isBorderless = false,
   });
 
   @override
   Widget build(BuildContext context) {
     final colors = context.appColors;
+    final border = isBorderless ? InputBorder.none : null;
 
     return TextFormField(
       controller: controller,
@@ -39,15 +42,41 @@ class CustomTextField extends StatelessWidget {
       ),
       decoration: InputDecoration(
         hintText: hintText,
+        filled: isBorderless ? false : null,
+        border: border,
+        enabledBorder: border,
+        focusedBorder: border,
+        errorBorder: border,
+        focusedErrorBorder: border,
         hintStyle: TextStyle(
           color: colors.textHint,
           fontSize: getSp(AppDimensions.font14),
         ),
-        prefixIcon: prefixIcon,
-        suffixIcon: suffixIcon,
-        contentPadding: EdgeInsets.symmetric(
-          horizontal: getWidth(AppDimensions.padding20),
-          vertical: getHeight(AppDimensions.padding16),
+        prefixIcon: prefixIcon == null
+            ? null
+            : Padding(
+                padding: EdgeInsetsDirectional.only(
+                  start: getWidth(AppDimensions.padding20),
+                  end: getWidth(AppDimensions.space8),
+                ),
+                child: prefixIcon,
+              ),
+        prefixIconConstraints: const BoxConstraints(),
+        suffixIcon: suffixIcon == null
+            ? null
+            : Padding(
+                padding: EdgeInsetsDirectional.only(
+                  start: getWidth(AppDimensions.space8),
+                  end: getWidth(AppDimensions.padding20),
+                ),
+                child: suffixIcon,
+              ),
+        suffixIconConstraints: const BoxConstraints(),
+        contentPadding: EdgeInsetsDirectional.only(
+          start: prefixIcon == null && !isBorderless ? getWidth(AppDimensions.padding20) : 0,
+          end: suffixIcon == null && !isBorderless ? getWidth(AppDimensions.padding20) : 0,
+          top: getHeight(isBorderless ? AppDimensions.padding12 : AppDimensions.padding16),
+          bottom: getHeight(isBorderless ? AppDimensions.padding12 : AppDimensions.padding16),
         ),
       ),
     );
