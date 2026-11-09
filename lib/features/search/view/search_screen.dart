@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart' hide ContextExtensionss;
 import 'package:template/core/core.dart';
+import 'package:template/features/main/widgets/main_app_bar.dart';
 import 'package:template/features/search/controller/search_controller.dart';
 
 /// The search tab of the main screen. Shows placeholder content until the real design is added.
@@ -10,16 +11,7 @@ class SearchScreen extends GetView<AppSearchController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(
-        title: AppStrings.navSearch.tr,
-        actions: [
-          CustomAppBarAction(
-            icon: IconPath.notification,
-            tooltip: AppStrings.navNotifications.tr,
-            onTap: () {},
-          ),
-        ],
-      ),
+      appBar: const MainAppBar(),
       body: Center(
         child: CustomText(
           text: AppStrings.navSearch.tr,

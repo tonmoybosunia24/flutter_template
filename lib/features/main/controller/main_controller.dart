@@ -12,6 +12,9 @@ class MainController extends GetxController {
     MainTabItem(icon: IconPath.user, label: AppStrings.navProfile),
   ];
 
+  // Placeholder until login provides the user.
+  final String userName = 'Tonmoy Bosunia';
+
   // Index of the currently selected tab.
   final RxInt currentIndex = 0.obs;
 

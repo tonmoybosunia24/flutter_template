@@ -18,7 +18,6 @@ class HomePostAuthor extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colors = context.appColors;
     final textTheme = context.textTheme;
 
     return Padding(
@@ -30,28 +29,7 @@ class HomePostAuthor extends StatelessWidget {
       ),
       child: Row(
         children: [
-          // Gradient ring around the avatar
-          Container(
-            padding: EdgeInsets.all(AppDimensions.borderWidth2),
-            decoration: BoxDecoration(
-              gradient: colors.primaryGradient,
-              shape: BoxShape.circle,
-            ),
-            child: Container(
-              padding: EdgeInsets.all(AppDimensions.borderWidth2),
-              decoration: BoxDecoration(
-                color: colors.background,
-                shape: BoxShape.circle,
-              ),
-              child: ClipOval(
-                child: SizedBox(
-                  width: getRadius(AppDimensions.icon32),
-                  height: getRadius(AppDimensions.icon32),
-                  child: avatar,
-                ),
-              ),
-            ),
-          ),
+          CustomRingAvatar(child: avatar),
           SizedBox(width: getWidth(AppDimensions.space10)),
           Expanded(
             child: Column(

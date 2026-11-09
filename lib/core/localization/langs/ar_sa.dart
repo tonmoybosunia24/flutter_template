@@ -47,6 +47,7 @@ const Map<String, String> arSA = {
   AppStrings.homeShare: 'مشاركة',
   AppStrings.homeCreatePostHint: 'اكتب عنوان المنشور...',
   AppStrings.homeCreatePostSubmit: 'نشر',
+  AppStrings.homeWelcomeBack: 'مرحبًا بعودتك',
 
   // Profile
   AppStrings.profileAccountSettings: 'إعدادات الحساب',

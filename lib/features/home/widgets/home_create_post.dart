@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart' hide ContextExtensionss;
 import 'package:template/core/core.dart';
-import 'package:template/features/home/widgets/home_post_author.dart';
 
-/// A flat box at the top of the feed, styled like a post, for writing a new post's title. Params: [authorName]: name shown as the author. [category]: small text under the name. [controller]: holds the entered title. [canSubmit]: whether there is a title to send. [isSubmitting]: shows a spinner on the post button. [errorText]: the already translated reason the last attempt failed. [onSubmit]: called when the post button is tapped.
+/// A flat box at the top of the feed for writing a new post's title. Params: [controller]: holds the entered title. [canSubmit]: whether there is a title to send. [isSubmitting]: shows a spinner on the post button. [errorText]: the already translated reason the last attempt failed. [onSubmit]: called when the post button is tapped.
 class HomeCreatePost extends StatelessWidget {
-  final String authorName;
-  final String category;
   final TextEditingController controller;
   final bool canSubmit;
   final bool isSubmitting;
@@ -15,8 +12,6 @@ class HomeCreatePost extends StatelessWidget {
 
   const HomeCreatePost({
     super.key,
-    required this.authorName,
-    required this.category,
     required this.controller,
     required this.canSubmit,
     required this.isSubmitting,
@@ -33,13 +28,6 @@ class HomeCreatePost extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        // Author
-        HomePostAuthor(
-          avatar: Image.asset(ImagePath.profileAvatar, fit: BoxFit.cover),
-          name: authorName,
-          subtitle: category,
-        ),
-
         Padding(
           padding: EdgeInsets.symmetric(
             horizontal: getWidth(AppDimensions.padding12),
@@ -111,7 +99,7 @@ class HomeCreatePost extends StatelessWidget {
             ],
           ),
         ),
-        SizedBox(height: getHeight(AppDimensions.space12)),
+        SizedBox(height: getHeight(AppDimensions.space8)),
         Divider(height: AppDimensions.borderWidth1, color: colors.outline),
       ],
     );

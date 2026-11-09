@@ -50,6 +50,7 @@ const Map<String, String> enUS = {
   AppStrings.homeShare: 'Share',
   AppStrings.homeCreatePostHint: 'Write a post title...',
   AppStrings.homeCreatePostSubmit: 'Post',
+  AppStrings.homeWelcomeBack: 'Welcome back',
 
   // Profile
   AppStrings.profileAccountSettings: 'Account Settings',

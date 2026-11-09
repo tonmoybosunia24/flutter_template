@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:template/core/core.dart';
 import 'package:template/features/home/model/home_post.dart';
 import 'package:template/features/home/repository/home_repository.dart';
+import 'package:template/features/main/controller/main_controller.dart';
 
 /// Holds the state and logic of the home tab: loads the post feed and tracks its loading and error state.
 class HomeController extends GetxController {
@@ -17,7 +18,7 @@ class HomeController extends GetxController {
   final RxBool canCreatePost = false.obs; 
   final RxBool isCreatingPost = false.obs; 
   final RxnString createPostError = RxnString(); 
-  final String authorName = 'Tonmoy Bosunia';
+  String get authorName => Get.find<MainController>().userName;
   final String postCategory = 'Travel';
   final String authorAvatarPath = '/images/avatars/profile.jpg';
   final String postBody = 'Shared from the app.';

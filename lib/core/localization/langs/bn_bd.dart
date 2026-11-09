@@ -48,6 +48,7 @@ const Map<String, String> bnBD = {
   AppStrings.homeShare: 'শেয়ার',
   AppStrings.homeCreatePostHint: 'পোস্টের শিরোনাম লিখুন...',
   AppStrings.homeCreatePostSubmit: 'পোস্ট করুন',
+  AppStrings.homeWelcomeBack: 'আবার স্বাগতম',
 
   // Profile
   AppStrings.profileAccountSettings: 'অ্যাকাউন্ট সেটিংস',

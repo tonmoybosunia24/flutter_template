@@ -25,7 +25,7 @@ class CustomAppBarAction extends StatelessWidget {
       onPressed: onTap,
       style: IconButton.styleFrom(
         backgroundColor: colors.surface,
-        fixedSize: Size.square(getRadius(AppDimensions.appBarActionSize)),
+        fixedSize: Size.square(CustomAppBar.itemSize),
         minimumSize: Size.zero,
         padding: EdgeInsets.zero,
         tapTargetSize: MaterialTapTargetSize.shrinkWrap,
