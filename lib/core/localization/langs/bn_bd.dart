@@ -46,6 +46,8 @@ const Map<String, String> bnBD = {
   AppStrings.homeLike: 'লাইক',
   AppStrings.homeComment: 'মন্তব্য',
   AppStrings.homeShare: 'শেয়ার',
+  AppStrings.homeCreatePostHint: 'পোস্টের শিরোনাম লিখুন...',
+  AppStrings.homeCreatePostSubmit: 'পোস্ট করুন',
 
   // Profile
   AppStrings.profileAccountSettings: 'অ্যাকাউন্ট সেটিংস',

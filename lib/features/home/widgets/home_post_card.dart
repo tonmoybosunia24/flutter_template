@@ -3,6 +3,7 @@ import 'package:get/get.dart' hide ContextExtensionss;
 import 'package:template/core/core.dart';
 import 'package:template/features/home/model/home_post.dart';
 import 'package:template/features/home/widgets/home_post_action.dart';
+import 'package:template/features/home/widgets/home_post_author.dart';
 
 /// A flat, photo-first feed post: author, square photo, icon actions, like count and caption. Params: [post]: the post to show. [isLiked]: whether the current user liked it. [likeCount]: number of likes to show. [timeAgo]: the already translated post age. [onToggleLike]: called when the heart is tapped. [onPhotoDoubleTap]: called when the photo is double-tapped.
 class HomePostCard extends StatelessWidget {
@@ -32,71 +33,22 @@ class HomePostCard extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         // Author
-        Padding(
-          padding: EdgeInsetsDirectional.fromSTEB(
-            getWidth(AppDimensions.padding12),
-            getHeight(AppDimensions.padding8),
-            getWidth(AppDimensions.padding4),
-            getHeight(AppDimensions.padding8),
-          ),
-          child: Row(
-            children: [
-              // Gradient ring around the avatar
-              Container(
-                padding: EdgeInsets.all(AppDimensions.borderWidth2),
-                decoration: BoxDecoration(
-                  gradient: colors.primaryGradient,
-                  shape: BoxShape.circle,
-                ),
-                child: Container(
-                  padding: EdgeInsets.all(AppDimensions.borderWidth2),
-                  decoration: BoxDecoration(
-                    color: colors.background,
-                    shape: BoxShape.circle,
-                  ),
-                  child: ClipOval(
-                    child: SizedBox(
-                      width: getRadius(AppDimensions.icon32),
-                      height: getRadius(AppDimensions.icon32),
-                      child: CustomNetworkImage(url: post.avatarUrl),
-                    ),
-                  ),
-                ),
+        HomePostAuthor(
+          avatar: CustomNetworkImage(url: post.avatarUrl),
+          name: post.authorName,
+          subtitle: post.category,
+          trailing: GestureDetector(
+            behavior: HitTestBehavior.opaque,
+            onTap: () {},
+            child: Padding(
+              padding: EdgeInsets.all(getRadius(AppDimensions.padding8)),
+              child: CustomSvgIcon(
+                assetName: IconPath.moreHorizontal,
+                width: getRadius(AppDimensions.icon20),
+                height: getRadius(AppDimensions.icon20),
+                color: colors.textPrimary,
               ),
-              SizedBox(width: getWidth(AppDimensions.space10)),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    CustomText(
-                      text: post.authorName,
-                      style: textTheme.titleSmall,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    CustomText(
-                      text: post.category,
-                      style: textTheme.bodySmall,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ],
-                ),
-              ),
-              GestureDetector(
-                behavior: HitTestBehavior.opaque,
-                onTap: () {},
-                child: Padding(
-                  padding: EdgeInsets.all(getRadius(AppDimensions.padding8)),
-                  child: CustomSvgIcon(
-                    assetName: IconPath.moreHorizontal,
-                    width: getRadius(AppDimensions.icon20),
-                    height: getRadius(AppDimensions.icon20),
-                    color: colors.textPrimary,
-                  ),
-                ),
-              ),
-            ],
+            ),
           ),
         ),
 
@@ -161,7 +113,12 @@ class HomePostCard extends StatelessWidget {
                 style: textTheme.titleSmall,
               ),
               SizedBox(height: getHeight(AppDimensions.space4)),
-              CustomText(text: post.title, style: textTheme.titleSmall),
+              CustomText(
+                text: post.title,
+                style: textTheme.titleSmall,
+                maxLines: 3,
+                overflow: TextOverflow.ellipsis,
+              ),
               CustomText(
                 text: post.body,
                 style: textTheme.bodyMedium,

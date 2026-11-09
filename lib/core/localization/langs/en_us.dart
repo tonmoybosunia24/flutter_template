@@ -48,6 +48,8 @@ const Map<String, String> enUS = {
   AppStrings.homeLike: 'Like',
   AppStrings.homeComment: 'Comment',
   AppStrings.homeShare: 'Share',
+  AppStrings.homeCreatePostHint: 'Write a post title...',
+  AppStrings.homeCreatePostSubmit: 'Post',
 
   // Profile
   AppStrings.profileAccountSettings: 'Account Settings',

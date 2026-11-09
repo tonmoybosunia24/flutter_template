@@ -10,6 +10,7 @@ class ApiEndpoints {
   static String get refreshToken => '$baseUrl/auth/refresh';
   static String get loginEndpoint => '$baseUrl/auth/login';
   static String get logoutEndpoint => '$baseUrl/auth/logout';
-  // Posts of the home feed, newest first.
-  static String get posts => '$baseUrl/posts?_sort=created_at&_order=desc';
+  // Post endpoints
+  static String get posts => '$baseUrl/posts';
+  static String get postsNewestFirst => '$posts?_sort=created_at&_order=desc';
 }

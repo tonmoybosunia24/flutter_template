@@ -1,3 +1,4 @@
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:template/core/core.dart';
 import 'package:template/features/home/model/home_post.dart';
@@ -11,6 +12,16 @@ class HomeController extends GetxController {
   final RxBool isLoading = false.obs; 
   final RxnString errorMessage = RxnString(); 
   final RxSet<int> likedPostIds = <int>{}.obs;
+
+  final TextEditingController titleController = TextEditingController(); 
+  final RxBool canCreatePost = false.obs; 
+  final RxBool isCreatingPost = false.obs; 
+  final RxnString createPostError = RxnString(); 
+  final String authorName = 'Tonmoy Bosunia';
+  final String postCategory = 'Travel';
+  final String authorAvatarPath = '/images/avatars/profile.jpg';
+  final String postBody = 'Shared from the app.';
+  final String postImagePath = '/images/posts/3.jpg';
 
   bool isLiked(int postId) => likedPostIds.contains(postId); 
   int likeCount(HomePost post) => post.likes + (isLiked(post.id) ? 1 : 0); 
@@ -38,8 +49,17 @@ class HomeController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+    titleController.addListener(_updateCanCreatePost);
     fetchPosts();
   }
+
+  @override
+  void onClose() {
+    titleController.dispose();
+    super.onClose();
+  }
+
+  void _updateCanCreatePost() => canCreatePost.value = titleController.text.trim().isNotEmpty;
 
   // Loads the feed. Also used by pull-to-refresh and the retry button.
   Future<void> fetchPosts() async {
@@ -54,5 +74,33 @@ class HomeController extends GetxController {
       errorMessage.value = response.errorMessage;
     }
     isLoading.value = false;
+  }
+
+  // Sends the typed title as a new post and shows it at the top of the feed.
+  Future<void> createPost() async {
+    final title = titleController.text.trim();
+    if (title.isEmpty || isCreatingPost.value) return;
+
+    isCreatingPost.value = true;
+    createPostError.value = null;
+    final response = await _repository.createPost(
+      title: title,
+      authorName: authorName,
+      authorAvatar: authorAvatarPath,
+      category: postCategory,
+      body: postBody,
+      image: postImagePath,
+    );
+    if (isClosed) return;
+
+    final post = response.data;
+    if (response.isSuccess && post != null) {
+      posts.insert(0, post);
+      titleController.clear();
+      FocusManager.instance.primaryFocus?.unfocus();
+    } else {
+      createPostError.value = response.errorMessage;
+    }
+    isCreatingPost.value = false;
   }
 }

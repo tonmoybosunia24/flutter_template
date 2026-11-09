@@ -49,6 +49,8 @@ class AppStrings {
   static const String homeLike = 'home_like';
   static const String homeComment = 'home_comment';
   static const String homeShare = 'home_share';
+  static const String homeCreatePostHint = 'home_create_post_hint';
+  static const String homeCreatePostSubmit = 'home_create_post_submit';
 
   // Profile
   static const String profileAccountSettings = 'profile_account_settings';

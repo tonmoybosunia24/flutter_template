@@ -21,7 +21,7 @@ class CustomNetworkImage extends StatelessWidget {
     final placeholder = SizedBox(
       width: width,
       height: height,
-      child: ColoredBox(color: context.appColors.surfaceVariant),
+      child: ColoredBox(color: context.appColors.outline),
     );
 
     return Image.network(
@@ -29,8 +29,8 @@ class CustomNetworkImage extends StatelessWidget {
       width: width,
       height: height,
       fit: fit,
-      loadingBuilder: (_, child, progress) =>
-          progress == null ? child : placeholder,
+      frameBuilder: (_, child, frame, wasSynchronouslyLoaded) =>
+          wasSynchronouslyLoaded || frame != null ? child : placeholder,
       errorBuilder: (_, _, _) => placeholder,
     );
   }
