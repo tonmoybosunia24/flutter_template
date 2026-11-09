@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart' hide ContextExtensionss;
 import 'package:template/core/core.dart';
+import 'package:template/features/main/controller/main_controller.dart';
 import 'package:template/features/main/widgets/main_app_bar.dart';
 import 'package:template/features/notification/controller/notification_controller.dart';
 
@@ -12,11 +13,9 @@ class NotificationScreen extends GetView<NotificationController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const MainAppBar(),
-      body: Center(
-        child: CustomText(
-          text: AppStrings.navNotifications.tr,
-          style: context.textTheme.titleLarge,
-        ),
+      body: CustomComingSoon(
+        icon: IconPath.notification,
+        onHomeTap: Get.find<MainController>().goHome,
       ),
     );
   }
