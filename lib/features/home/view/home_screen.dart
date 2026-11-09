@@ -30,7 +30,7 @@ class HomeScreen extends GetView<HomeController> {
             onRetry: controller.fetchPosts,
           );
         }
-
+        
         // Keep the list on screen during pull-to-refresh.
         if (controller.isLoading.value && controller.posts.isEmpty) {
           return const Center(child: CustomLoader());
