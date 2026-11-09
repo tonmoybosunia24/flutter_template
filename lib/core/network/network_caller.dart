@@ -114,8 +114,8 @@ class NetworkCaller {
   Future<Map<String, String>> _getHeaders({bool isAuthCall = false}) async {
     var token = await _storage.getAccessToken();
 
-    // Check for expiration and refresh if necessary
-    if (!isAuthCall && _storage.isAccessTokenExpired()) {
+    // Refresh an expired token. Without a token there is no session to refresh, so the request goes out without one.
+    if (!isAuthCall && token != null && _storage.isAccessTokenExpired()) {
       final refreshed = await _refreshToken();
       if (!refreshed) await _logout();
       token = await _storage.getAccessToken();

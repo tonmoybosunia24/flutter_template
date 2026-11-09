@@ -1,11 +1,13 @@
 import 'package:get/get.dart';
+import 'package:template/features/home/repository/home_repository.dart';
 import '../controller/home_controller.dart';
 
-/// Registers [HomeController] for the home tab.
+/// Registers [HomeRepository] and [HomeController] for the home tab.
 class HomeBinding extends Bindings {
   @override
   void dependencies() {
-    // Register HomeController as a lazy-loaded dependency using GetX
+    // Register the repository and controller as lazy-loaded dependencies using GetX
+    Get.lazyPut<HomeRepository>(() => HomeRepository());
     Get.lazyPut<HomeController>(() => HomeController());
   }
 }

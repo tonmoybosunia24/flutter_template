@@ -34,6 +34,18 @@ const Map<String, String> arSA = {
   AppStrings.navSettings: 'الإعدادات',
   AppStrings.navProfile: 'الملف الشخصي',
 
+  // Home
+  AppStrings.homeLikeCount: '@count إعجاب',
+  AppStrings.homeViewComments: 'عرض كل التعليقات (@count)',
+  AppStrings.homeSave: 'حفظ',
+  AppStrings.homeJustNow: 'الآن',
+  AppStrings.homeMinutesAgo: 'منذ @count دقيقة',
+  AppStrings.homeHoursAgo: 'منذ @count ساعة',
+  AppStrings.homeDaysAgo: 'منذ @count يوم',
+  AppStrings.homeLike: 'إعجاب',
+  AppStrings.homeComment: 'تعليق',
+  AppStrings.homeShare: 'مشاركة',
+
   // Profile
   AppStrings.profileAccountSettings: 'إعدادات الحساب',
   AppStrings.profileMyAccount: 'حسابي',
@@ -71,6 +83,7 @@ const Map<String, String> arSA = {
   AppStrings.errorValidation: 'فشل التحقق.',
   AppStrings.errorServer: 'خطأ في الخادم.',
   AppStrings.errorRequestFailed: 'فشل الطلب.',
+  AppStrings.errorRetry: 'حاول مرة أخرى',
 
   // Form validation
   AppStrings.validationEmailRequired: 'البريد الإلكتروني مطلوب',

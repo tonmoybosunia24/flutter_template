@@ -37,6 +37,18 @@ const Map<String, String> enUS = {
   AppStrings.navSettings: 'Settings',
   AppStrings.navProfile: 'Profile',
 
+  // Home
+  AppStrings.homeLikeCount: '@count likes',
+  AppStrings.homeViewComments: 'View all @count comments',
+  AppStrings.homeSave: 'Save',
+  AppStrings.homeJustNow: 'Just now',
+  AppStrings.homeMinutesAgo: '@count min ago',
+  AppStrings.homeHoursAgo: '@count h ago',
+  AppStrings.homeDaysAgo: '@count d ago',
+  AppStrings.homeLike: 'Like',
+  AppStrings.homeComment: 'Comment',
+  AppStrings.homeShare: 'Share',
+
   // Profile
   AppStrings.profileAccountSettings: 'Account Settings',
   AppStrings.profileMyAccount: 'My Account',
@@ -74,6 +86,7 @@ const Map<String, String> enUS = {
   AppStrings.errorValidation: 'Validation failed.',
   AppStrings.errorServer: 'Server error.',
   AppStrings.errorRequestFailed: 'Request failed.',
+  AppStrings.errorRetry: 'Try again',
 
   // Form validation
   AppStrings.validationEmailRequired: 'Email is required',

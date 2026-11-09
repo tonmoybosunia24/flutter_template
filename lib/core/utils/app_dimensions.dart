@@ -69,6 +69,7 @@ class AppDimensions {
   static const double avatarSizeLarge = 100.0;
   static const double vehicleThumbWidth = 96.0;
   static const double vehicleThumbHeight = 92.0;
+  static const double feedMaxWidth = 500.0;
   static const double logoSizeLarge = 200.0;
   static const double logoSizeMedium = 120.0;
   static const double bottomNavBarHeight = 81.0;

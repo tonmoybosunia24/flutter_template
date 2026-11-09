@@ -9,16 +9,20 @@ const String _url = 'https://example.com/items';
 
 /// An in-memory [StorageService] with a valid session, so tests never touch the device's storage plugins.
 class _FakeStorage extends GetxService implements StorageService {
+  _FakeStorage({this.accessToken = 'access', this.expired = false});
+
+  String? accessToken;
+  final bool expired;
   String? savedAccessToken;
 
   @override
-  Future<String?> getAccessToken() async => 'access';
+  Future<String?> getAccessToken() async => accessToken;
 
   @override
   Future<String?> getRefreshToken() async => 'refresh';
 
   @override
-  bool isAccessTokenExpired() => false;
+  bool isAccessTokenExpired() => expired;
 
   @override
   Future<void> saveTokens({
@@ -26,6 +30,7 @@ class _FakeStorage extends GetxService implements StorageService {
     required String refreshToken,
     required int expiresIn,
   }) async {
+    this.accessToken = accessToken;
     savedAccessToken = accessToken;
   }
 
@@ -133,13 +138,55 @@ void main() {
     });
   });
 
+  test('a request without a session goes out with no token and no refresh', () async {
+    final requests = <http.Request>[];
+    final caller = NetworkCaller(
+      storage: _FakeStorage(accessToken: null, expired: true),
+      client: MockClient((request) async {
+        requests.add(request);
+        return http.Response('{"id":1}', 200);
+      }),
+      connectivityCheck: () async => true,
+    );
+
+    final result = await caller.getRequest(_url);
+
+    expect(result.isSuccess, isTrue);
+    expect(requests.map((r) => r.url.toString()), [_url]);
+    expect(requests.single.headers.containsKey('Authorization'), isFalse);
+  });
+
+  test('an expired token is refreshed before the request', () async {
+    final requests = <http.Request>[];
+    final caller = NetworkCaller(
+      storage: _FakeStorage(expired: true),
+      client: MockClient((request) async {
+        requests.add(request);
+        return request.url.path.endsWith('/auth/refresh')
+            ? http.Response(
+                '{"data":{"access_token":"new","refresh_token":"r2","expires_in":60}}',
+                200,
+              )
+            : http.Response('{"id":1}', 200);
+      }),
+      connectivityCheck: () async => true,
+    );
+
+    final result = await caller.getRequest(_url);
+
+    expect(result.isSuccess, isTrue);
+    expect(requests.first.url.path, endsWith('/auth/refresh'));
+    expect(requests.last.url.toString(), _url);
+    expect(requests.last.headers['Authorization'], 'Bearer new');
+  });
+
   test('a 401 refreshes the token and retries the request once', () async {
     final storage = _FakeStorage();
     var itemRequests = 0;
     final caller = NetworkCaller(
       storage: storage,
       client: MockClient((request) async {
-        if (request.url.path == '/auth/refresh') {
+        if (request.url.path.endsWith('/auth/refresh')) {
           return http.Response(
             '{"data":{"access_token":"new","refresh_token":"r2","expires_in":60}}',
             200,

@@ -35,6 +35,18 @@ const Map<String, String> bnBD = {
   AppStrings.navSettings: 'সেটিংস',
   AppStrings.navProfile: 'প্রোফাইল',
 
+  // Home
+  AppStrings.homeLikeCount: '@countটি লাইক',
+  AppStrings.homeViewComments: '@countটি মন্তব্য দেখুন',
+  AppStrings.homeSave: 'সেভ করুন',
+  AppStrings.homeJustNow: 'এইমাত্র',
+  AppStrings.homeMinutesAgo: '@count মিনিট আগে',
+  AppStrings.homeHoursAgo: '@count ঘণ্টা আগে',
+  AppStrings.homeDaysAgo: '@count দিন আগে',
+  AppStrings.homeLike: 'লাইক',
+  AppStrings.homeComment: 'মন্তব্য',
+  AppStrings.homeShare: 'শেয়ার',
+
   // Profile
   AppStrings.profileAccountSettings: 'অ্যাকাউন্ট সেটিংস',
   AppStrings.profileMyAccount: 'আমার অ্যাকাউন্ট',
@@ -72,6 +84,7 @@ const Map<String, String> bnBD = {
   AppStrings.errorValidation: 'যাচাই ব্যর্থ হয়েছে।',
   AppStrings.errorServer: 'সার্ভারে সমস্যা হয়েছে।',
   AppStrings.errorRequestFailed: 'অনুরোধ ব্যর্থ হয়েছে।',
+  AppStrings.errorRetry: 'আবার চেষ্টা করুন',
 
   // Form validation
   AppStrings.validationEmailRequired: 'ইমেইল দিতে হবে',

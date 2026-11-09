@@ -32,6 +32,13 @@ class IconPath {
   static const String moneyAdd = '${asset}money_add.svg';
   static const String moon = '${asset}moon.svg';
   static const String sun = '${asset}sun.svg';
+  // Post icons
+  static const String bookmark = '${asset}bookmark.svg';
+  static const String comment = '${asset}comment.svg';
+  static const String heart = '${asset}heart.svg';
+  static const String heartFilled = '${asset}heart_filled.svg';
+  static const String moreHorizontal = '${asset}more_horizontal.svg';
+  static const String share = '${asset}share.svg';
   // Brand icons (multi-color, don't tint)
   static const String facebook = '${asset}facebook.svg';
   static const String google = '${asset}google.svg';

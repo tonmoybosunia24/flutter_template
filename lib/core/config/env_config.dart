@@ -26,7 +26,7 @@ class EnvConfig {
 
     return switch (environment) {
       // TODO: Replace these with your own API hosts.
-      Environment.dev => 'https://dev.api.example.com',
+      Environment.dev => 'https://mock-server-iota-ebon.vercel.app',
       Environment.staging => 'https://staging.api.example.com',
       Environment.prod => 'https://api.example.com',
     };

@@ -38,6 +38,18 @@ class AppStrings {
   static const String navSettings = 'nav_settings';
   static const String navProfile = 'nav_profile';
 
+  // Home
+  static const String homeLikeCount = 'home_like_count';
+  static const String homeViewComments = 'home_view_comments';
+  static const String homeSave = 'home_save';
+  static const String homeJustNow = 'home_just_now';
+  static const String homeMinutesAgo = 'home_minutes_ago';
+  static const String homeHoursAgo = 'home_hours_ago';
+  static const String homeDaysAgo = 'home_days_ago';
+  static const String homeLike = 'home_like';
+  static const String homeComment = 'home_comment';
+  static const String homeShare = 'home_share';
+
   // Profile
   static const String profileAccountSettings = 'profile_account_settings';
   static const String profileMyAccount = 'profile_my_account';
@@ -75,6 +87,7 @@ class AppStrings {
   static const String errorValidation = 'error_validation';
   static const String errorServer = 'error_server';
   static const String errorRequestFailed = 'error_request_failed';
+  static const String errorRetry = 'error_retry';
 
   // Form validation
   static const String validationEmailRequired = 'validation_email_required';
