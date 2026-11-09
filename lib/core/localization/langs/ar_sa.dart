@@ -34,6 +34,10 @@ const Map<String, String> arSA = {
   AppStrings.navSettings: 'الإعدادات',
   AppStrings.navProfile: 'الملف الشخصي',
 
+  // Coming soon
+  AppStrings.comingSoon: 'قريبًا',
+  AppStrings.comingSoonMessage: 'نعمل على هذا. عد قريبًا.',
+
   // Home
   AppStrings.homeLikeCount: '@count إعجاب',
   AppStrings.homeViewComments: 'عرض كل التعليقات (@count)',

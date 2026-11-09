@@ -35,6 +35,10 @@ const Map<String, String> bnBD = {
   AppStrings.navSettings: 'সেটিংস',
   AppStrings.navProfile: 'প্রোফাইল',
 
+  // Coming soon
+  AppStrings.comingSoon: 'শীঘ্রই আসছে',
+  AppStrings.comingSoonMessage: 'আমরা এটি নিয়ে কাজ করছি। শীঘ্রই আবার দেখুন।',
+
   // Home
   AppStrings.homeLikeCount: '@countটি লাইক',
   AppStrings.homeViewComments: '@countটি মন্তব্য দেখুন',

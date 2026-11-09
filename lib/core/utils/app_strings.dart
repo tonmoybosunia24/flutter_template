@@ -38,6 +38,10 @@ class AppStrings {
   static const String navSettings = 'nav_settings';
   static const String navProfile = 'nav_profile';
 
+  // Coming soon
+  static const String comingSoon = 'coming_soon';
+  static const String comingSoonMessage = 'coming_soon_message';
+
   // Home
   static const String homeLikeCount = 'home_like_count';
   static const String homeViewComments = 'home_view_comments';

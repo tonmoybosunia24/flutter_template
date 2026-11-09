@@ -27,7 +27,11 @@ class HomeErrorState extends StatelessWidget {
               textAlign: TextAlign.center,
             ),
             SizedBox(height: getHeight(AppDimensions.space16)),
-            CustomButton(text: AppStrings.errorRetry.tr, onPressed: onRetry),
+            CustomPillButton(
+              icon: IconPath.refresh,
+              text: AppStrings.errorRetry.tr,
+              onTap: onRetry,
+            ),
           ],
         ),
       ),

@@ -18,6 +18,7 @@ class IconPath {
   static const String lock = '${asset}lock.svg';
   static const String mail = '${asset}mail.svg';
   static const String notification = '${asset}notification.svg';
+  static const String refresh = '${asset}refresh.svg';
   static const String search = '${asset}search.svg';
   static const String settings = '${asset}settings.svg';
   static const String user = '${asset}user.svg';

@@ -37,6 +37,10 @@ const Map<String, String> enUS = {
   AppStrings.navSettings: 'Settings',
   AppStrings.navProfile: 'Profile',
 
+  // Coming soon
+  AppStrings.comingSoon: 'Coming soon',
+  AppStrings.comingSoonMessage: "We're working on this. Check back soon.",
+
   // Home
   AppStrings.homeLikeCount: '@count likes',
   AppStrings.homeViewComments: 'View all @count comments',
