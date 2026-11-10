@@ -1,6 +1,6 @@
 <div align="center">
 
-# 🚀 Flutter GetX Clean Architecture Template
+# 🚀 Flutter Architecture Template
 
 **A production-ready, feature-first Flutter starter built on GetX.**
 
