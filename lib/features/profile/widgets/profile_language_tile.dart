@@ -38,8 +38,9 @@ class ProfileLanguageTile extends StatelessWidget {
                 children: [
                   CustomText(
                     text: name,
-                    style: textTheme.titleSmall,
-                    fontWeight: isSelected ? null : FontWeight.w500,
+                    style: isSelected
+                        ? textTheme.titleSmall
+                        : textTheme.titleMedium,
                     color: isSelected ? colors.primary : null,
                     // The same strut for both states, so the row doesn't shift when the font weight changes.
                     strutStyle: StrutStyle(
