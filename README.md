@@ -45,13 +45,32 @@ and automatic token refresh.
 
 ## 📸 Screenshots
 
-| Onboarding | Login | Home · Light | Home · Dark |
-| :---: | :---: | :---: | :---: |
-| <img src="docs/screenshots/onboarding.jpg" width="200" alt="Onboarding screen"> | <img src="docs/screenshots/login.jpg" width="200" alt="Login screen"> | <img src="docs/screenshots/home_light.jpg" width="200" alt="Home feed in light mode"> | <img src="docs/screenshots/home_dark.jpg" width="200" alt="Home feed in dark mode"> |
-
-| Profile | Language | Profile · Arabic (RTL) |
-| :---: | :---: | :---: |
-| <img src="docs/screenshots/profile_light.jpg" width="200" alt="Profile screen"> | <img src="docs/screenshots/language.jpg" width="200" alt="Language picker screen"> | <img src="docs/screenshots/profile_rtl.jpg" width="200" alt="Profile screen in Arabic, laid out right-to-left"> |
+<table width="100%">
+  <tr>
+    <th width="25%">Onboarding</th>
+    <th width="25%">Login</th>
+    <th width="25%">Home · Light</th>
+    <th width="25%">Home · Dark</th>
+  </tr>
+  <tr>
+    <td width="25%"><img src="docs/screenshots/onboarding.jpg" width="100%" alt="Onboarding screen"></td>
+    <td width="25%"><img src="docs/screenshots/login.jpg" width="100%" alt="Login screen"></td>
+    <td width="25%"><img src="docs/screenshots/home_light.jpg" width="100%" alt="Home feed in light mode"></td>
+    <td width="25%"><img src="docs/screenshots/home_dark.jpg" width="100%" alt="Home feed in dark mode"></td>
+  </tr>
+  <tr>
+    <th width="25%">Profile</th>
+    <th width="25%">Language</th>
+    <th width="25%">Profile · Arabic (RTL)</th>
+    <th width="25%"></th>
+  </tr>
+  <tr>
+    <td width="25%"><img src="docs/screenshots/profile_light.jpg" width="100%" alt="Profile screen"></td>
+    <td width="25%"><img src="docs/screenshots/language.jpg" width="100%" alt="Language picker screen"></td>
+    <td width="25%"><img src="docs/screenshots/profile_rtl.jpg" width="100%" alt="Profile screen in Arabic, laid out right-to-left"></td>
+    <td width="25%"></td>
+  </tr>
+</table>
 
 ---
 
