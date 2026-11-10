@@ -45,14 +45,12 @@ class _CustomLoaderState extends State<CustomLoader>
   // Builds the widget tree for the [CustomLoader], applying a rotation transition to the loading icon.
   @override
   Widget build(BuildContext context) {
-    final size = getRadius(widget.size ?? AppDimensions.icon30);
-
     return RotationTransition(
       turns: _controller,
       child: CustomSvgIcon(
         assetName: IconPath.loading,
-        width: size,
-        height: size,
+        width: getRadius(widget.size ?? AppDimensions.icon30),
+        height: getRadius(widget.size ?? AppDimensions.icon30),
         color: widget.color ?? context.appColors.primary,
       ),
     );

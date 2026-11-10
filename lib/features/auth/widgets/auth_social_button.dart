@@ -17,13 +17,12 @@ class AuthSocialButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = context.appColors;
-    final size = getRadius(AppDimensions.iconButtonSize);
 
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        width: size,
-        height: size,
+        width: getRadius(AppDimensions.iconButtonSize),
+        height: getRadius(AppDimensions.iconButtonSize),
         alignment: Alignment.center,
         decoration: BoxDecoration(
           color: colors.surface,
