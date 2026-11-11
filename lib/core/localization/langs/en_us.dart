@@ -99,7 +99,8 @@ const Map<String, String> enUS = {
   AppStrings.validationEmailRequired: 'Email is required',
   AppStrings.validationEmailInvalid: 'Enter a valid email',
   AppStrings.validationPasswordRequired: 'Password is required',
-  AppStrings.validationPasswordTooShort: 'Password must be at least 6 characters',
+  AppStrings.validationPasswordTooShort:
+      'Password must be at least 6 characters',
   AppStrings.validationFieldRequired: '@field is required',
   AppStrings.validationFieldDefault: 'Field',
 };

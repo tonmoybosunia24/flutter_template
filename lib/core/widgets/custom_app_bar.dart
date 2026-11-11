@@ -50,7 +50,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       ),
       leadingWidth: canGoBack
           ? getWidth(AppDimensions.padding20) +
-              getRadius(AppDimensions.appBarActionSize)
+                getRadius(AppDimensions.appBarActionSize)
           : null,
       leading: canGoBack
           ? Padding(

@@ -40,7 +40,9 @@ class MyApp extends StatelessWidget {
       builder: (context, child) {
         return GetMaterialApp(
           debugShowCheckedModeBanner: false,
-          title: AppStrings.appName.tr, // Application title. Change this to your app's name.
+          title: AppStrings
+              .appName
+              .tr, // Application title. Change this to your app's name.
           theme: AppTheme.light,
           darkTheme: AppTheme.dark,
           themeMode: initialTheme,
@@ -58,14 +60,19 @@ class MyApp extends StatelessWidget {
             Locale('bn', 'BD'),
           ],
           builder: (context, child) {
-            AppSizeClass.init(context); // Initialize AppSizeClass for responsive sizing
-            return AnnotatedRegion<SystemUiOverlayStyle>( // Set the system overlay style based on the current theme
+            AppSizeClass.init(
+              context,
+            ); // Initialize AppSizeClass for responsive sizing
+            return AnnotatedRegion<SystemUiOverlayStyle>(
+              // Set the system overlay style based on the current theme
               value: AppTheme.systemOverlayStyle(Theme.of(context).brightness),
               child: child!,
             );
           },
-          initialBinding: AppBinding(), // Initial binding to set up dependencies
-          initialRoute: AppRoutes.splash, // Set the initial route to the splash screen
+          initialBinding:
+              AppBinding(), // Initial binding to set up dependencies
+          initialRoute:
+              AppRoutes.splash, // Set the initial route to the splash screen
           getPages: AppPages.routes, // Define the application's routes
         );
       },

@@ -9,10 +9,13 @@ enum ScreenType { mobile, tablet, desktop, tv }
 
 /// Scales [size] with the screen height.
 double getHeight(double size) => AppSizeClass.instance.getHeight(size);
+
 /// Scales [size] with the screen width.
 double getWidth(double size) => AppSizeClass.instance.getWidth(size);
+
 /// Scales the font [size] with the screen.
 double getSp(double size) => AppSizeClass.instance.getSp(size);
+
 /// Scales a corner radius or icon [size] with the smaller screen side.
 double getRadius(double size) => AppSizeClass.instance.getRadius(size);
 
@@ -25,10 +28,13 @@ T getValue<T>({required T mobile, T? tablet, T? desktop, T? tv}) => AppSizeClass
 
 /// The current screen width in logical pixels.
 double get screenWidth => AppSizeClass.instance.screenWidth;
+
 /// The current screen height in logical pixels.
 double get screenHeight => AppSizeClass.instance.screenHeight;
+
 /// The horizontal page padding for the current screen type.
 double get horizontalPadding => AppSizeClass.instance.horizontalPadding;
+
 /// The maximum content width for the current screen type.
 double get maxContentWidth => AppSizeClass.instance.maxContentWidth;
 
@@ -36,19 +42,21 @@ double get maxContentWidth => AppSizeClass.instance.maxContentWidth;
 
 /// Whether the screen is mobile sized.
 bool get isMobile => AppSizeClass.instance.isMobile;
+
 /// Whether the screen is tablet sized.
 bool get isTablet => AppSizeClass.instance.isTablet;
+
 /// Whether the screen is desktop sized.
 bool get isDesktop => AppSizeClass.instance.isDesktop;
+
 /// Whether the screen is TV sized.
 bool get isTV => AppSizeClass.instance.isTV;
 
 /// The responsive sizing system: works out the screen type and scale factor from the screen width. Created with [AppSizeClass.init] and read through [AppSizeClass.instance] or the global helpers above.
 class AppSizeClass {
-
   // Singleton instance of AppSizeClass
   static AppSizeClass? _instance;
-  
+
   // Screen dimensions and type
   final double screenWidth;
   final double screenHeight;
@@ -74,7 +82,6 @@ class AppSizeClass {
 
   // Initialize the responsive system.
   static void init(BuildContext context) {
-
     // Get the screen size from the MediaQuery
     final size = MediaQuery.sizeOf(context);
     final width = size.width;
@@ -151,5 +158,4 @@ class AppSizeClass {
   // Get the horizontal padding based on the current screen type. This is useful for setting consistent padding around content on different devices.
   double get horizontalPadding =>
       getValue<double>(mobile: 20, tablet: 32, desktop: 48, tv: 64);
-
 }

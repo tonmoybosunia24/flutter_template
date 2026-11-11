@@ -117,9 +117,9 @@ runners are included, but check the
    flutter run --dart-define=API_BASE_URL=https://your.api.com
    ```
 
-   The `dev` host is a public mock server that serves the home feed
-   (`/posts`), so the template runs with no backend of your own. Set your real
-   hosts in `lib/core/config/env_config.dart`.
+   The `dev` and `staging` hosts point at a public mock server that serves the
+   home feed (`/posts`), so the template runs with no backend of your own. Set
+   your real hosts in `lib/core/config/env_config.dart`.
 
 4. **Build a release**
    ```bash
@@ -127,6 +127,45 @@ runners are included, but check the
    flutter build appbundle --release --dart-define=ENV=prod
    flutter build ipa --release --dart-define=ENV=prod
    ```
+
+### CI/CD
+
+[`.github/workflows/flutter-ci.yml`](.github/workflows/flutter-ci.yml) runs on
+GitHub Actions:
+
+| Trigger | What runs | Output |
+|---|---|---|
+| Pull request to `main` / `dev` | format check, `flutter analyze`, `flutter test` | coverage report |
+| Push to `dev` | the checks + release APK with `ENV=dev` | APK artifact |
+| Push to `main` | the checks + release APK with `ENV=staging` | APK artifact |
+| Tag `v1.2.3` | the checks + signed APK and AAB with `ENV=prod` | GitHub Release |
+
+The version name comes from the tag (or `pubspec.yaml` on branches), and the
+build number is the workflow run number, so every build has a higher Android
+`versionCode`. CI pins Flutter in `FLUTTER_VERSION`; bump it when you upgrade
+locally.
+
+**Release signing.** Create an upload keystore once
+([Flutter guide](https://docs.flutter.dev/deployment/android#sign-the-app)),
+then add these repository secrets under *Settings → Secrets and variables →
+Actions*:
+
+| Secret | Value |
+|---|---|
+| `ANDROID_KEYSTORE_BASE64` | `base64 -w 0 upload-keystore.jks` |
+| `ANDROID_KEYSTORE_PASSWORD` | keystore password |
+| `ANDROID_KEY_ALIAS` | key alias, e.g. `upload` |
+| `ANDROID_KEY_PASSWORD` | key password |
+
+Without them, branch builds are signed with debug keys and tag releases fail.
+For signed local builds, create `android/key.properties` (git-ignored) with
+`storeFile`, `storePassword`, `keyAlias` and `keyPassword`.
+
+**Releasing:**
+```bash
+git tag v1.0.0
+git push origin v1.0.0
+```
 
 ---
 
@@ -564,8 +603,8 @@ production:
 
 - [ ] **Login API**: the login screen is UI only (see
       [Wiring up login](#wiring-up-login)).
-- [ ] **CI**: no GitHub Actions workflow yet. Run `flutter analyze` and
-      `flutter test` locally before pushing.
+- [ ] **iOS CI**: the workflow builds Android only. Add a macOS job with
+      code signing if you ship to the App Store.
 - [ ] **Flavors**: environments are compile-time `--dart-define` values, not
       Gradle/Xcode flavors. Add real flavors if you need a separate app ID or
       icon per environment.

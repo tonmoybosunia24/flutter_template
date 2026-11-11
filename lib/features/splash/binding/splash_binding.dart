@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+
 import '../controller/splash_controller.dart';
 
 /// Registers [SplashController] for the splash screen.

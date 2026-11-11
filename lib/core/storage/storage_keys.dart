@@ -1,6 +1,5 @@
 /// All keys used for local and secure storage, plus the saved language codes. Every read and write must use these constants.
 class StorageKeys {
-
   // Private constructor to prevent instantiation
   StorageKeys._();
 
@@ -20,5 +19,4 @@ class StorageKeys {
   static const String langCodeEn = 'en';
   static const String langCodeAr = 'ar';
   static const String langCodeBn = 'bn';
-
 }

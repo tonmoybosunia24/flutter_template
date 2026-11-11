@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+
 import '../controller/notification_controller.dart';
 
 /// Registers [NotificationController] for the notifications tab.

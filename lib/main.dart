@@ -9,7 +9,12 @@ import 'package:template/core/core.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await GetStorage.init(); // Initialize GetStorage for local storage
-  await SystemChrome.setPreferredOrientations([]); // Set preferred device orientations (empty list allows all orientations)
-  Get.put<StorageService>(StorageService(), permanent: true); // Register StorageService as a permanent dependency using GetX
+  await SystemChrome.setPreferredOrientations(
+    [],
+  ); // Set preferred device orientations (empty list allows all orientations)
+  Get.put<StorageService>(
+    StorageService(),
+    permanent: true,
+  ); // Register StorageService as a permanent dependency using GetX
   runApp(const MyApp());
 }

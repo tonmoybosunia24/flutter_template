@@ -1,7 +1,7 @@
 /// Asset paths of the SVG icons. Use these constants instead of hardcoded strings.
 class IconPath {
   // Private constructor to prevent instantiation
-  IconPath._(); 
+  IconPath._();
   // Base directory path for all icon assets
   static const String asset = 'assets/icons/';
   // Navigation & action icons

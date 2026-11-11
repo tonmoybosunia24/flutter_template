@@ -17,12 +17,9 @@ class HomeScreen extends GetView<HomeController> {
       body: Obx(() {
         final error = controller.errorMessage.value;
         if (error != null) {
-          return HomeErrorState(
-            message: error,
-            onRetry: controller.fetchPosts,
-          );
+          return HomeErrorState(message: error, onRetry: controller.fetchPosts);
         }
-        
+
         // Keep the list on screen during pull-to-refresh.
         if (controller.isLoading.value && controller.posts.isEmpty) {
           return const Center(child: CustomLoader());

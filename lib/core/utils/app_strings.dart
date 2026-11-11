@@ -99,8 +99,10 @@ class AppStrings {
   // Form validation
   static const String validationEmailRequired = 'validation_email_required';
   static const String validationEmailInvalid = 'validation_email_invalid';
-  static const String validationPasswordRequired = 'validation_password_required';
-  static const String validationPasswordTooShort = 'validation_password_too_short';
+  static const String validationPasswordRequired =
+      'validation_password_required';
+  static const String validationPasswordTooShort =
+      'validation_password_too_short';
   static const String validationFieldRequired = 'validation_field_required';
   static const String validationFieldDefault = 'validation_field_default';
 }

@@ -36,7 +36,10 @@ void main() {
   test('a message from the server stays as it was sent', () {
     Get.locale = _bengali;
 
-    expect(AppError.fromStatusCode(400, message: 'Bad email').message, 'Bad email');
+    expect(
+      AppError.fromStatusCode(400, message: 'Bad email').message,
+      'Bad email',
+    );
   });
 
   test('copyWith keeps the message translatable', () {

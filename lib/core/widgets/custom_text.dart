@@ -28,8 +28,7 @@ class CustomText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final baseStyle =
-        style ?? context.textTheme.bodyLarge ?? const TextStyle();
+    final baseStyle = style ?? context.textTheme.bodyLarge ?? const TextStyle();
 
     return Text(
       text,

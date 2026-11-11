@@ -10,16 +10,12 @@ class AppTheme {
   AppTheme._();
 
   // Light theme configuration for the application.
-  static ThemeData get light => _buildTheme(
-        brightness: Brightness.light,
-        colors: AppColorScheme.light,
-      );
+  static ThemeData get light =>
+      _buildTheme(brightness: Brightness.light, colors: AppColorScheme.light);
 
   // Dark theme configuration for the application.
-  static ThemeData get dark => _buildTheme(
-        brightness: Brightness.dark,
-        colors: AppColorScheme.dark,
-      );
+  static ThemeData get dark =>
+      _buildTheme(brightness: Brightness.dark, colors: AppColorScheme.dark);
 
   // System status bar & navigation bar style for the given theme brightness: transparent status bar (no dark scrim), navigation bar matching the app background, and icons that contrast with it. Applied app-wide in MaterialApp's builder and by every AppBar.
   static SystemUiOverlayStyle systemOverlayStyle(Brightness brightness) {
@@ -111,67 +107,67 @@ class AppTheme {
       textTheme: base.textTheme
           .apply(fontFamily: GoogleFonts.poppins().fontFamily)
           .copyWith(
-        displayLarge: GoogleFonts.poppins(
-          color: colors.textPrimary,
-          fontSize: AppDimensions.font33,
-          fontWeight: FontWeight.w500,
-        ),
-        displayMedium: GoogleFonts.poppins(
-          color: colors.textPrimary,
-          fontSize: AppDimensions.font30,
-          fontWeight: FontWeight.w500,
-        ),
-        headlineSmall: GoogleFonts.poppins(
-          color: colors.textPrimary,
-          fontSize: AppDimensions.font24,
-          fontWeight: FontWeight.w500,
-        ),
-        titleLarge: GoogleFonts.poppins(
-          color: colors.textPrimary,
-          fontSize: AppDimensions.font20,
-          fontWeight: FontWeight.w500,
-        ),
-        titleMedium: GoogleFonts.poppins(
-          color: colors.textPrimary,
-          fontSize: AppDimensions.font16,
-          fontWeight: FontWeight.w500,
-        ),
-        titleSmall: GoogleFonts.poppins(
-          color: colors.textPrimary,
-          fontSize: AppDimensions.font15,
-          fontWeight: FontWeight.w600,
-        ),
-        bodyLarge: GoogleFonts.poppins(
-          color: colors.textPrimary,
-          fontSize: AppDimensions.font16,
-          fontWeight: FontWeight.w400,
-        ),
-        bodyMedium: GoogleFonts.poppins(
-          color: colors.textSecondary,
-          fontSize: AppDimensions.font14,
-          fontWeight: FontWeight.w400,
-        ),
-        bodySmall: GoogleFonts.poppins(
-          color: colors.textHint,
-          fontSize: AppDimensions.font12,
-          fontWeight: FontWeight.w400,
-        ),
-        labelLarge: GoogleFonts.urbanist(
-          color: colors.textPrimary,
-          fontSize: AppDimensions.font16,
-          fontWeight: FontWeight.w600,
-        ),
-        labelMedium: GoogleFonts.poppins(
-          color: colors.textPrimary,
-          fontSize: AppDimensions.font14,
-          fontWeight: FontWeight.w500,
-        ),
-        labelSmall: GoogleFonts.poppins(
-          color: colors.textSecondary,
-          fontSize: AppDimensions.font11,
-          fontWeight: FontWeight.w500,
-        ),
-      ),
+            displayLarge: GoogleFonts.poppins(
+              color: colors.textPrimary,
+              fontSize: AppDimensions.font33,
+              fontWeight: FontWeight.w500,
+            ),
+            displayMedium: GoogleFonts.poppins(
+              color: colors.textPrimary,
+              fontSize: AppDimensions.font30,
+              fontWeight: FontWeight.w500,
+            ),
+            headlineSmall: GoogleFonts.poppins(
+              color: colors.textPrimary,
+              fontSize: AppDimensions.font24,
+              fontWeight: FontWeight.w500,
+            ),
+            titleLarge: GoogleFonts.poppins(
+              color: colors.textPrimary,
+              fontSize: AppDimensions.font20,
+              fontWeight: FontWeight.w500,
+            ),
+            titleMedium: GoogleFonts.poppins(
+              color: colors.textPrimary,
+              fontSize: AppDimensions.font16,
+              fontWeight: FontWeight.w500,
+            ),
+            titleSmall: GoogleFonts.poppins(
+              color: colors.textPrimary,
+              fontSize: AppDimensions.font15,
+              fontWeight: FontWeight.w600,
+            ),
+            bodyLarge: GoogleFonts.poppins(
+              color: colors.textPrimary,
+              fontSize: AppDimensions.font16,
+              fontWeight: FontWeight.w400,
+            ),
+            bodyMedium: GoogleFonts.poppins(
+              color: colors.textSecondary,
+              fontSize: AppDimensions.font14,
+              fontWeight: FontWeight.w400,
+            ),
+            bodySmall: GoogleFonts.poppins(
+              color: colors.textHint,
+              fontSize: AppDimensions.font12,
+              fontWeight: FontWeight.w400,
+            ),
+            labelLarge: GoogleFonts.urbanist(
+              color: colors.textPrimary,
+              fontSize: AppDimensions.font16,
+              fontWeight: FontWeight.w600,
+            ),
+            labelMedium: GoogleFonts.poppins(
+              color: colors.textPrimary,
+              fontSize: AppDimensions.font14,
+              fontWeight: FontWeight.w500,
+            ),
+            labelSmall: GoogleFonts.poppins(
+              color: colors.textSecondary,
+              fontSize: AppDimensions.font11,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
 
       // Elevated button theme (Primary pill buttons)
       elevatedButtonTheme: ElevatedButtonThemeData(

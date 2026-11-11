@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+
 import '../controller/settings_controller.dart';
 
 /// Registers [SettingsController] for the settings tab.

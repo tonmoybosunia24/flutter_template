@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+
 import '../controller/onboarding_controller.dart';
 
 /// Registers [OnboardingController] for the onboarding screen.
@@ -9,4 +10,3 @@ class OnboardingBinding extends Bindings {
     Get.lazyPut<OnboardingController>(() => OnboardingController());
   }
 }
-

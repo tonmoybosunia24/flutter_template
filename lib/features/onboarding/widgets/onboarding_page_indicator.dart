@@ -26,7 +26,9 @@ class OnboardingPageIndicator extends StatelessWidget {
           margin: EdgeInsets.symmetric(
             horizontal: getWidth(AppDimensions.space4),
           ),
-          width: getWidth(isActive ? AppDimensions.space24 : AppDimensions.space8),
+          width: getWidth(
+            isActive ? AppDimensions.space24 : AppDimensions.space8,
+          ),
           height: getHeight(AppDimensions.space8),
           decoration: BoxDecoration(
             color: isActive ? colors.primary : colors.textHint,

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 /// Raw color constants of the application. Widgets should use the semantic colors of the active theme instead, through `context.appColors` (see [AppColorScheme]).
 class AppColors {
-
   // Common utility colors.
   static const Color white = Color(0xFFFFFFFF);
   static const Color black = Color(0xFF000000);
@@ -93,10 +92,18 @@ class AppColors {
   static const Color infoDark = Color(0xFF29B6F6);
 
   // The light theme's soft status background colors.
-  static const Color successSoftLight = Color(0x3334C759); // rgba(52, 199, 89, 0.2)
-  static const Color warningSoftLight = Color(0x33FFCC00); // rgba(255, 204, 0, 0.2)
-  static const Color errorSoftLight = Color(0x33FF383C); // rgba(255, 56, 60, 0.2)
-  static const Color primarySoftLight = Color(0x1AFA4A0C); // rgba(250, 74, 12, 0.1)
+  static const Color successSoftLight = Color(
+    0x3334C759,
+  ); // rgba(52, 199, 89, 0.2)
+  static const Color warningSoftLight = Color(
+    0x33FFCC00,
+  ); // rgba(255, 204, 0, 0.2)
+  static const Color errorSoftLight = Color(
+    0x33FF383C,
+  ); // rgba(255, 56, 60, 0.2)
+  static const Color primarySoftLight = Color(
+    0x1AFA4A0C,
+  ); // rgba(250, 74, 12, 0.1)
 
   // The light and dark theme's overlay colors.
   static const Color overlayLight = Color(0x1AFA4A0C); // primary 10%
@@ -107,10 +114,14 @@ class AppColors {
   static const Color scrimDark = Color(0xCC000000);
 
   // The shadow colors for buttons, cards, and bottom navigation.
-  static const Color primaryShadow = Color(0x1AFA4A0C); // 0px 4px 4px rgba(250, 74, 12, 0.1)
+  static const Color primaryShadow = Color(
+    0x1AFA4A0C,
+  ); // 0px 4px 4px rgba(250, 74, 12, 0.1)
   static const Color cardShadow = Color(0x1A100E0E); // rgba(16, 14, 14, 0.1)
   static const Color cardShadowDark = Color(0x73000000); // rgba(0, 0, 0, 0.45)
-  static const Color bottomNavShadow = Color(0x0F989292); // rgba(152, 146, 146, 0.06)
+  static const Color bottomNavShadow = Color(
+    0x0F989292,
+  ); // rgba(152, 146, 146, 0.06)
 
   // The light theme's primary linear gradient.
   static const LinearGradient primaryGradientLight = LinearGradient(

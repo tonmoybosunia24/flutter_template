@@ -25,9 +25,7 @@ class MainBottomNavItem extends StatelessWidget {
       behavior: HitTestBehavior.opaque,
       onTap: onTap,
       child: Padding(
-        padding: EdgeInsets.only(
-          top: getHeight(AppDimensions.padding16),
-        ),
+        padding: EdgeInsets.only(top: getHeight(AppDimensions.padding16)),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -42,7 +40,9 @@ class MainBottomNavItem extends StatelessWidget {
               fit: BoxFit.scaleDown,
               child: CustomText(
                 text: tab.label.tr,
-                style: isSelected ? textTheme.labelMedium : textTheme.bodyMedium,
+                style: isSelected
+                    ? textTheme.labelMedium
+                    : textTheme.bodyMedium,
                 color: isSelected ? colors.primary : colors.textMuted,
                 maxLines: 1,
                 strutStyle: StrutStyle(

@@ -4,6 +4,7 @@ import 'package:template/features/notification/binding/notification_binding.dart
 import 'package:template/features/profile/binding/profile_binding.dart';
 import 'package:template/features/search/binding/search_binding.dart';
 import 'package:template/features/settings/binding/settings_binding.dart';
+
 import '../controller/main_controller.dart';
 
 /// Registers [MainController] and the controllers of every tab shown inside the main screen.

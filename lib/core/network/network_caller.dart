@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_instance/src/extension_instance.dart';
@@ -25,7 +26,6 @@ class _SessionException implements Exception {
 
 /// Makes the app's HTTP requests: adds auth headers, refreshes expired tokens, retries once after a 401 and turns every outcome into a [ResponseData]. Params: [storage]: token storage. Defaults to the registered [StorageService]. [client]: the HTTP client. Defaults to a new [http.Client]. [connectivityCheck]: tells whether the device is online. Defaults to a check with [Connectivity]. [onSessionExpired]: called after the session is cleared. Defaults to opening the login screen.
 class NetworkCaller {
-  
   // Timeout duration for network requests in seconds.
   final _timeoutSeconds = 30;
   final StorageService _storage;
@@ -438,5 +438,4 @@ class NetworkCaller {
       return ResponseData.failure(error: AppError.unknown);
     }
   }
-
 }

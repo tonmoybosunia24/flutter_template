@@ -1,6 +1,5 @@
 import 'package:template/core/network/app_error.dart';
 
-
 /// The result of a network call, successful or not. Params: [isSuccess]: whether the request succeeded. [statusCode]: HTTP status code, or 0 when the request failed before a response. [data]: the parsed response body on success. [error]: what went wrong on failure.
 class ResponseData<T> {
   final bool isSuccess;
@@ -67,5 +66,4 @@ class ResponseData<T> {
   @override
   String toString() =>
       'ResponseData(isSuccess: $isSuccess, statusCode: $statusCode, error: $error)';
-
 }
