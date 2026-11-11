@@ -62,7 +62,7 @@ jobs:
         run: flutter test --coverage
 
       - name: Upload coverage
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: coverage
           path: coverage/lcov.info
@@ -183,7 +183,7 @@ jobs:
           ls -la dist
 
       - name: Upload build
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: ${{ steps.config.outputs.artifact }}
           path: dist/
@@ -205,7 +205,7 @@ jobs:
       contents: write
     steps:
       - name: Download build
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@v7
         with:
           name: ${{ needs.build-android.outputs.artifact }}
           path: dist
