@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+
 import '../controller/language_controller.dart';
 
 /// Registers [LanguageController] for the language screen.

@@ -4,7 +4,8 @@ import 'package:template/core/core.dart';
 import 'package:template/features/main/controller/main_controller.dart';
 
 /// The profile-style app bar shared by the tabs of the main screen: the user's photo, name and greeting, with a notification button.
-class MainAppBar extends GetView<MainController> implements PreferredSizeWidget {
+class MainAppBar extends GetView<MainController>
+    implements PreferredSizeWidget {
   const MainAppBar({super.key});
 
   @override

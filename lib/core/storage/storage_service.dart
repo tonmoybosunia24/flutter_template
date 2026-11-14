@@ -5,7 +5,6 @@ import 'package:template/core/storage/storage_keys.dart';
 
 /// Saves and reads app data: preferences in [GetStorage] and auth tokens in [FlutterSecureStorage].
 class StorageService extends GetxService {
-
   // Storage instances for local and secure storage
   final GetStorage _localStorage = GetStorage();
   final FlutterSecureStorage _secureStorage = const FlutterSecureStorage(
@@ -22,9 +21,9 @@ class StorageService extends GetxService {
       _localStorage.write(StorageKeys.langCode, lang);
   String? getLanguage() => _localStorage.read<String>(StorageKeys.langCode);
 
-
   // Methods for checking if the user has onboarded
-  bool hasOnboarded() => _localStorage.read<bool>(StorageKeys.hasOnboarded) ?? false;
+  bool hasOnboarded() =>
+      _localStorage.read<bool>(StorageKeys.hasOnboarded) ?? false;
 
   Future<void> setOnboarded() async =>
       _localStorage.write(StorageKeys.hasOnboarded, true);
@@ -35,18 +34,19 @@ class StorageService extends GetxService {
     required String refreshToken,
     required int expiresIn,
   }) async {
-
     // Save tokens securely and store the expiry time in local storage
-    await _secureStorage.write(key: StorageKeys.accessToken, value: accessToken);
-    await _secureStorage.write(key: StorageKeys.refreshToken, value: refreshToken);
+    await _secureStorage.write(
+      key: StorageKeys.accessToken,
+      value: accessToken,
+    );
+    await _secureStorage.write(
+      key: StorageKeys.refreshToken,
+      value: refreshToken,
+    );
 
     final expiryTime =
         DateTime.now().millisecondsSinceEpoch + (expiresIn * 1000);
-    await _localStorage.write(
-      StorageKeys.tokenExpiry,
-      expiryTime,
-    ); // Store the expiry time in milliseconds since epoch. Expiry isn't sensitive data.
-
+    await _localStorage.write(StorageKeys.tokenExpiry, expiryTime); // Store the expiry time in milliseconds since epoch. Expiry isn't sensitive data.
   }
 
   // Method to retrieve the access token from secure storage

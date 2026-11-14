@@ -61,6 +61,8 @@ class AppDimensions {
   static const double inputHeight = 52.0;
   static const double iconButtonSize = 50.0;
   static const double iconContainerSize = 40.0;
+  static const double chipHeight = 40.0;
+  static const double floatingCardMaxWidth = 320.0;
   static const double appBarHeight = 64.0;
   static const double appBarActionSize = 50.0;
   static const double switchWidth = 36.0;
@@ -73,7 +75,7 @@ class AppDimensions {
   static const double logoSizeLarge = 200.0;
   static const double logoSizeMedium = 120.0;
   static const double bottomNavBarHeight = 81.0;
-  
+
   // Standard border stroke widths for outlines, dividers, and focused inputs.
   static const double borderWidth05 = 0.5;
   static const double borderWidth1 = 1.0;

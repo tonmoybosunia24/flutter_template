@@ -3,8 +3,5 @@ class MainTabItem {
   final String icon;
   final String label;
 
-  const MainTabItem({
-    required this.icon,
-    required this.label,
-  });
+  const MainTabItem({required this.icon, required this.label});
 }

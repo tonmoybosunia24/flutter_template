@@ -23,7 +23,10 @@ Future<void> _pumpInApp(WidgetTester tester, Widget child) {
 void main() {
   testWidgets('shows the label and reports taps', (tester) async {
     var taps = 0;
-    await _pumpInApp(tester, CustomButton(text: 'Save', onPressed: () => taps++));
+    await _pumpInApp(
+      tester,
+      CustomButton(text: 'Save', onPressed: () => taps++),
+    );
 
     expect(find.text('Save'), findsOneWidget);
     expect(find.byType(CircularProgressIndicator), findsNothing);

@@ -23,7 +23,7 @@ extension ContextExtension on BuildContext {
   ThemeData get theme => Theme.of(this);
   // Quick access to text theme.
   TextTheme get textTheme => Theme.of(this).textTheme;
-  
+
   // Quick access to the current theme's color scheme (e.g., context.appColors.primary).
   AppColorScheme get appColors =>
       Theme.of(this).extension<AppColorScheme>() ??

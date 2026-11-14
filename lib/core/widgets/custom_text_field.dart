@@ -73,10 +73,18 @@ class CustomTextField extends StatelessWidget {
               ),
         suffixIconConstraints: const BoxConstraints(),
         contentPadding: EdgeInsetsDirectional.only(
-          start: prefixIcon == null && !isBorderless ? getWidth(AppDimensions.padding20) : 0,
-          end: suffixIcon == null && !isBorderless ? getWidth(AppDimensions.padding20) : 0,
-          top: getHeight(isBorderless ? AppDimensions.padding12 : AppDimensions.padding16),
-          bottom: getHeight(isBorderless ? AppDimensions.padding12 : AppDimensions.padding16),
+          start: prefixIcon == null && !isBorderless
+              ? getWidth(AppDimensions.padding20)
+              : 0,
+          end: suffixIcon == null && !isBorderless
+              ? getWidth(AppDimensions.padding20)
+              : 0,
+          top: getHeight(
+            isBorderless ? AppDimensions.padding12 : AppDimensions.padding16,
+          ),
+          bottom: getHeight(
+            isBorderless ? AppDimensions.padding12 : AppDimensions.padding16,
+          ),
         ),
       ),
     );

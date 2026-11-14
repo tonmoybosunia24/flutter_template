@@ -117,9 +117,9 @@ runners are included, but check the
    flutter run --dart-define=API_BASE_URL=https://your.api.com
    ```
 
-   The `dev` host is a public mock server that serves the home feed
-   (`/posts`), so the template runs with no backend of your own. Set your real
-   hosts in `lib/core/config/env_config.dart`.
+   The `dev` and `staging` hosts point at a public mock server that serves the
+   home feed (`/posts`), so the template runs with no backend of your own. Set
+   your real hosts in `lib/core/config/env_config.dart`.
 
 4. **Build a release**
    ```bash
@@ -127,6 +127,45 @@ runners are included, but check the
    flutter build appbundle --release --dart-define=ENV=prod
    flutter build ipa --release --dart-define=ENV=prod
    ```
+
+### CI/CD
+
+[`.github/workflows/flutter-ci.yml`](.github/workflows/flutter-ci.yml) runs on
+GitHub Actions:
+
+| Trigger | What runs | Output |
+|---|---|---|
+| Pull request to `main` / `dev` | format check, `flutter analyze`, `flutter test` | coverage report |
+| Push to `dev` | the checks + release APK with `ENV=dev` | APK artifact |
+| Push to `main` | the checks + release APK with `ENV=staging` | APK artifact |
+| Tag `v1.2.3` | the checks + signed APK and AAB with `ENV=prod` | GitHub Release |
+
+The version name comes from the tag (or `pubspec.yaml` on branches), and the
+build number is the workflow run number, so every build has a higher Android
+`versionCode`. CI pins Flutter in `FLUTTER_VERSION`; bump it when you upgrade
+locally.
+
+**Release signing.** Create an upload keystore once
+([Flutter guide](https://docs.flutter.dev/deployment/android#sign-the-app)),
+then add these repository secrets under *Settings → Secrets and variables →
+Actions*:
+
+| Secret | Value |
+|---|---|
+| `ANDROID_KEYSTORE_BASE64` | `base64 -w 0 upload-keystore.jks` |
+| `ANDROID_KEYSTORE_PASSWORD` | keystore password |
+| `ANDROID_KEY_ALIAS` | key alias, e.g. `upload` |
+| `ANDROID_KEY_PASSWORD` | key password |
+
+Without them, branch builds are signed with debug keys and tag releases fail.
+For signed local builds, create `android/key.properties` (git-ignored) with
+`storeFile`, `storePassword`, `keyAlias` and `keyPassword`.
+
+**Releasing:**
+```bash
+git tag v1.0.0
+git push origin v1.0.0
+```
 
 ---
 
@@ -146,8 +185,10 @@ lib/
 │   ├── theme/                      # AppColors, AppColorScheme (light/dark), AppTheme
 │   ├── localization/               # AppTranslations + langs/{en_us, bn_bd, ar_sa}
 │   ├── utils/                      # AppSizeClass, AppDimensions, AppStrings, asset paths,
-│   │                               # validators, extensions, AppLogger, SettingsUtil
-│   └── widgets/                    # Custom* reusable widgets (button, text field, app bar, ...)
+│   │                               # validators, extensions, AppLogger, SettingsUtil,
+│   │                               # ViewStateMixin (screen states), DevScenario
+│   └── widgets/                    # Custom* reusable widgets (button, text field, app bar,
+│                                   # state view, skeletons, dev switcher, ...)
 ├── features/                       # One folder per feature
 │   ├── splash/                     # Startup work + routing to onboarding / login / main
 │   ├── onboarding/                 # First-run pager
@@ -180,9 +221,9 @@ features/<feature>/
 ```
 
 **`home` is the reference implementation.** It is a complete vertical slice:
-binding → controller → repository → typed model (`HomePost`) → view, with
-loading, error and pull-to-refresh states, plus a create-post flow. Copy its
-shape when you add a feature.
+binding → controller → repository → typed model (`HomePost`) → view, with a
+skeleton while loading, empty / error / offline screens, pull-to-refresh and a
+create-post flow. Copy its shape when you add a feature.
 
 ---
 
@@ -211,7 +252,8 @@ shape when you add a feature.
 - **Safe logout rules**: only a refused refresh (400/401/403) logs the user
   out. Network errors, timeouts and 5xx keep the session.
 - **Connectivity guard**: requests fail fast with `AppError.noInternet` when
-  the device is offline.
+  the device is offline, and also when it is on a network that can't reach the
+  server (e.g. Wi-Fi without internet).
 - **File uploads**: `multipartPostRequest` with the same refresh-and-retry
   behaviour.
 - **Testable**: `NetworkCaller` accepts an `http.Client`, a connectivity check
@@ -228,7 +270,21 @@ shape when you add a feature.
   `ImagePath` (photos). No `'assets/...'` strings in code.
 - **Reusable widgets**: `CustomAppBar`, `CustomButton`, `CustomPillButton`,
   `CustomTextField`, `CustomText`, `CustomSvgIcon`, `CustomNetworkImage`,
-  `CustomRingAvatar`, `CustomLoader`, `CustomComingSoon`.
+  `CustomRingAvatar`, `CustomLoader`, `CustomComingSoon`, `CustomStateView`,
+  `CustomScreenState`, `CustomSkeleton`, `CustomSkeletonBox`.
+
+### 🧩 Screen States & Dev Switcher
+- **One pattern for every data screen**: the controller mixes in
+  `ViewStateMixin` and implements `fetchData()`; the view wraps its content in
+  `CustomStateView`. You get a **skeleton** while loading, **empty**,
+  **error** and **offline** screens with a retry button, and pull-to-refresh,
+  all looking the same across the app.
+- **Safe by default**: a reply from an older request or from a closed screen
+  is ignored, and a failed refresh keeps the content on screen with a snackbar
+  instead of replacing it with an error.
+- **Dev scenario switcher**: in debug builds every data screen shows a round
+  ⚙ button. Pick **Live, Loading, Empty, Error or Offline** to see that state
+  without touching the backend. Release builds don't include it.
 
 ### 📱 Responsive Engine
 - **`flutter_screenutil`** with a `412 × 917` design size.
@@ -351,7 +407,8 @@ splash screen already treats a saved token as a logged-in session.
 
 ## 🧑‍💻 Usage Example
 
-A new API call touches four files. This is the pattern `home` uses.
+A screen that loads data touches five files. This is the pattern `home` uses
+(the full guide is in `docs/ARCHITECTURE.md` §3.3).
 
 **1. Endpoint** — `lib/core/network/api_endpoints.dart`
 ```dart
@@ -389,36 +446,32 @@ class ShopRepository {
 
 **3. Controller** — `lib/features/shop/controller/shop_controller.dart`
 ```dart
-/// Holds the shop screen state: the product list, loading flag and error message.
-class ShopController extends GetxController {
+/// Holds the shop screen state: loads the product list and picks the screen state.
+class ShopController extends GetxController with ViewStateMixin {
   final ShopRepository _repository = Get.find<ShopRepository>();
 
   final RxList<ShopProduct> products = <ShopProduct>[].obs;
-  final RxBool isLoading = false.obs;
-  final RxnString errorMessage = RxnString();
 
+  // Loads the products. ViewStateMixin calls it on init; retry and pull-to-refresh call it too.
   @override
-  void onInit() {
-    super.onInit();
-    fetchProducts();
-  }
+  Future<void> fetchData() async {
+    final response = await runLoad(_repository.getProducts);
+    // Null when the screen closed, a newer load started, or a dev scenario is forced.
+    if (response == null) return;
 
-  // Loads the products. Also used by pull-to-refresh and the retry button.
-  Future<void> fetchProducts() async {
-    isLoading.value = true;
-    errorMessage.value = null;
-    final response = await _repository.getProducts();
-    if (isClosed) return; // the screen may have closed while waiting
-
-    if (response.isSuccess) {
-      products.assignAll(response.data ?? const []);
-    } else {
-      errorMessage.value = response.errorMessage; // already translated
-    }
-    isLoading.value = false;
+    if (response.isSuccess) products.assignAll(response.data ?? const []);
+    showResult(
+      isSuccess: response.isSuccess,
+      isEmpty: products.isEmpty,
+      error: response.errorMessage, // already translated
+      isOffline: response.error?.isNoInternet ?? false,
+    );
   }
 }
 ```
+
+`ViewStateMixin` gives the controller `state`, `isLoading` and `errorMessage`,
+and calls `fetchData()` on init, so don't call it again in `onInit`.
 
 **4. Binding** — `lib/features/shop/binding/shop_binding.dart`
 ```dart
@@ -432,8 +485,20 @@ class ShopBinding extends Bindings {
 }
 ```
 
-The view then reads `controller.products`, `controller.isLoading` and
-`controller.errorMessage` inside `Obx`.
+**5. View** — `lib/features/shop/view/shop_screen.dart`
+```dart
+body: Obx(
+  () => CustomStateView(
+    state: controller.state.value,
+    isRetrying: controller.isLoading.value,
+    errorMessage: controller.errorMessage.value,
+    onRetry: controller.fetchData,
+    loadingChild: const ShopProductSkeleton(), // optional: shaped like a product card
+    emptyTitle: AppStrings.shopEmptyTitle.tr,  // optional
+    child: const ShopProductList(), // RefreshIndicator(onRefresh: controller.fetchData) + list
+  ),
+),
+```
 
 ---
 
@@ -446,7 +511,9 @@ The view then reads `controller.products`, `controller.isLoading` and
    `bn_bd.dart` and `ar_sa.dart`.
 4. Add the route name to `AppRoutes` and register the page + binding in
    `AppPages`. For a main tab, register its binding in `MainBinding` instead.
-5. Run `flutter analyze` and `flutter test`. The architecture test will flag
+5. If the screen loads data, use `ViewStateMixin` + `CustomStateView` (see the
+   usage example above) and check every state with the ⚙ dev switcher.
+6. Run `flutter analyze` and `flutter test`. The architecture test will flag
    anything that breaks the conventions.
 
 See `docs/ARCHITECTURE.md` for the full rules.
@@ -523,13 +590,15 @@ rewrite the iOS usage descriptions for your app.
 ## ✅ Testing
 
 ```bash
-flutter analyze   # keep at 0 warnings / 0 errors
+dart format lib test   # CI fails on unformatted files
+flutter analyze        # keep at 0 warnings / 0 errors
 flutter test
 ```
 
 | Area | What is covered |
 | --- | --- |
-| Network | Response parsing, error mapping, token refresh, single-flight refresh, logout rules, timeouts, offline short-circuit, file-upload retry |
+| Network | Response parsing, error mapping, token refresh, single-flight refresh, logout rules, timeouts, offline short-circuit, no internet on connection failure, file-upload retry |
+| Screen states | `ViewStateMixin`: content / empty / error / offline, failed refresh keeps content, late and closed replies ignored, forced dev scenarios |
 | Utils & widgets | Validators, `AppError` translation, `CustomButton` |
 | Localization | Every locale has every key with a non-empty value |
 | Architecture | Fails on hardcoded colors, raw `Text`, hardcoded asset paths, `print`/`debugPrint`, network imports in views/controllers, `_buildXxx()` methods, hoisted sizes, `fontSize`/`fontWeight` on `CustomText`, unprefixed feature widgets, malformed doc comments |
@@ -564,8 +633,8 @@ production:
 
 - [ ] **Login API**: the login screen is UI only (see
       [Wiring up login](#wiring-up-login)).
-- [ ] **CI**: no GitHub Actions workflow yet. Run `flutter analyze` and
-      `flutter test` locally before pushing.
+- [ ] **iOS CI**: the workflow builds Android only. Add a macOS job with
+      code signing if you ship to the App Store.
 - [ ] **Flavors**: environments are compile-time `--dart-define` values, not
       Gradle/Xcode flavors. Add real flavors if you need a separate app ID or
       icon per environment.

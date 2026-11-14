@@ -1,0 +1,221 @@
+# Flutter CI/CD for this template.
+#
+#   Pull request -> verify (format, analyze, test)
+#   Push to dev  -> verify + APK built with ENV=dev      (artifact)
+#   Push to main -> verify + APK built with ENV=staging  (artifact)
+#   Tag v1.2.3   -> verify + signed APK & AAB, ENV=prod  (GitHub Release)
+#
+# Release signing reads these repository secrets (see README "CI/CD"):
+#   ANDROID_KEYSTORE_BASE64, ANDROID_KEYSTORE_PASSWORD, ANDROID_KEY_ALIAS, ANDROID_KEY_PASSWORD
+# Without them, branch builds fall back to debug keys; tag releases fail on purpose.
+
+name: Flutter CI/CD
+
+on:
+  push:
+    branches: [main, dev]
+    tags: ['v*.*.*']
+  pull_request:
+    branches: [main, dev]
+  workflow_dispatch:
+
+# Least privilege by default; only the release job asks for write access.
+permissions:
+  contents: read
+
+# A newer commit cancels an older PR run, but branch and tag builds always finish.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+env:
+  # Pinned so CI builds with the same SDK as local development. Bump together with your local Flutter.
+  FLUTTER_VERSION: '3.47.9'
+  JAVA_VERSION: '17'
+
+jobs:
+  verify:
+    name: Format, analyze & test
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: stable
+          cache: true
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Check formatting
+        run: dart format --output=none --set-exit-if-changed lib test
+
+      - name: Analyze
+        run: flutter analyze --fatal-infos --fatal-warnings
+
+      # Includes test/core/architecture_test.dart, which enforces the AGENTS.md rules.
+      - name: Test
+        run: flutter test --coverage
+
+      - name: Upload coverage
+        uses: actions/upload-artifact@v6
+        with:
+          name: coverage
+          path: coverage/lcov.info
+          if-no-files-found: warn
+          retention-days: 7
+
+  build-android:
+    name: Build Android
+    needs: verify
+    if: github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    outputs:
+      artifact: ${{ steps.config.outputs.artifact }}
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Set up Java
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: ${{ env.JAVA_VERSION }}
+          cache: gradle
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: stable
+          cache: true
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      # Picks the environment and version from the ref. ENV must match EnvConfig (lib/core/config/env_config.dart).
+      - name: Resolve build settings
+        id: config
+        run: |
+          app_name=$(grep -E '^name:' pubspec.yaml | sed -E 's/^name:[[:space:]]*([^[:space:]#]+).*/\1/')
+          pubspec_version=$(grep -E '^version:' pubspec.yaml | sed -E 's/^version:[[:space:]]*([^+[:space:]#]+).*/\1/')
+
+          if [[ "$GITHUB_REF" == refs/tags/v* ]]; then
+            env=prod
+            build_name="${GITHUB_REF_NAME#v}"
+            release=true
+          elif [[ "$GITHUB_REF" == refs/heads/main ]]; then
+            env=staging
+            build_name="$pubspec_version"
+            release=false
+          else
+            env=dev
+            build_name="$pubspec_version"
+            release=false
+          fi
+
+          # run_number only grows, so every build gets a higher Android versionCode.
+          build_number="$GITHUB_RUN_NUMBER"
+
+          {
+            echo "env=$env"
+            echo "build_name=$build_name"
+            echo "build_number=$build_number"
+            echo "release=$release"
+            echo "file_prefix=${app_name}-${build_name}+${build_number}-${env}"
+            echo "artifact=android-${env}-${build_name}+${build_number}"
+          } >> "$GITHUB_OUTPUT"
+
+          echo "Building $app_name $build_name+$build_number with ENV=$env (release=$release)"
+
+      - name: Set up release signing
+        env:
+          KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+          IS_RELEASE: ${{ steps.config.outputs.release }}
+        run: |
+          if [ -z "$KEYSTORE_BASE64" ]; then
+            if [ "$IS_RELEASE" = "true" ]; then
+              echo "::error::ANDROID_KEYSTORE_BASE64 is not set. A tagged release must be signed with the upload key."
+              exit 1
+            fi
+            echo "::warning::Signing secrets are not set, so this build uses debug keys."
+            exit 0
+          fi
+
+          echo "$KEYSTORE_BASE64" | base64 --decode > android/app/upload-keystore.jks
+          cat > android/key.properties <<EOF
+          storeFile=upload-keystore.jks
+          storePassword=$KEYSTORE_PASSWORD
+          keyAlias=$KEY_ALIAS
+          keyPassword=$KEY_PASSWORD
+          EOF
+
+      - name: Build APK
+        run: |
+          flutter build apk --release \
+            --dart-define=ENV=${{ steps.config.outputs.env }} \
+            --build-name=${{ steps.config.outputs.build_name }} \
+            --build-number=${{ steps.config.outputs.build_number }}
+
+      # The Play Store only accepts App Bundles, so they are built for releases only.
+      - name: Build App Bundle
+        if: steps.config.outputs.release == 'true'
+        run: |
+          flutter build appbundle --release \
+            --dart-define=ENV=${{ steps.config.outputs.env }} \
+            --build-name=${{ steps.config.outputs.build_name }} \
+            --build-number=${{ steps.config.outputs.build_number }}
+
+      - name: Collect outputs
+        run: |
+          mkdir -p dist
+          cp build/app/outputs/flutter-apk/app-release.apk "dist/${{ steps.config.outputs.file_prefix }}.apk"
+          if [ -f build/app/outputs/bundle/release/app-release.aab ]; then
+            cp build/app/outputs/bundle/release/app-release.aab "dist/${{ steps.config.outputs.file_prefix }}.aab"
+          fi
+          ls -la dist
+
+      - name: Upload build
+        uses: actions/upload-artifact@v6
+        with:
+          name: ${{ steps.config.outputs.artifact }}
+          path: dist/
+          if-no-files-found: error
+          retention-days: 14
+
+      # The runner is thrown away, but remove the key material anyway.
+      - name: Clean up signing files
+        if: always()
+        run: rm -f android/app/upload-keystore.jks android/key.properties
+
+  release:
+    name: Publish GitHub Release
+    needs: build-android
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    steps:
+      - name: Download build
+        uses: actions/download-artifact@v7
+        with:
+          name: ${{ needs.build-android.outputs.artifact }}
+          path: dist
+
+      - name: Create release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: Release ${{ github.ref_name }}
+          tag_name: ${{ github.ref_name }}
+          files: dist/*
+          generate_release_notes: true
+          # Tags like v1.2.0-beta.1 are marked as pre-releases.
+          prerelease: ${{ contains(github.ref_name, '-') }}

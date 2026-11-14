@@ -7,7 +7,10 @@ class MainController extends GetxController {
   final List<MainTabItem> tabs = const [
     MainTabItem(icon: IconPath.home, label: AppStrings.navHome),
     MainTabItem(icon: IconPath.search, label: AppStrings.navSearch),
-    MainTabItem(icon: IconPath.notification, label: AppStrings.navNotifications),
+    MainTabItem(
+      icon: IconPath.notification,
+      label: AppStrings.navNotifications,
+    ),
     MainTabItem(icon: IconPath.settings, label: AppStrings.navSettings),
     MainTabItem(icon: IconPath.user, label: AppStrings.navProfile),
   ];

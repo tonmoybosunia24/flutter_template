@@ -58,20 +58,27 @@ lib/
 │   │   ├── app_images.dart            # Raster image asset paths (ImagePath)
 │   │   ├── app_size_class.dart        # Responsive system (AppSizeClass) & global scaling/breakpoint helpers
 │   │   ├── app_strings.dart           # Translation key constants (AppStrings)
+│   │   ├── dev_scenario.dart          # DevScenario: debug-only forced screen states for the dev switcher
 │   │   ├── extensions.dart            # StringExtension & ContextExtension (context.appColors, context.textTheme, etc.)
 │   │   ├── logger.dart                # Debug-only logger (AppLogger)
 │   │   ├── settings_util.dart         # Runtime theme & locale switching + persistence (SettingsUtil)
-│   │   └── validators.dart            # Localized form field validators (AppValidators)
+│   │   ├── validators.dart            # Localized form field validators (AppValidators)
+│   │   └── view_state.dart            # ViewState enum & ViewStateMixin (screen state for every data screen)
 │   └── widgets/
 │       ├── widgets.dart               # Barrel file for core reusable widgets
 │       ├── custom_app_bar.dart        # Standard & profile-style AppBar
 │       ├── custom_app_bar_action.dart # Circular icon button for CustomAppBar
 │       ├── custom_button.dart         # Full-width pill ElevatedButton with loading & icon support
-│       ├── custom_coming_soon.dart    # Placeholder widget for unfinished features/tabs
+│       ├── custom_coming_soon.dart    # Placeholder for unfinished features/tabs (drawn by CustomScreenState)
+│       ├── custom_dev_scenario_switcher.dart # Debug-only ⚙ button that forces a screen state
 │       ├── custom_loader.dart         # Rotating SVG loading indicator
 │       ├── custom_network_image.dart  # Network image with themed placeholder & error fallback
-│       ├── custom_pill_button.dart    # Compact gradient pill button with SVG icon + text
+│       ├── custom_pill_button.dart    # Compact gradient pill button with SVG icon + text & loading spinner
 │       ├── custom_ring_avatar.dart    # Circular avatar inside a primary gradient ring
+│       ├── custom_screen_state.dart   # Centered icon + title + message + optional button (empty/error/offline)
+│       ├── custom_skeleton.dart       # Pulsing wrapper for a loading placeholder (+ screen reader label)
+│       ├── custom_skeleton_box.dart   # One grey block (line, image or circle) of a loading placeholder
+│       ├── custom_state_view.dart     # Shows a data screen as skeleton, empty, error, offline or content
 │       ├── custom_svg_icon.dart       # SvgPicture.asset wrapper with optional color tinting
 │       ├── custom_text.dart           # Responsive text widget (scales fontSize with getSp)
 │       └── custom_text_field.dart     # Styled TextFormField with prefix/suffix icons & borderless mode
@@ -145,6 +152,92 @@ lib/
    - Shared only by the tabs of the main shell → `features/main/widgets/` (e.g. `MainAppBar`).
 7. **Static vs Dynamic Content**: When static UI sits above a dynamic list, don't add it as item `0` and offset every index. Use `CustomScrollView` with a `SliverToBoxAdapter` for the static part and a `SliverList` for the items.
 
+### 3.3. Data Screens (Fetching from an API)
+
+Every screen that **loads data to show** (a feed, a list, a detail page, a profile read from the server) uses the same system, so loading, empty, error, offline and content look and behave the same everywhere. The home feed (`features/home/`) is the reference implementation.
+
+Screens that only **send** data (a login form, a "create post" button) don't need it: keep a `RxBool isSubmitting` in the controller and use `CustomButton(isLoading: ...)`.
+
+#### How it fits together
+
+```text
+HomeController with ViewStateMixin            CustomStateView (in HomeScreen)
+──────────────────────────────────            ───────────────────────────────
+onInit ─▶ fetchData()                         switch (controller.state):
+            runLoad(repository.getPosts)        loading  → CustomSkeleton(loadingChild)
+            showResult(...) ──▶ state  ───────▶ empty    → CustomScreenState (inbox, no button)
+                                                error    → CustomScreenState (alert + Try again)
+                                                offline  → CustomScreenState (hotspot-offline + Try again)
+                                                content  → child (the real UI)
+```
+
+- `ViewStateMixin` (`core/utils/view_state.dart`) owns `state`, `isLoading` and `errorMessage`, calls `fetchData()` on init, drops replies from older loads or from a closed controller, and in debug builds follows the dev scenario switcher.
+- `CustomStateView` (`core/widgets/custom_state_view.dart`) draws the right state and adds the debug-only ⚙ dev switcher on top.
+- How the state is picked after a load:
+  - success with items → `content`; success with no items → `empty`
+  - failure while content is already on screen → content stays, a "Couldn't refresh" snackbar shows
+  - failure with nothing on screen → `offline` when `response.error?.isNoInternet`, otherwise `error` with the server's message
+
+#### Step by step (example feature `order`)
+
+1. **Repository** (as in 3.2): `Future<ResponseData<List<Order>>> getOrders()` in `features/order/repository/order_repository.dart`, with the endpoint in `ApiEndpoints`.
+2. **Controller**: mix in `ViewStateMixin` and override `fetchData()`. Don't call `fetchData()` in `onInit`; the mixin already does.
+   ```dart
+   class OrderController extends GetxController with ViewStateMixin {
+     final OrderRepository _repository = Get.find<OrderRepository>();
+     final RxList<Order> orders = <Order>[].obs;
+
+     // Loads the orders. ViewStateMixin calls it on init; retry and pull-to-refresh call it too.
+     @override
+     Future<void> fetchData() async {
+       final response = await runLoad(_repository.getOrders);
+       // Null when the screen closed, a newer load started, or a dev scenario is forced.
+       if (response == null) return;
+
+       if (response.isSuccess) orders.assignAll(response.data ?? const []);
+       showResult(
+         isSuccess: response.isSuccess,
+         isEmpty: orders.isEmpty,
+         error: response.errorMessage,
+         isOffline: response.error?.isNoInternet ?? false,
+       );
+     }
+   }
+   ```
+   - `runLoad` passes the function itself (`_repository.getOrders`, no `()`), so the mixin can number the load before running it. Its `null` check replaces `if (isClosed) return;`.
+   - For a single object (a detail page), pass `isEmpty: false`, or `isEmpty: item == null` when the server can answer with nothing.
+   - When the controller adds data itself (e.g. after creating an order), set `state.value = ViewState.content;` so an empty screen switches to the content.
+3. **Screen**: wrap the body in `Obx` + `CustomStateView`.
+   ```dart
+   body: Center(
+     child: ConstrainedBox(
+       constraints: BoxConstraints(maxWidth: maxContentWidth),
+       child: Obx(
+         () => CustomStateView(
+           state: controller.state.value,
+           isRetrying: controller.isLoading.value,
+           errorMessage: controller.errorMessage.value,
+           onRetry: controller.fetchData,
+           loadingLabel: AppStrings.orderLoading.tr,      // optional
+           loadingChild: const OrderListSkeleton(),         // optional
+           emptyTitle: AppStrings.orderEmptyTitle.tr,       // optional
+           emptyMessage: AppStrings.orderEmptyMessage.tr,   // optional
+           child: const OrderList(),
+         ),
+       ),
+     ),
+   ),
+   ```
+4. **Content widget** (`features/order/widgets/order_list.dart`): a `GetView<OrderController>` with its own `RefreshIndicator(onRefresh: controller.fetchData)` around an `Obx` list, like `HomeFeed`.
+5. **Skeleton** (optional, `features/order/widgets/order_skeleton.dart`): copy the real item's layout and put a `CustomSkeletonBox` where each text, image and avatar goes, with the same paddings, so nothing jumps when the data arrives (see `HomePostSkeleton`). `CustomSkeletonBox` scales its raw `AppDimensions` tokens itself, so pass `AppDimensions.space12`, not `getHeight(...)`. Without a `loadingChild`, generic cards are shown.
+6. **Strings**: only the screen-specific ones (`orderLoading`, `orderEmptyTitle`, `orderEmptyMessage`), in all three locales. Error and offline texts are shared (`stateErrorTitle`, `stateOfflineTitle`, …).
+
+#### Checking every state (dev scenario switcher)
+- In debug builds every `CustomStateView` shows a round ⚙ button. It opens a card with **Live, Loading, Empty, Error, Offline**; picking one makes every `ViewStateMixin` screen show that state without calling the server. **Live** loads real data again.
+- It works on tabs and pushed pages alike, because it lives inside `CustomStateView`.
+- Release builds (`kDebugMode == false`) never draw it and never read the scenario; the dead code is removed at compile time.
+- To add a scenario, add a value to `DevScenario` (label, icon, forced `ViewState`) and its label string in all three locales.
+
 ---
 
 ## 4. Design System, Styling & Responsiveness
@@ -198,14 +291,17 @@ lib/
 Always prefer existing core widgets in `lib/core/widgets/` before building custom ones:
 - `CustomAppBar` & `CustomAppBarAction`
 - `CustomButton` (full-width primary action button with `isLoading` spinner)
-- `CustomPillButton` (small gradient pill button with icon)
+- `CustomPillButton` (small gradient pill button with icon and `isLoading` spinner)
+- `CustomStateView` (every data screen's loading, empty, error, offline and content states; see 3.3)
+- `CustomScreenState` (centered icon, title, message and optional button for a screen with nothing else to show)
+- `CustomSkeleton` & `CustomSkeletonBox` (pulsing loading placeholders shaped like the content)
 - `CustomTextField` (form input with `prefixIcon`, `suffixIcon`, `isPassword`, `validator`, `isBorderless`)
 - `CustomText`
 - `CustomSvgIcon`
 - `CustomNetworkImage`
 - `CustomRingAvatar`
 - `CustomLoader`
-- `CustomComingSoon`
+- `CustomComingSoon` (built on `CustomScreenState`)
 
 ### 4.5. Assets (`IconPath`, `IllustrationPath`, `ImagePath`)
 - Never write hardcoded asset path strings (e.g., `'assets/icons/...'`) in widgets or controllers.
@@ -251,6 +347,7 @@ Always prefer existing core widgets in `lib/core/widgets/` before building custo
 - **API Endpoints**: Add all endpoint getters to `ApiEndpoints` (`lib/core/network/api_endpoints.dart`), constructed from `baseUrl` (`EnvConfig.baseUrl`).
 - **Auth Calls**: When calling login/register endpoints that should not trigger token refresh on `401`, pass `isAuthCall: true` to `NetworkCaller.postRequest(...)`.
 - **Token Refresh**: An expired token is refreshed only when one exists; without a token the request goes out unauthenticated. Only a refresh refusal (`400`, `401` or `403`) clears the session and opens login (once, even for parallel requests). Network errors, timeouts and `5xx` keep the session and return `noInternet`, `timeout` or a server error. The backend must answer a missing or invalid token with `401`, not `403`.
+- **Offline Detection**: A request fails with `AppError.noInternet` when the device has no network (checked with `connectivity_plus` before sending) **and** when it is on a network that can't reach the server (`http.ClientException`, e.g. Wi-Fi without internet). Data screens show this as the offline state (3.3).
 - **Logging**: Never use `print()` or `debugPrint()`. Always use `AppLogger.logInfo`, `AppLogger.logDebug`, `AppLogger.logWarning`, or `AppLogger.logError`.
 
 ---
@@ -274,6 +371,7 @@ Always prefer existing core widgets in `lib/core/widgets/` before building custo
 - **Translation Completeness Test**: `test/core/localization/app_translations_test.dart` verifies that `en_US`, `bn_BD`, and `ar_SA` have identical key sets and no empty values.
 - **When to Run Tests/Analyze**: **Do NOT run `flutter test` or `flutter analyze` in the terminal after every command** (it slows down iteration). Instead, self-review your code against the checklist below while writing it, and only run `flutter test` / `flutter analyze` when the user explicitly asks or after completing a major milestone.
 - **Unit Tests**: Inject fake/mock dependencies (such as a fake `StorageService` or `http.testing` `MockClient`) into `NetworkCaller` or repositories instead of touching platform channels.
+- **Screen State Tests**: `test/core/utils/view_state_test.dart` drives a fake `ViewStateMixin` controller whose loads wait on `Completer`s, so each test decides what every load returns and in which order (late replies, closed controller, failed refresh, forced dev scenario).
 - **Widget Tests**: Pump widgets inside `ScreenUtilInit(designSize: const Size(412, 917), ...)` and call `AppSizeClass.init(context)` inside `MaterialApp.builder` so responsive helpers (`getWidth`, `getHeight`, `getSp`, `getRadius`) work identically to production.
 
 ---
@@ -287,3 +385,4 @@ While writing or editing any code, you **MUST** verify every item below by inspe
 4. [ ] **RTL Ready**: Directional padding/alignment (`EdgeInsetsDirectional`, `AlignmentDirectional`) and RTL icon flipping are used where needed.
 5. [ ] **Clean Imports & Disposals**: `hide ContextExtensionss` is used when importing both `get.dart` and `core.dart`; all controllers/timers are disposed in `onClose()`.
 6. [ ] **Structure & Docs**: Logic is in the controller, there are no `_buildXxx()` methods, widgets sit in the right folder with the right prefix, and every class has a one-line `///` doc.
+7. [ ] **Data Screens**: A screen that loads data uses `ViewStateMixin` (`fetchData` with `runLoad` + `showResult`, not called again in `onInit`) and `CustomStateView`, with a skeleton shaped like the content and its own empty texts in all three locales.

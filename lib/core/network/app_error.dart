@@ -3,7 +3,6 @@ import 'package:template/core/utils/app_strings.dart';
 
 /// An application-level error that the UI can show or branch on. Params: [message]: translation key from [AppStrings], or ready-to-show text such as a message from the server. [statusCode]: HTTP status code, if the error came from a response. [errorCode]: machine-readable code for conditional UI logic.
 class AppError {
-  
   final String _message;
   final int? statusCode;
   final String? errorCode;

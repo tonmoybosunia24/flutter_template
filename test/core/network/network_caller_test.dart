@@ -87,7 +87,10 @@ void main() {
 
     test('every 2xx status counts as a success', () async {
       final created = await _callerFor(201, '{"id":5}').postRequest(_url);
-      final accepted = await _callerFor(202, '{"queued":true}').postRequest(_url);
+      final accepted = await _callerFor(
+        202,
+        '{"queued":true}',
+      ).postRequest(_url);
 
       expect(created.isSuccess, isTrue);
       expect(accepted.isSuccess, isTrue);
@@ -148,25 +151,46 @@ void main() {
       expect(result.error?.isNoInternet, isTrue);
       expect(requests, 0);
     });
-  });
 
-  test('a request without a session goes out with no token and no refresh', () async {
-    final requests = <http.Request>[];
-    final caller = NetworkCaller(
-      storage: _FakeStorage(accessToken: null, expired: true),
-      client: MockClient((request) async {
-        requests.add(request);
-        return http.Response('{"id":1}', 200);
-      }),
-      connectivityCheck: () async => true,
+    test(
+      'a connection failure on a connected network reports no internet',
+      () async {
+        final caller = NetworkCaller(
+          storage: _FakeStorage(),
+          client: MockClient(
+            (_) async => throw http.ClientException('offline'),
+          ),
+          connectivityCheck: () async => true,
+        );
+
+        final result = await caller.getRequest(_url);
+
+        expect(result.isSuccess, isFalse);
+        expect(result.error?.isNoInternet, isTrue);
+      },
     );
-
-    final result = await caller.getRequest(_url);
-
-    expect(result.isSuccess, isTrue);
-    expect(requests.map((r) => r.url.toString()), [_url]);
-    expect(requests.single.headers.containsKey('Authorization'), isFalse);
   });
+
+  test(
+    'a request without a session goes out with no token and no refresh',
+    () async {
+      final requests = <http.Request>[];
+      final caller = NetworkCaller(
+        storage: _FakeStorage(accessToken: null, expired: true),
+        client: MockClient((request) async {
+          requests.add(request);
+          return http.Response('{"id":1}', 200);
+        }),
+        connectivityCheck: () async => true,
+      );
+
+      final result = await caller.getRequest(_url);
+
+      expect(result.isSuccess, isTrue);
+      expect(requests.map((r) => r.url.toString()), [_url]);
+      expect(requests.single.headers.containsKey('Authorization'), isFalse);
+    },
+  );
 
   test('an expired token is refreshed before the request', () async {
     final requests = <http.Request>[];
@@ -223,9 +247,8 @@ void main() {
     });
 
     test('a server error keeps the session and stops the request', () async {
-      final result = await callerWith(
-        () async => http.Response('{}', 500),
-      ).getRequest(_url);
+      final result = await callerWith(() async => http.Response('{}', 500))
+          .getRequest(_url);
 
       expect(result.isSuccess, isFalse);
       expect(result.statusCode, 500);
@@ -249,9 +272,8 @@ void main() {
 
     test('a 401 after a server error on refresh keeps the session', () async {
       storage = _FakeStorage();
-      final result = await callerWith(
-        () async => http.Response('{}', 503),
-      ).getRequest(_url);
+      final result = await callerWith(() async => http.Response('{}', 503))
+          .getRequest(_url);
 
       expect(result.isSuccess, isFalse);
       expect(itemRequests, hasLength(1));
@@ -260,9 +282,8 @@ void main() {
     });
 
     test('a rejected refresh logs out and stops the request', () async {
-      final result = await callerWith(
-        () async => http.Response('{}', 401),
-      ).getRequest(_url);
+      final result = await callerWith(() async => http.Response('{}', 401))
+          .getRequest(_url);
 
       expect(result.isSuccess, isFalse);
       expect(result.statusCode, 401);
@@ -399,6 +420,23 @@ void main() {
       expect(result.error?.isUnauthorized, isTrue);
       expect(expiredCalls, 1);
       expect(storage.clearAuthCalls, 1);
+    });
+
+    test('a connection failure reports no internet', () async {
+      final caller = NetworkCaller(
+        storage: _FakeStorage(),
+        client: MockClient((_) async => throw http.ClientException('offline')),
+        connectivityCheck: () async => true,
+      );
+
+      final result = await caller.multipartPostRequest(
+        url: _url,
+        fields: const {},
+        fileFieldName: 'image',
+        filePath: filePath,
+      );
+
+      expect(result.error?.isNoInternet, isTrue);
     });
   });
 
