@@ -95,7 +95,6 @@ delete what you don't use.
 | Demo endpoints | `ApiEndpoints.posts`, `ApiEndpoints.postsNewestFirst` | Delete with the feed. |
 | Placeholder user name | `userName` in `MainController` and `ProfileController` | Replace with the logged-in user's data. |
 | Placeholder avatar | `assets/images/profile_avatar.jpg` (`ImagePath.profileAvatar`) | Replace with the user's photo (`CustomNetworkImage`). |
-| Unused product images | `assets/images/product_*.png` and their `ImagePath` constants | Delete. Nothing uses them. |
 | "Coming soon" tabs | `features/search/`, `features/notification/`, `features/settings/` | Build them, or remove the tab from `MainController.tabs`, its screen from `MainScreen`, its binding from `MainBinding`, and the feature folder. |
 | Profile menu | `features/profile/view/profile_screen.dart` | Only notifications, theme and language work; the other rows don't open anything yet. Wire or remove them. |
 | Login screen links | `features/auth/view/login_screen.dart` | *Forgot password*, *Sign up* and the social buttons (`AuthSocialButton`) have empty `onTap`s. Wire them or remove them. |
