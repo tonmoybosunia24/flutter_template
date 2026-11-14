@@ -18,6 +18,7 @@ class _FakeStorage extends GetxService implements StorageService {
   String? refreshToken = 'refresh';
   final bool expired;
   String? savedAccessToken;
+  Object? savedExpiresIn;
   int clearAuthCalls = 0;
 
   @override
@@ -40,10 +41,11 @@ class _FakeStorage extends GetxService implements StorageService {
   Future<void> saveTokens({
     required String accessToken,
     required String refreshToken,
-    required int expiresIn,
+    Object? expiresIn,
   }) async {
     this.accessToken = accessToken;
     savedAccessToken = accessToken;
+    savedExpiresIn = expiresIn;
   }
 
   @override
@@ -214,6 +216,28 @@ void main() {
     expect(requests.first.url.path, endsWith('/auth/refresh'));
     expect(requests.last.url.toString(), _url);
     expect(requests.last.headers['Authorization'], 'Bearer new');
+  });
+
+  test('a refresh without expires_in saves no expiry instead of 0', () async {
+    final storage = _FakeStorage(expired: true);
+    final caller = NetworkCaller(
+      storage: storage,
+      client: MockClient(
+        (request) async => request.url.path.endsWith('/auth/refresh')
+            ? http.Response(
+                '{"data":{"access_token":"new","refresh_token":"r2"}}',
+                200,
+              )
+            : http.Response('{"id":1}', 200),
+      ),
+      connectivityCheck: () async => true,
+    );
+
+    final result = await caller.getRequest(_url);
+
+    expect(result.isSuccess, isTrue);
+    expect(storage.savedAccessToken, 'new');
+    expect(storage.savedExpiresIn, isNull);
   });
 
   group('when the refresh fails', () {

@@ -111,13 +111,12 @@ class NetworkCaller {
         if (data is Map<String, dynamic>) {
           final accessToken = data['access_token'];
           final refreshToken = data['refresh_token'];
-          final expiresIn = data['expires_in'];
 
           if (accessToken is String && refreshToken is String) {
             await _storage.saveTokens(
               accessToken: accessToken,
               refreshToken: refreshToken,
-              expiresIn: expiresIn is int ? expiresIn : 0,
+              expiresIn: data['expires_in'],
             );
             AppLogger.logInfo('Token refreshed successfully');
             return _RefreshResult.refreshed;

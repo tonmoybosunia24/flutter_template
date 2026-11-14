@@ -205,6 +205,7 @@ lib/
 
 test/                               # Mirrors lib/
 docs/ARCHITECTURE.md                # Full architecture & style guide
+docs/CRASHLYTICS.md                 # Optional: adding Firebase Crashlytics
 AGENTS.md                           # Condensed rules for AI coding agents
 ```
 
@@ -377,8 +378,14 @@ and expects:
 }
 ```
 
-`expires_in` is the access token's lifetime **in seconds**. The refresh call
-is judged by its status code:
+`expires_in` is the access token's lifetime **in seconds** (a number or
+numeric text). If it's missing, the app reads the `exp` claim when the access
+token is a JWT. If neither exists, the expiry stays unknown: the app doesn't
+refresh ahead of time and refreshes when a request returns `401`. A token with
+a known expiry is refreshed 30 seconds early, so it never runs out on the way
+to the server.
+
+The refresh call is judged by its status code:
 
 | Refresh response | What happens |
 | --- | --- |
@@ -400,8 +407,10 @@ static String get logoutEndpoint => '$baseUrl/auth/logout';
 The login screen ships as UI only. To connect it, add an `AuthRepository` that
 calls `ApiEndpoints.loginEndpoint` with `isAuthCall: true` (so no stale token is
 attached) and stores the result with
-`StorageService.saveTokens(accessToken:, refreshToken:, expiresIn:)`. The
-splash screen already treats a saved token as a logged-in session.
+`StorageService.saveTokens(accessToken:, refreshToken:, expiresIn:)`. Pass
+`expires_in` exactly as the server sends it (or leave it out); `StorageService`
+works out the expiry. The splash screen already treats a saved token as a
+logged-in session.
 
 ---
 
@@ -638,8 +647,9 @@ production:
 - [ ] **Flavors**: environments are compile-time `--dart-define` values, not
       Gradle/Xcode flavors. Add real flavors if you need a separate app ID or
       icon per environment.
-- [ ] **Crash reporting & analytics**: nothing is wired in. Add Firebase
-      Crashlytics, Sentry or similar.
+- [ ] **Crash reporting & analytics**: nothing is wired in. Follow
+      [`docs/CRASHLYTICS.md`](docs/CRASHLYTICS.md) to add Firebase Crashlytics
+      step by step.
 - [ ] **App icon & native splash**: still the Flutter defaults.
 - [ ] **Desktop & web**: macOS needs the Keychain Sharing entitlement for
       `flutter_secure_storage`, and web has no truly secure storage. Review
