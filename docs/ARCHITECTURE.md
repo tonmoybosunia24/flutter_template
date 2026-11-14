@@ -361,14 +361,7 @@ Always prefer existing core widgets in `lib/core/widgets/` before building custo
   /// A small rounded button with an icon and a label. Params: [icon]: SVG path from [IconPath]. [text]: the already translated label. [onTap]: called when tapped.
   ```
   Barrel files use `/// ...` followed by `library;`.
-- **Inside Class Bodies**: Use `//` comments only, never `///`, to explain non-obvious logic or mark sections in widget trees. Comment the *why*, not the *what*: fields and members whose name and type already say what they are get no comment.
-  ```dart
-  final StorageService _storage = Get.find<StorageService>(); // no comment needed
-  final RxBool isLoggingOut = false.obs;                      // no comment needed
-
-  // Wait before applying a theme change, so the switch finishes sliding before the whole app rebuilds.
-  static const Duration _themeApplyDelay = Duration(milliseconds: 200);
-  ```
+- **Inside Class Bodies**: Use `//` comments only, never `///`.
 - **Formatting & Lints**: Keep `flutter analyze` at **0 warnings and 0 errors** (`package:flutter_lints/flutter.yaml`). Use modern Dart 3 features (switch expressions, records, pattern matching, null-aware elements) where appropriate.
 
 ---
