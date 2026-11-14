@@ -349,7 +349,8 @@ An empty body (e.g. `204 No Content`) is a success with `data == null`. A
 non-JSON body is returned as a raw `String`.
 
 ### Error responses (`4xx` / `5xx`)
-If the body has a `message` field, it is shown to the user as-is. Otherwise a
+If the body has a `message` field, it is shown to the user as-is. A list of
+messages (like NestJS validation errors) is shown one per line. Otherwise a
 translated default for the status code is used.
 
 ```json

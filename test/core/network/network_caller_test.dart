@@ -119,6 +119,20 @@ void main() {
       expect(result.errorMessage, 'Bad email');
     });
 
+    test('a list of messages is shown one per line', () async {
+      final result = await _callerFor(
+        400,
+        '{"message":["email must be an email","password is too short"]}',
+      ).postRequest(_url);
+
+      expect(result.statusCode, 400);
+      expect(result.error?.errorCode, 'BAD_REQUEST');
+      expect(
+        result.errorMessage,
+        'email must be an email\npassword is too short',
+      );
+    });
+
     test('502 with an HTML body is a failure', () async {
       final result = await _callerFor(
         502,
