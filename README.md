@@ -590,11 +590,12 @@ dart run rename setAppName --value "Your App Name"
 ```
 
 ### Permissions
-The template declares camera and photo-library permissions (Android
-`AndroidManifest.xml`, iOS `NSCameraUsageDescription` /
-`NSPhotoLibraryUsageDescription`) for file uploads. **Remove the ones your app
-doesn't use**, or app-store review may reject the build. If you keep them,
-rewrite the iOS usage descriptions for your app.
+The template declares only network permissions (`INTERNET`,
+`ACCESS_NETWORK_STATE`, `ACCESS_WIFI_STATE`). Add others only when a feature
+needs them, so store review doesn't flag unused permissions. For example, a
+photo upload with `image_picker` needs `NSCameraUsageDescription` and
+`NSPhotoLibraryUsageDescription` in `ios/Runner/Info.plist`, written for your
+app; on Android the plugin handles it without extra permissions.
 
 ---
 
