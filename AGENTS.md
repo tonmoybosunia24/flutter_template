@@ -92,7 +92,7 @@ lib/
 - **RTL Support (`ar_SA`)**: Use `EdgeInsetsDirectional`, `AlignmentDirectional`, and flip directional icons (`IconPath.backArrow`, `IconPath.arrowRight`) in RTL (`flipInRtl: true` or `Transform.flip(flipX: Directionality.of(context) == TextDirection.rtl, ...)`).
 - **Theme/Locale Switching**: Always use `SettingsUtil.changeTheme(...)` and `SettingsUtil.changeLanguage(...)`.
 - **Logging**: Never use `print()` or `debugPrint()`; use `AppLogger`.
-- **Doc Comments**: Every class, enum, extension and mixin gets exactly one `///` line: summary and `Params: [name]: description.` on the same line, no blank `///` lines. Barrel files use `/// ...` + `library;`. Inside class bodies use `//` only, never `///`, and only to say *why*: no comment on fields or members whose name and type already say what they are (`_storage`, `isLoggingOut`); keep one when the reason isn't obvious (e.g. why a delay exists).
+- **Doc Comments**: Every class, enum, extension and mixin gets exactly one `///` line: summary and `Params: [name]: description.` on the same line, no blank `///` lines. Barrel files use `/// ...` + `library;`. Inside class bodies use `//` only, never `///`.
 
 ---
 
