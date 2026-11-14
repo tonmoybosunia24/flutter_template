@@ -55,6 +55,10 @@ const Map<String, String> enUS = {
   AppStrings.homeCreatePostHint: 'Write a post title...',
   AppStrings.homeCreatePostSubmit: 'Post',
   AppStrings.homeWelcomeBack: 'Welcome back',
+  AppStrings.homeLoading: 'Loading posts',
+  AppStrings.homeEmptyTitle: 'No posts yet',
+  AppStrings.homeEmptyMessage:
+      'When someone shares a post, it will show up here.',
 
   // Profile
   AppStrings.profileAccountSettings: 'Account Settings',
@@ -94,6 +98,25 @@ const Map<String, String> enUS = {
   AppStrings.errorServer: 'Server error.',
   AppStrings.errorRequestFailed: 'Request failed.',
   AppStrings.errorRetry: 'Try again',
+
+  // Screen states
+  AppStrings.stateLoading: 'Loading...',
+  AppStrings.stateEmptyTitle: 'Nothing here yet',
+  AppStrings.stateEmptyMessage:
+      'When new content is available, it will show up here.',
+  AppStrings.stateErrorTitle: 'Something went wrong',
+  AppStrings.stateOfflineTitle: 'You\'re offline',
+  AppStrings.stateOfflineMessage:
+      'Check your internet connection and try again.',
+  AppStrings.stateRefreshFailed: 'Couldn\'t refresh. Showing previous content.',
+
+  // Dev scenario switcher
+  AppStrings.devScenarioBadge: 'DEV · @name',
+  AppStrings.devScenarioLive: 'Live',
+  AppStrings.devScenarioLoading: 'Loading',
+  AppStrings.devScenarioEmpty: 'Empty',
+  AppStrings.devScenarioError: 'Error',
+  AppStrings.devScenarioOffline: 'Offline',
 
   // Form validation
   AppStrings.validationEmailRequired: 'Email is required',

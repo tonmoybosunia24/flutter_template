@@ -53,6 +53,9 @@ const Map<String, String> bnBD = {
   AppStrings.homeCreatePostHint: 'পোস্টের শিরোনাম লিখুন...',
   AppStrings.homeCreatePostSubmit: 'পোস্ট করুন',
   AppStrings.homeWelcomeBack: 'আবার স্বাগতম',
+  AppStrings.homeLoading: 'পোস্ট লোড হচ্ছে',
+  AppStrings.homeEmptyTitle: 'এখনো কোনো পোস্ট নেই',
+  AppStrings.homeEmptyMessage: 'কেউ পোস্ট শেয়ার করলে এখানে দেখা যাবে।',
 
   // Profile
   AppStrings.profileAccountSettings: 'অ্যাকাউন্ট সেটিংস',
@@ -92,6 +95,23 @@ const Map<String, String> bnBD = {
   AppStrings.errorServer: 'সার্ভারে সমস্যা হয়েছে।',
   AppStrings.errorRequestFailed: 'অনুরোধ ব্যর্থ হয়েছে।',
   AppStrings.errorRetry: 'আবার চেষ্টা করুন',
+
+  // Screen states
+  AppStrings.stateLoading: 'লোড হচ্ছে...',
+  AppStrings.stateEmptyTitle: 'এখনো কিছু নেই',
+  AppStrings.stateEmptyMessage: 'নতুন কিছু যোগ হলে এখানে দেখা যাবে।',
+  AppStrings.stateErrorTitle: 'কিছু একটা সমস্যা হয়েছে',
+  AppStrings.stateOfflineTitle: 'আপনি অফলাইনে আছেন',
+  AppStrings.stateOfflineMessage: 'ইন্টারনেট সংযোগ দেখে আবার চেষ্টা করুন।',
+  AppStrings.stateRefreshFailed: 'রিফ্রেশ করা যায়নি। আগের তথ্য দেখানো হচ্ছে।',
+
+  // Dev scenario switcher
+  AppStrings.devScenarioBadge: 'DEV · @name',
+  AppStrings.devScenarioLive: 'লাইভ',
+  AppStrings.devScenarioLoading: 'লোডিং',
+  AppStrings.devScenarioEmpty: 'খালি',
+  AppStrings.devScenarioError: 'এরর',
+  AppStrings.devScenarioOffline: 'অফলাইন',
 
   // Form validation
   AppStrings.validationEmailRequired: 'ইমেইল দিতে হবে',

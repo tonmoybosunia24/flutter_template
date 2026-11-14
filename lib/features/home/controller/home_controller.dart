@@ -1,17 +1,15 @@
-import 'package:flutter/widgets.dart';
-import 'package:get/get.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart' hide ContextExtensionss;
 import 'package:template/core/core.dart';
 import 'package:template/features/home/model/home_post.dart';
 import 'package:template/features/home/repository/home_repository.dart';
 import 'package:template/features/main/controller/main_controller.dart';
 
-/// Holds the state and logic of the home tab: loads the post feed and tracks its loading and error state.
-class HomeController extends GetxController {
+/// Holds the state and logic of the home tab: loads the post feed and manages the screen state.
+class HomeController extends GetxController with ViewStateMixin {
   final HomeRepository _repository = Get.find<HomeRepository>();
 
   final RxList<HomePost> posts = <HomePost>[].obs;
-  final RxBool isLoading = false.obs;
-  final RxnString errorMessage = RxnString();
   final RxSet<int> likedPostIds = <int>{}.obs;
 
   final TextEditingController titleController = TextEditingController();
@@ -52,7 +50,6 @@ class HomeController extends GetxController {
   void onInit() {
     super.onInit();
     titleController.addListener(_updateCanCreatePost);
-    fetchPosts();
   }
 
   @override
@@ -64,19 +61,18 @@ class HomeController extends GetxController {
   void _updateCanCreatePost() =>
       canCreatePost.value = titleController.text.trim().isNotEmpty;
 
-  // Loads the feed. Also used by pull-to-refresh and the retry button.
-  Future<void> fetchPosts() async {
-    isLoading.value = true;
-    errorMessage.value = null;
-    final response = await _repository.getPosts();
-    // The tab may have been closed while the request was running.
-    if (isClosed) return;
-    if (response.isSuccess) {
-      posts.assignAll(response.data ?? const []);
-    } else {
-      errorMessage.value = response.errorMessage;
-    }
-    isLoading.value = false;
+  // Loads the feed and picks the state to show. ViewStateMixin calls it on init; pull-to-refresh and the retry button call it too.
+  @override
+  Future<void> fetchData() async {
+    final response = await runLoad(_repository.getPosts);
+    if (response == null) return;
+    if (response.isSuccess) posts.assignAll(response.data ?? const []);
+    showResult(
+      isSuccess: response.isSuccess,
+      isEmpty: posts.isEmpty,
+      error: response.errorMessage,
+      isOffline: response.error?.isNoInternet ?? false,
+    );
   }
 
   // Sends the typed title as a new post and shows it at the top of the feed.
@@ -99,6 +95,7 @@ class HomeController extends GetxController {
     final post = response.data;
     if (response.isSuccess && post != null) {
       posts.insert(0, post);
+      state.value = ViewState.content;
       titleController.clear();
       FocusManager.instance.primaryFocus?.unfocus();
     } else {

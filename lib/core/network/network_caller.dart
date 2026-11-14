@@ -265,6 +265,10 @@ class NetworkCaller {
       return ResponseData.failure(error: e.error, statusCode: e.statusCode);
     } on TimeoutException {
       return ResponseData.failure(error: AppError.timeout, statusCode: 408);
+    } on http.ClientException catch (e) {
+      // Connected to a network that has no internet, or the server can't be reached.
+      AppLogger.logError('Could not reach the server', e);
+      return ResponseData.failure(error: AppError.noInternet);
     } catch (e) {
       AppLogger.logError('Network error', e);
       return ResponseData.failure(error: AppError.unknown);
@@ -433,6 +437,10 @@ class NetworkCaller {
       return ResponseData.failure(error: e.error, statusCode: e.statusCode);
     } on TimeoutException {
       return ResponseData.failure(error: AppError.timeout, statusCode: 408);
+    } on http.ClientException catch (e) {
+      // Connected to a network that has no internet, or the server can't be reached.
+      AppLogger.logError('Upload could not reach the server', e);
+      return ResponseData.failure(error: AppError.noInternet);
     } catch (e) {
       AppLogger.logError('Upload error', e);
       return ResponseData.failure(error: AppError.unknown);

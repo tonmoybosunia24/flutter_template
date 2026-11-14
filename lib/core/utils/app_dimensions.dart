@@ -61,6 +61,8 @@ class AppDimensions {
   static const double inputHeight = 52.0;
   static const double iconButtonSize = 50.0;
   static const double iconContainerSize = 40.0;
+  static const double chipHeight = 40.0;
+  static const double floatingCardMaxWidth = 320.0;
   static const double appBarHeight = 64.0;
   static const double appBarActionSize = 50.0;
   static const double switchWidth = 36.0;

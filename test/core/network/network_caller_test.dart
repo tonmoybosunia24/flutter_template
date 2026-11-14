@@ -151,6 +151,24 @@ void main() {
       expect(result.error?.isNoInternet, isTrue);
       expect(requests, 0);
     });
+
+    test(
+      'a connection failure on a connected network reports no internet',
+      () async {
+        final caller = NetworkCaller(
+          storage: _FakeStorage(),
+          client: MockClient(
+            (_) async => throw http.ClientException('offline'),
+          ),
+          connectivityCheck: () async => true,
+        );
+
+        final result = await caller.getRequest(_url);
+
+        expect(result.isSuccess, isFalse);
+        expect(result.error?.isNoInternet, isTrue);
+      },
+    );
   });
 
   test(
@@ -402,6 +420,23 @@ void main() {
       expect(result.error?.isUnauthorized, isTrue);
       expect(expiredCalls, 1);
       expect(storage.clearAuthCalls, 1);
+    });
+
+    test('a connection failure reports no internet', () async {
+      final caller = NetworkCaller(
+        storage: _FakeStorage(),
+        client: MockClient((_) async => throw http.ClientException('offline')),
+        connectivityCheck: () async => true,
+      );
+
+      final result = await caller.multipartPostRequest(
+        url: _url,
+        fields: const {},
+        fileFieldName: 'image',
+        filePath: filePath,
+      );
+
+      expect(result.error?.isNoInternet, isTrue);
     });
   });
 

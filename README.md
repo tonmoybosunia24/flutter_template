@@ -185,8 +185,10 @@ lib/
 │   ├── theme/                      # AppColors, AppColorScheme (light/dark), AppTheme
 │   ├── localization/               # AppTranslations + langs/{en_us, bn_bd, ar_sa}
 │   ├── utils/                      # AppSizeClass, AppDimensions, AppStrings, asset paths,
-│   │                               # validators, extensions, AppLogger, SettingsUtil
-│   └── widgets/                    # Custom* reusable widgets (button, text field, app bar, ...)
+│   │                               # validators, extensions, AppLogger, SettingsUtil,
+│   │                               # ViewStateMixin (screen states), DevScenario
+│   └── widgets/                    # Custom* reusable widgets (button, text field, app bar,
+│                                   # state view, skeletons, dev switcher, ...)
 ├── features/                       # One folder per feature
 │   ├── splash/                     # Startup work + routing to onboarding / login / main
 │   ├── onboarding/                 # First-run pager
@@ -219,9 +221,9 @@ features/<feature>/
 ```
 
 **`home` is the reference implementation.** It is a complete vertical slice:
-binding → controller → repository → typed model (`HomePost`) → view, with
-loading, error and pull-to-refresh states, plus a create-post flow. Copy its
-shape when you add a feature.
+binding → controller → repository → typed model (`HomePost`) → view, with a
+skeleton while loading, empty / error / offline screens, pull-to-refresh and a
+create-post flow. Copy its shape when you add a feature.
 
 ---
 
@@ -250,7 +252,8 @@ shape when you add a feature.
 - **Safe logout rules**: only a refused refresh (400/401/403) logs the user
   out. Network errors, timeouts and 5xx keep the session.
 - **Connectivity guard**: requests fail fast with `AppError.noInternet` when
-  the device is offline.
+  the device is offline, and also when it is on a network that can't reach the
+  server (e.g. Wi-Fi without internet).
 - **File uploads**: `multipartPostRequest` with the same refresh-and-retry
   behaviour.
 - **Testable**: `NetworkCaller` accepts an `http.Client`, a connectivity check
@@ -267,7 +270,21 @@ shape when you add a feature.
   `ImagePath` (photos). No `'assets/...'` strings in code.
 - **Reusable widgets**: `CustomAppBar`, `CustomButton`, `CustomPillButton`,
   `CustomTextField`, `CustomText`, `CustomSvgIcon`, `CustomNetworkImage`,
-  `CustomRingAvatar`, `CustomLoader`, `CustomComingSoon`.
+  `CustomRingAvatar`, `CustomLoader`, `CustomComingSoon`, `CustomStateView`,
+  `CustomScreenState`, `CustomSkeleton`, `CustomSkeletonBox`.
+
+### 🧩 Screen States & Dev Switcher
+- **One pattern for every data screen**: the controller mixes in
+  `ViewStateMixin` and implements `fetchData()`; the view wraps its content in
+  `CustomStateView`. You get a **skeleton** while loading, **empty**,
+  **error** and **offline** screens with a retry button, and pull-to-refresh,
+  all looking the same across the app.
+- **Safe by default**: a reply from an older request or from a closed screen
+  is ignored, and a failed refresh keeps the content on screen with a snackbar
+  instead of replacing it with an error.
+- **Dev scenario switcher**: in debug builds every data screen shows a round
+  ⚙ button. Pick **Live, Loading, Empty, Error or Offline** to see that state
+  without touching the backend. Release builds don't include it.
 
 ### 📱 Responsive Engine
 - **`flutter_screenutil`** with a `412 × 917` design size.
@@ -390,7 +407,8 @@ splash screen already treats a saved token as a logged-in session.
 
 ## 🧑‍💻 Usage Example
 
-A new API call touches four files. This is the pattern `home` uses.
+A screen that loads data touches five files. This is the pattern `home` uses
+(the full guide is in `docs/ARCHITECTURE.md` §3.3).
 
 **1. Endpoint** — `lib/core/network/api_endpoints.dart`
 ```dart
@@ -428,36 +446,32 @@ class ShopRepository {
 
 **3. Controller** — `lib/features/shop/controller/shop_controller.dart`
 ```dart
-/// Holds the shop screen state: the product list, loading flag and error message.
-class ShopController extends GetxController {
+/// Holds the shop screen state: loads the product list and picks the screen state.
+class ShopController extends GetxController with ViewStateMixin {
   final ShopRepository _repository = Get.find<ShopRepository>();
 
   final RxList<ShopProduct> products = <ShopProduct>[].obs;
-  final RxBool isLoading = false.obs;
-  final RxnString errorMessage = RxnString();
 
+  // Loads the products. ViewStateMixin calls it on init; retry and pull-to-refresh call it too.
   @override
-  void onInit() {
-    super.onInit();
-    fetchProducts();
-  }
+  Future<void> fetchData() async {
+    final response = await runLoad(_repository.getProducts);
+    // Null when the screen closed, a newer load started, or a dev scenario is forced.
+    if (response == null) return;
 
-  // Loads the products. Also used by pull-to-refresh and the retry button.
-  Future<void> fetchProducts() async {
-    isLoading.value = true;
-    errorMessage.value = null;
-    final response = await _repository.getProducts();
-    if (isClosed) return; // the screen may have closed while waiting
-
-    if (response.isSuccess) {
-      products.assignAll(response.data ?? const []);
-    } else {
-      errorMessage.value = response.errorMessage; // already translated
-    }
-    isLoading.value = false;
+    if (response.isSuccess) products.assignAll(response.data ?? const []);
+    showResult(
+      isSuccess: response.isSuccess,
+      isEmpty: products.isEmpty,
+      error: response.errorMessage, // already translated
+      isOffline: response.error?.isNoInternet ?? false,
+    );
   }
 }
 ```
+
+`ViewStateMixin` gives the controller `state`, `isLoading` and `errorMessage`,
+and calls `fetchData()` on init, so don't call it again in `onInit`.
 
 **4. Binding** — `lib/features/shop/binding/shop_binding.dart`
 ```dart
@@ -471,8 +485,20 @@ class ShopBinding extends Bindings {
 }
 ```
 
-The view then reads `controller.products`, `controller.isLoading` and
-`controller.errorMessage` inside `Obx`.
+**5. View** — `lib/features/shop/view/shop_screen.dart`
+```dart
+body: Obx(
+  () => CustomStateView(
+    state: controller.state.value,
+    isRetrying: controller.isLoading.value,
+    errorMessage: controller.errorMessage.value,
+    onRetry: controller.fetchData,
+    loadingChild: const ShopProductSkeleton(), // optional: shaped like a product card
+    emptyTitle: AppStrings.shopEmptyTitle.tr,  // optional
+    child: const ShopProductList(), // RefreshIndicator(onRefresh: controller.fetchData) + list
+  ),
+),
+```
 
 ---
 
@@ -485,7 +511,9 @@ The view then reads `controller.products`, `controller.isLoading` and
    `bn_bd.dart` and `ar_sa.dart`.
 4. Add the route name to `AppRoutes` and register the page + binding in
    `AppPages`. For a main tab, register its binding in `MainBinding` instead.
-5. Run `flutter analyze` and `flutter test`. The architecture test will flag
+5. If the screen loads data, use `ViewStateMixin` + `CustomStateView` (see the
+   usage example above) and check every state with the ⚙ dev switcher.
+6. Run `flutter analyze` and `flutter test`. The architecture test will flag
    anything that breaks the conventions.
 
 See `docs/ARCHITECTURE.md` for the full rules.
@@ -562,13 +590,15 @@ rewrite the iOS usage descriptions for your app.
 ## ✅ Testing
 
 ```bash
-flutter analyze   # keep at 0 warnings / 0 errors
+dart format lib test   # CI fails on unformatted files
+flutter analyze        # keep at 0 warnings / 0 errors
 flutter test
 ```
 
 | Area | What is covered |
 | --- | --- |
-| Network | Response parsing, error mapping, token refresh, single-flight refresh, logout rules, timeouts, offline short-circuit, file-upload retry |
+| Network | Response parsing, error mapping, token refresh, single-flight refresh, logout rules, timeouts, offline short-circuit, no internet on connection failure, file-upload retry |
+| Screen states | `ViewStateMixin`: content / empty / error / offline, failed refresh keeps content, late and closed replies ignored, forced dev scenarios |
 | Utils & widgets | Validators, `AppError` translation, `CustomButton` |
 | Localization | Every locale has every key with a non-empty value |
 | Architecture | Fails on hardcoded colors, raw `Text`, hardcoded asset paths, `print`/`debugPrint`, network imports in views/controllers, `_buildXxx()` methods, hoisted sizes, `fontSize`/`fontWeight` on `CustomText`, unprefixed feature widgets, malformed doc comments |

@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart' hide ContextExtensionss;
 import 'package:template/core/core.dart';
 import 'package:template/features/home/controller/home_controller.dart';
-import 'package:template/features/home/widgets/home_error_state.dart';
-import 'package:template/features/home/widgets/home_post_card.dart';
+import 'package:template/features/home/widgets/home_feed.dart';
+import 'package:template/features/home/widgets/home_post_skeleton.dart';
 import 'package:template/features/main/widgets/main_app_bar.dart';
 
-/// The home tab of the main screen. Shows a feed of posts with loading, error and pull-to-refresh states.
+/// The home tab of the main screen. Shows the post feed in one of five states (loading, empty, error, offline or content).
 class HomeScreen extends GetView<HomeController> {
   const HomeScreen({super.key});
 
@@ -14,48 +14,33 @@ class HomeScreen extends GetView<HomeController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const MainAppBar(),
-      body: Obx(() {
-        final error = controller.errorMessage.value;
-        if (error != null) {
-          return HomeErrorState(message: error, onRetry: controller.fetchPosts);
-        }
-
-        // Keep the list on screen during pull-to-refresh.
-        if (controller.isLoading.value && controller.posts.isEmpty) {
-          return const Center(child: CustomLoader());
-        }
-
-        return Center(
-          child: ConstrainedBox(
-            constraints: BoxConstraints(maxWidth: AppDimensions.feedMaxWidth),
-            child: RefreshIndicator(
-              onRefresh: controller.fetchPosts,
-              child: ListView.separated(
-                physics: const AlwaysScrollableScrollPhysics(),
+      body: Center(
+        child: ConstrainedBox(
+          constraints: BoxConstraints(maxWidth: AppDimensions.feedMaxWidth),
+          child: Obx(
+            () => CustomStateView(
+              state: controller.state.value,
+              isRetrying: controller.isLoading.value,
+              errorMessage: controller.errorMessage.value,
+              onRetry: controller.fetchData,
+              loadingLabel: AppStrings.homeLoading.tr,
+              loadingChild: ListView.separated(
+                physics: const NeverScrollableScrollPhysics(),
                 padding: EdgeInsets.symmetric(
                   vertical: getHeight(AppDimensions.space8),
                 ),
-                itemCount: controller.posts.length,
+                itemCount: 3,
                 separatorBuilder: (_, _) =>
                     SizedBox(height: getHeight(AppDimensions.space4)),
-                itemBuilder: (_, index) {
-                  final post = controller.posts[index];
-                  return Obx(
-                    () => HomePostCard(
-                      post: post,
-                      isLiked: controller.isLiked(post.id),
-                      likeCount: controller.likeCount(post),
-                      timeAgo: controller.timeAgo(post),
-                      onToggleLike: () => controller.toggleLike(post.id),
-                      onPhotoDoubleTap: () => controller.likePost(post.id),
-                    ),
-                  );
-                },
+                itemBuilder: (_, _) => const HomePostSkeleton(),
               ),
+              emptyTitle: AppStrings.homeEmptyTitle.tr,
+              emptyMessage: AppStrings.homeEmptyMessage.tr,
+              child: const HomeFeed(),
             ),
           ),
-        );
-      }),
+        ),
+      ),
     );
   }
 }

@@ -8,7 +8,7 @@ Every AI agent working on this repository **must** strictly follow these convent
 - **Framework**: Flutter (Material 3), Dart `^3.13.7`
 - **State, DI & Routing**: `get` (`GetX`) — routes in `lib/routes/app_routes.dart` & `lib/routes/app_pages.dart`, global DI in `lib/bindings/app_binding.dart`.
 - **Storage**: `StorageService` (`lib/core/storage/storage_service.dart`) wraps `GetStorage` (preferences/flags) and `FlutterSecureStorage` (`access_token`, `refresh_token`). All keys live in `StorageKeys`.
-- **Networking**: `NetworkCaller` (`lib/core/network/network_caller.dart`) handles auth headers, queued token refresh (`_refreshCompleter`), 401 retry, and returns `ResponseData<T>` / `AppError`. Only a refresh refusal (400/401/403) logs out; network errors, timeouts and 5xx keep the session.
+- **Networking**: `NetworkCaller` (`lib/core/network/network_caller.dart`) handles auth headers, queued token refresh (`_refreshCompleter`), 401 retry, and returns `ResponseData<T>` / `AppError`. Only a refresh refusal (400/401/403) logs out; network errors, timeouts and 5xx keep the session. No network, or a network that can't reach the server (`http.ClientException`), returns `AppError.noInternet`.
 - **Responsive UI**: `flutter_screenutil` (`412 x 917` design size) + `AppSizeClass` (`lib/core/utils/app_size_class.dart`).
 
 ---
@@ -24,8 +24,8 @@ lib/
 │   ├── network/                   # api_endpoints.dart, app_error.dart, network_caller.dart, response_data.dart
 │   ├── storage/                   # storage_keys.dart, storage_service.dart
 │   ├── theme/                     # app_colors.dart (AppColors + AppColorScheme), app_theme.dart
-│   ├── utils/                     # app_dimensions, app_icons, app_illustrations, app_images, app_size_class, app_strings, extensions, logger, settings_util, validators
-│   └── widgets/                   # CustomAppBar, CustomAppBarAction, CustomButton, CustomPillButton, CustomTextField, CustomText, CustomSvgIcon, CustomNetworkImage, CustomRingAvatar, CustomLoader, CustomComingSoon
+│   ├── utils/                     # app_dimensions, app_icons, app_illustrations, app_images, app_size_class, app_strings, dev_scenario, extensions, logger, settings_util, validators, view_state
+│   └── widgets/                   # CustomAppBar, CustomAppBarAction, CustomButton, CustomPillButton, CustomTextField, CustomText, CustomSvgIcon, CustomNetworkImage, CustomRingAvatar, CustomLoader, CustomComingSoon, CustomStateView, CustomScreenState, CustomSkeleton, CustomSkeletonBox, CustomDevScenarioSwitcher
 └── features/<feature>/
     ├── binding/<feature>_binding.dart
     ├── controller/<feature>_controller.dart
@@ -47,6 +47,28 @@ lib/
 6. **View & Widgets**: Screens extend `GetView<FeatureController>` with a `const` constructor and stay logic-free. A feature can be a whole flow (`auth` holds login, register, …); each screen gets its own controller and binding. No `_buildXxx()` methods: inline the widget or extract a `StatelessWidget` (or `GetView` when tightly coupled). No `StatefulWidget`, except purely visual animation inside a reusable core widget (like `CustomLoader`).
 7. **Widget Placement**: Used by one feature → `features/<feature>/widgets/<feature>_<name>.dart` (class `<Feature>Xxx`). Shared by several features → `core/widgets/` (`Custom*`). Shared only by the main tabs → `features/main/widgets/`.
 8. **Static vs Dynamic**: Don't put static UI inside a dynamic list with index offsets; use `CustomScrollView` with a `SliverToBoxAdapter` and a `SliverList`.
+9. **Data Screens (API / fetch)**: Every screen that loads data to show uses this pattern; follow `features/home/` and `docs/ARCHITECTURE.md` §3.3. Screens that only send data (forms) use `RxBool isSubmitting` + `CustomButton(isLoading:)` instead.
+   - **Controller**: `extends GetxController with ViewStateMixin` and overrides `fetchData()`. The mixin calls it on init, so never call it in `onInit` again:
+     ```dart
+     @override
+     Future<void> fetchData() async {
+       final response = await runLoad(_repository.getOrders); // pass the function, no ()
+       if (response == null) return; // closed, superseded or dev scenario forced
+       if (response.isSuccess) orders.assignAll(response.data ?? const []);
+       showResult(
+         isSuccess: response.isSuccess,
+         isEmpty: orders.isEmpty, // false (or item == null) for a single object
+         error: response.errorMessage,
+         isOffline: response.error?.isNoInternet ?? false,
+       );
+     }
+     ```
+     When the controller adds data itself (e.g. after creating an item), set `state.value = ViewState.content;`.
+   - **Screen**: `Obx(() => CustomStateView(state: controller.state.value, isRetrying: controller.isLoading.value, errorMessage: controller.errorMessage.value, onRetry: controller.fetchData, loadingChild: ..., emptyTitle: ..., emptyMessage: ..., child: const OrderList()))`. Never build your own loading/empty/error/offline UI.
+   - **Content widget**: `features/<feature>/widgets/<feature>_list.dart` with its own `RefreshIndicator(onRefresh: controller.fetchData)` around an `Obx` list (like `HomeFeed`).
+   - **Skeleton**: `features/<feature>/widgets/<feature>_skeleton.dart`, copying the item's layout and paddings with `CustomSkeletonBox` (pass raw `AppDimensions` tokens; it scales them itself), like `HomePostSkeleton`.
+   - **Strings**: only the screen's own loading label and empty title/message, in all 3 locales. Error/offline texts are shared.
+   - **Dev switcher**: `CustomStateView` adds a debug-only ⚙ button (tabs and pushed pages) that forces Live/Loading/Empty/Error/Offline through `DevScenario`. Nothing to wire up; release builds drop it.
 
 ---
 
@@ -61,7 +83,7 @@ lib/
   - Constrain screen bodies with `Center -> ConstrainedBox(constraints: BoxConstraints(maxWidth: maxContentWidth))` (or `AppDimensions.feedMaxWidth` for feeds) and `EdgeInsets.symmetric(horizontal: horizontalPadding)`.
   - Breakpoint-specific values: `getValue<T>(mobile: ..., tablet: ..., desktop: ..., tv: ...)`.
 - **Assets**: Never hardcode `'assets/...'` strings. Small single-color UI icons → `assets/icons/` + `IconPath` (render via `CustomSvgIcon`, `color: null` for multi-color brand icons). Large multi-color artwork (onboarding, empty/error states) → `assets/illustrations/` + `IllustrationPath` (never tint). Photos → `assets/images/` + `ImagePath`. Use `CustomNetworkImage` for remote images.
-- **Core Widgets First**: Reuse `CustomAppBar`, `CustomButton`, `CustomPillButton`, `CustomTextField`, `CustomRingAvatar`, `CustomLoader`, and `CustomComingSoon` before creating custom widgets.
+- **Core Widgets First**: Reuse `CustomAppBar`, `CustomButton`, `CustomPillButton`, `CustomTextField`, `CustomRingAvatar`, `CustomLoader`, `CustomComingSoon`, `CustomStateView`, `CustomScreenState`, `CustomSkeleton`, and `CustomSkeletonBox` before creating custom widgets.
 
 ---
 
@@ -76,7 +98,7 @@ lib/
 
 ## 5. Testing & Self-Review Checklist
 - **Do NOT run `flutter test` or `flutter analyze` after every command** (to keep iteration fast). Run them only when requested or after major milestones (`test/core/architecture_test.dart` and `test/core/localization/app_translations_test.dart` guard these rules).
-- **Test Layout**: Mirror `lib/` inside `test/`. Unit tests inject fakes (`http.testing` `MockClient`, fake `StorageService`) into `NetworkCaller`/repositories instead of touching platform channels. Widget tests pump inside `ScreenUtilInit(designSize: const Size(412, 917), ...)` and call `AppSizeClass.init(context)` in `MaterialApp.builder`.
+- **Test Layout**: Mirror `lib/` inside `test/`. Unit tests inject fakes (`http.testing` `MockClient`, fake `StorageService`) into `NetworkCaller`/repositories instead of touching platform channels. Screen-state logic is covered by `test/core/utils/view_state_test.dart`. Widget tests pump inside `ScreenUtilInit(designSize: const Size(412, 917), ...)` and call `AppSizeClass.init(context)` in `MaterialApp.builder`.
 - **Lints**: Keep `flutter analyze` at 0 warnings / 0 errors.
 - **Self-Review Before Finishing Any Task**:
   1. [ ] Only `context.appColors`, `CustomText`, and `IconPath`/`IllustrationPath`/`ImagePath` are used (zero hardcoded colors, `Text`, or asset strings).
@@ -84,3 +106,4 @@ lib/
   3. [ ] New `AppStrings` keys are added to `en_us.dart`, `bn_bd.dart`, and `ar_sa.dart`.
   4. [ ] RTL directional widgets/icon flipping, `hide ContextExtensionss`, `if (isClosed) return;`, and `onClose()` disposals are in place.
   5. [ ] Logic is in the controller, no `_buildXxx()` methods, widgets sit in the right folder, and every class has a one-line `///` doc.
+  6. [ ] Data screens use `ViewStateMixin` (`fetchData` with `runLoad` + `showResult`) and `CustomStateView`, with a content-shaped skeleton and their own empty texts.

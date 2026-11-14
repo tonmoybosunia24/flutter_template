@@ -52,6 +52,9 @@ const Map<String, String> arSA = {
   AppStrings.homeCreatePostHint: 'اكتب عنوان المنشور...',
   AppStrings.homeCreatePostSubmit: 'نشر',
   AppStrings.homeWelcomeBack: 'مرحبًا بعودتك',
+  AppStrings.homeLoading: 'جارٍ تحميل المنشورات',
+  AppStrings.homeEmptyTitle: 'لا توجد منشورات بعد',
+  AppStrings.homeEmptyMessage: 'عندما يشارك أحدهم منشورًا، سيظهر هنا.',
 
   // Profile
   AppStrings.profileAccountSettings: 'إعدادات الحساب',
@@ -91,6 +94,23 @@ const Map<String, String> arSA = {
   AppStrings.errorServer: 'خطأ في الخادم.',
   AppStrings.errorRequestFailed: 'فشل الطلب.',
   AppStrings.errorRetry: 'حاول مرة أخرى',
+
+  // Screen states
+  AppStrings.stateLoading: 'جارٍ التحميل...',
+  AppStrings.stateEmptyTitle: 'لا يوجد شيء هنا بعد',
+  AppStrings.stateEmptyMessage: 'عند توفر محتوى جديد، سيظهر هنا.',
+  AppStrings.stateErrorTitle: 'حدث خطأ ما',
+  AppStrings.stateOfflineTitle: 'أنت غير متصل',
+  AppStrings.stateOfflineMessage: 'تحقق من اتصالك بالإنترنت وحاول مرة أخرى.',
+  AppStrings.stateRefreshFailed: 'تعذّر التحديث. يتم عرض المحتوى السابق.',
+
+  // Dev scenario switcher
+  AppStrings.devScenarioBadge: 'DEV · @name',
+  AppStrings.devScenarioLive: 'مباشر',
+  AppStrings.devScenarioLoading: 'تحميل',
+  AppStrings.devScenarioEmpty: 'فارغ',
+  AppStrings.devScenarioError: 'خطأ',
+  AppStrings.devScenarioOffline: 'غير متصل',
 
   // Form validation
   AppStrings.validationEmailRequired: 'البريد الإلكتروني مطلوب',

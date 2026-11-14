@@ -56,6 +56,9 @@ class AppStrings {
   static const String homeCreatePostHint = 'home_create_post_hint';
   static const String homeCreatePostSubmit = 'home_create_post_submit';
   static const String homeWelcomeBack = 'home_welcome_back';
+  static const String homeLoading = 'home_loading';
+  static const String homeEmptyTitle = 'home_empty_title';
+  static const String homeEmptyMessage = 'home_empty_message';
 
   // Profile
   static const String profileAccountSettings = 'profile_account_settings';
@@ -95,6 +98,23 @@ class AppStrings {
   static const String errorServer = 'error_server';
   static const String errorRequestFailed = 'error_request_failed';
   static const String errorRetry = 'error_retry';
+
+  // Screen states
+  static const String stateLoading = 'state_loading';
+  static const String stateEmptyTitle = 'state_empty_title';
+  static const String stateEmptyMessage = 'state_empty_message';
+  static const String stateErrorTitle = 'state_error_title';
+  static const String stateOfflineTitle = 'state_offline_title';
+  static const String stateOfflineMessage = 'state_offline_message';
+  static const String stateRefreshFailed = 'state_refresh_failed';
+
+  // Dev scenario switcher (debug builds only)
+  static const String devScenarioBadge = 'dev_scenario_badge';
+  static const String devScenarioLive = 'dev_scenario_live';
+  static const String devScenarioLoading = 'dev_scenario_loading';
+  static const String devScenarioEmpty = 'dev_scenario_empty';
+  static const String devScenarioError = 'dev_scenario_error';
+  static const String devScenarioOffline = 'dev_scenario_offline';
 
   // Form validation
   static const String validationEmailRequired = 'validation_email_required';
