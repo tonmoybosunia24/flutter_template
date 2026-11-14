@@ -410,7 +410,9 @@ attached) and stores the result with
 `StorageService.saveTokens(accessToken:, refreshToken:, expiresIn:)`. Pass
 `expires_in` exactly as the server sends it (or leave it out); `StorageService`
 works out the expiry. The splash screen already treats a saved token as a
-logged-in session.
+logged-in session. The profile tab's **Logout** button
+(`ProfileController.logout`) clears the tokens and opens login; if your backend
+has a logout endpoint, call it there before `clearAuth()`.
 
 ---
 
