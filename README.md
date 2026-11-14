@@ -92,6 +92,10 @@ runners are included, but check the
 
 ## 🚀 Getting Started
 
+> **Starting a real app from this template?** Follow
+> [`docs/NEW_PROJECT.md`](docs/NEW_PROJECT.md): a step-by-step checklist for
+> renaming, branding, removing the demo content and preparing the first release.
+
 1. **Clone the repository**
    ```bash
    git clone https://github.com/tonmoybosunia24/flutter_template.git
@@ -206,6 +210,7 @@ lib/
 test/                               # Mirrors lib/
 docs/ARCHITECTURE.md                # Full architecture & style guide
 docs/CRASHLYTICS.md                 # Optional: adding Firebase Crashlytics
+docs/NEW_PROJECT.md                 # Checklist for starting an app from this template
 AGENTS.md                           # Condensed rules for AI coding agents
 ```
 
