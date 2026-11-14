@@ -346,7 +346,9 @@ Always prefer existing core widgets in `lib/core/widgets/` before building custo
 - **Theme & Language Changes**: Use `SettingsUtil.changeTheme(...)` and `SettingsUtil.changeLanguage(...)` so changes both update the active UI immediately and persist via `StorageService`.
 - **API Endpoints**: Add all endpoint getters to `ApiEndpoints` (`lib/core/network/api_endpoints.dart`), constructed from `baseUrl` (`EnvConfig.baseUrl`).
 - **Auth Calls**: When calling login/register endpoints that should not trigger token refresh on `401`, pass `isAuthCall: true` to `NetworkCaller.postRequest(...)`.
-- **Token Refresh**: An expired token is refreshed only when one exists; without a token the request goes out unauthenticated. Only a refresh refusal (`400`, `401` or `403`) clears the session and opens login (once, even for parallel requests). Network errors, timeouts and `5xx` keep the session and return `noInternet`, `timeout` or a server error. The backend must answer a missing or invalid token with `401`, not `403`.
+- **Token Refresh**: An expired token is refreshed only when one exists; without a token the request goes out unauthenticated. Only a refresh refusal (`400`, `401` or `403`) clears the session and opens login (once, even for parallel requests). Network errors, timeouts and `5xx` keep the session and return `noInternet`, `timeout` or a server error. The backend must answer a missing or invalid token with `401`, not `403`. The expiry comes from `expires_in`, else the JWT `exp` claim; when both are missing it stays unknown and only a `401` triggers a refresh. Known expiries refresh 30 seconds early (`StorageService.expiryBuffer`).
+- **Error Messages**: For a `4xx`/`5xx` response, the body's `message` is shown to the user: a string as-is, a list (e.g. NestJS validation errors) one per line. Without a usable `message`, `AppError.fromStatusCode` picks a translated default. The `errorCode` (`BAD_REQUEST`, `UNAUTHORIZED`, …) always follows the status code, so UI logic can branch on it.
+- **Logout**: A manual logout lives in a controller (`ProfileController.logout`): call the backend's logout endpoint through a repository if there is one, then `StorageService.clearAuth()` and `Get.offAllNamed(AppRoutes.login)`. Only auth data is cleared; theme, language and the onboarding flag stay. Guard the button with an `RxBool` + `CustomButton(isLoading:)` against double taps.
 - **Offline Detection**: A request fails with `AppError.noInternet` when the device has no network (checked with `connectivity_plus` before sending) **and** when it is on a network that can't reach the server (`http.ClientException`, e.g. Wi-Fi without internet). Data screens show this as the offline state (3.3).
 - **Logging**: Never use `print()` or `debugPrint()`. Always use `AppLogger.logInfo`, `AppLogger.logDebug`, `AppLogger.logWarning`, or `AppLogger.logError`.
 
@@ -359,7 +361,14 @@ Always prefer existing core widgets in `lib/core/widgets/` before building custo
   /// A small rounded button with an icon and a label. Params: [icon]: SVG path from [IconPath]. [text]: the already translated label. [onTap]: called when tapped.
   ```
   Barrel files use `/// ...` followed by `library;`.
-- **Inside Class Bodies**: Use `//` comments only, never `///`, to explain non-obvious logic or mark sections in widget trees.
+- **Inside Class Bodies**: Use `//` comments only, never `///`, to explain non-obvious logic or mark sections in widget trees. Comment the *why*, not the *what*: fields and members whose name and type already say what they are get no comment.
+  ```dart
+  final StorageService _storage = Get.find<StorageService>(); // no comment needed
+  final RxBool isLoggingOut = false.obs;                      // no comment needed
+
+  // Wait before applying a theme change, so the switch finishes sliding before the whole app rebuilds.
+  static const Duration _themeApplyDelay = Duration(milliseconds: 200);
+  ```
 - **Formatting & Lints**: Keep `flutter analyze` at **0 warnings and 0 errors** (`package:flutter_lints/flutter.yaml`). Use modern Dart 3 features (switch expressions, records, pattern matching, null-aware elements) where appropriate.
 
 ---

@@ -111,13 +111,12 @@ class NetworkCaller {
         if (data is Map<String, dynamic>) {
           final accessToken = data['access_token'];
           final refreshToken = data['refresh_token'];
-          final expiresIn = data['expires_in'];
 
           if (accessToken is String && refreshToken is String) {
             await _storage.saveTokens(
               accessToken: accessToken,
               refreshToken: refreshToken,
-              expiresIn: expiresIn is int ? expiresIn : 0,
+              expiresIn: data['expires_in'],
             );
             AppLogger.logInfo('Token refreshed successfully');
             return _RefreshResult.refreshed;
@@ -306,7 +305,14 @@ class NetworkCaller {
         );
       }
 
-      final errorMsg = decoded is Map ? (decoded['message'] as String?) : null;
+      // Some backends (e.g. NestJS validation) send a list of messages, so show them one per line.
+      final errorMsg = switch (decoded is Map ? decoded['message'] : null) {
+        final String message when message.isNotEmpty => message,
+        final List<dynamic> messages when messages.isNotEmpty => messages.join(
+          '\n',
+        ),
+        _ => null,
+      };
       final appError = AppError.fromStatusCode(
         response.statusCode,
         message: errorMsg,

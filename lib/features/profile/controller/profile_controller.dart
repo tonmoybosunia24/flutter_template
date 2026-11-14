@@ -2,26 +2,21 @@ import 'dart:async';
 
 import 'package:get/get.dart';
 import 'package:template/core/core.dart';
+import 'package:template/routes/app_routes.dart';
 
-/// Holds the state of the profile screen: the user's name, the notification toggle and the theme setting.
+/// Holds the state of the profile screen: the user's name, the notification toggle, the theme setting and logging out.
 class ProfileController extends GetxController {
-  // Placeholder until the profile comes from the API.
+  final StorageService _storage = Get.find<StorageService>();
+  final RxBool isLoggingOut = false.obs;
   final String userName = 'Md Tonmoy Bosunia';
-
-  // Reactive state of the notification switch.
   final RxBool notificationEnabled = true.obs;
-
-  // Wait before applying a theme change, so the switch finishes sliding before the whole app rebuilds.
+  // Waits for the switch to finish sliding before the whole app rebuilds; quick repeated taps apply only the last one.
   static const Duration _themeApplyDelay = Duration(milliseconds: 200);
   Timer? _themeTimer;
-
-  // Reactive state of the theme switch: on means dark mode.
   late final RxBool darkModeSwitch = _isDarkMode.obs;
-
-  // Icon of the theme row: a moon in dark mode, a sun in light mode.
   String get themeIcon => darkModeSwitch.value ? IconPath.moon : IconPath.sun;
 
-  // Whether the app is showing dark mode, including when it follows a dark system theme.
+  // Determines if the current theme is dark mode based on the saved setting and system preference.
   bool get _isDarkMode {
     final theme = SettingsUtil.currentTheme.value;
     return theme == 'dark' || (theme == 'system' && Get.isPlatformDarkMode);
@@ -38,6 +33,15 @@ class ProfileController extends GetxController {
       _themeApplyDelay,
       () => SettingsUtil.changeTheme(darkModeSwitch.value ? 'dark' : 'light'),
     );
+  }
+
+  // Clears the saved session and opens the login screen. When the backend has a logout endpoint, call it through a repository before clearAuth().
+  Future<void> logout() async {
+    if (isLoggingOut.value) return;
+    isLoggingOut.value = true;
+    await _storage.clearAuth();
+    if (isClosed) return;
+    Get.offAllNamed(AppRoutes.login);
   }
 
   @override

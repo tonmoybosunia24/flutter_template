@@ -139,9 +139,12 @@ class ProfileScreen extends GetView<ProfileController> {
                       ),
                     ],
                   ),
-                  child: CustomButton(
-                    text: AppStrings.profileLogout.tr,
-                    onPressed: () {},
+                  child: Obx(
+                    () => CustomButton(
+                      text: AppStrings.profileLogout.tr,
+                      isLoading: controller.isLoggingOut.value,
+                      onPressed: controller.logout,
+                    ),
                   ),
                 ),
                 SizedBox(height: getHeight(AppDimensions.space24)),

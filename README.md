@@ -92,6 +92,10 @@ runners are included, but check the
 
 ## 🚀 Getting Started
 
+> **Starting a real app from this template?** Follow
+> [`docs/NEW_PROJECT.md`](docs/NEW_PROJECT.md): a step-by-step checklist for
+> renaming, branding, removing the demo content and preparing the first release.
+
 1. **Clone the repository**
    ```bash
    git clone https://github.com/tonmoybosunia24/flutter_template.git
@@ -205,6 +209,8 @@ lib/
 
 test/                               # Mirrors lib/
 docs/ARCHITECTURE.md                # Full architecture & style guide
+docs/CRASHLYTICS.md                 # Optional: adding Firebase Crashlytics
+docs/NEW_PROJECT.md                 # Checklist for starting an app from this template
 AGENTS.md                           # Condensed rules for AI coding agents
 ```
 
@@ -348,7 +354,8 @@ An empty body (e.g. `204 No Content`) is a success with `data == null`. A
 non-JSON body is returned as a raw `String`.
 
 ### Error responses (`4xx` / `5xx`)
-If the body has a `message` field, it is shown to the user as-is. Otherwise a
+If the body has a `message` field, it is shown to the user as-is. A list of
+messages (like NestJS validation errors) is shown one per line. Otherwise a
 translated default for the status code is used.
 
 ```json
@@ -377,8 +384,14 @@ and expects:
 }
 ```
 
-`expires_in` is the access token's lifetime **in seconds**. The refresh call
-is judged by its status code:
+`expires_in` is the access token's lifetime **in seconds** (a number or
+numeric text). If it's missing, the app reads the `exp` claim when the access
+token is a JWT. If neither exists, the expiry stays unknown: the app doesn't
+refresh ahead of time and refreshes when a request returns `401`. A token with
+a known expiry is refreshed 30 seconds early, so it never runs out on the way
+to the server.
+
+The refresh call is judged by its status code:
 
 | Refresh response | What happens |
 | --- | --- |
@@ -400,8 +413,12 @@ static String get logoutEndpoint => '$baseUrl/auth/logout';
 The login screen ships as UI only. To connect it, add an `AuthRepository` that
 calls `ApiEndpoints.loginEndpoint` with `isAuthCall: true` (so no stale token is
 attached) and stores the result with
-`StorageService.saveTokens(accessToken:, refreshToken:, expiresIn:)`. The
-splash screen already treats a saved token as a logged-in session.
+`StorageService.saveTokens(accessToken:, refreshToken:, expiresIn:)`. Pass
+`expires_in` exactly as the server sends it (or leave it out); `StorageService`
+works out the expiry. The splash screen already treats a saved token as a
+logged-in session. The profile tab's **Logout** button
+(`ProfileController.logout`) clears the tokens and opens login; if your backend
+has a logout endpoint, call it there before `clearAuth()`.
 
 ---
 
@@ -579,11 +596,12 @@ dart run rename setAppName --value "Your App Name"
 ```
 
 ### Permissions
-The template declares camera and photo-library permissions (Android
-`AndroidManifest.xml`, iOS `NSCameraUsageDescription` /
-`NSPhotoLibraryUsageDescription`) for file uploads. **Remove the ones your app
-doesn't use**, or app-store review may reject the build. If you keep them,
-rewrite the iOS usage descriptions for your app.
+The template declares only network permissions (`INTERNET`,
+`ACCESS_NETWORK_STATE`, `ACCESS_WIFI_STATE`). Add others only when a feature
+needs them, so store review doesn't flag unused permissions. For example, a
+photo upload with `image_picker` needs `NSCameraUsageDescription` and
+`NSPhotoLibraryUsageDescription` in `ios/Runner/Info.plist`, written for your
+app; on Android the plugin handles it without extra permissions.
 
 ---
 
@@ -638,8 +656,9 @@ production:
 - [ ] **Flavors**: environments are compile-time `--dart-define` values, not
       Gradle/Xcode flavors. Add real flavors if you need a separate app ID or
       icon per environment.
-- [ ] **Crash reporting & analytics**: nothing is wired in. Add Firebase
-      Crashlytics, Sentry or similar.
+- [ ] **Crash reporting & analytics**: nothing is wired in. Follow
+      [`docs/CRASHLYTICS.md`](docs/CRASHLYTICS.md) to add Firebase Crashlytics
+      step by step.
 - [ ] **App icon & native splash**: still the Flutter defaults.
 - [ ] **Desktop & web**: macOS needs the Keychain Sharing entitlement for
       `flutter_secure_storage`, and web has no truly secure storage. Review
